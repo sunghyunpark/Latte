@@ -30,6 +30,7 @@ import page5.Fragment_MyPage;
  * 3. git add [파일명]
  * 4. git commit -m "설명"
  * 5. git commit -am "설명"
+ * 6. git push origin master
  *
  *
  * 현재 하단탭 메뉴 부분을 커스텀으로 제작
