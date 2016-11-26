@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">latte</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="intro1_title">Egg Slide</string>
+    <string name="intro1_text">너희들의 최고의 순간을 멋진 사진으로 공유해봐</string>
+    <string name="intro2_title">최고의 순간을 공유</string>
+    <string name="intro2_text">너희들의 최고의 순간을 멋진 사진으로 공유해봐</string>
+
+    <string name="link_to_search_id_pw">로그인 정보를 잊으셨나요? 아이디 비밀번호 찾기</string>
+    <string name="link_to_register">계정이 없으신가요? 가입하기</string>
+    <string name="register_agree_txt">가입하면 약관 및 개인정보취급방침에 동의하게 됩니다.</string>
+</resources>
