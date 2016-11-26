@@ -25,6 +25,12 @@ import page5.Fragment_MyPage;
  * 4. 오픈소스를 사용한 경우 해당 오픈소스 깃허브 주소를 상단 주석에 표기할 것.
  *
  *
+ * ###git 사용법###
+ * 1. 터미널에서 해당 프로젝트로 이동 후 git init 입력
+ * 2. git status로 현재 상태 확인
+ * 3. git add [파일명]
+ * 4. git commit -m "설명"
+ * 5. git commit -am "설명"
  * 현재 하단탭 메뉴 부분을 커스텀으로 제작
  */
 public class MainActivity extends FragmentActivity implements View.OnClickListener {

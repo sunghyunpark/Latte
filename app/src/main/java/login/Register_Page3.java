@@ -1,13 +1,8 @@
 package login;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +22,7 @@ import java.util.UUID;
 
 import app_controller.SQLiteHandler;
 import app_controller.SessionManager;
-import common.BusProvider;
 import common.Image_Uploader;
-import common.User_Profile_Edit_Dialog;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
