@@ -6,7 +6,11 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import java.util.HashMap;
+
+import app_controller.SQLiteHandler;
 import app_controller.SessionManager;
 import login.Login_Page;
 import page1.Fragment_Ranking;
@@ -38,7 +42,13 @@ import page5.Fragment_MyPage;
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     ImageView tab1, tab2, tab3, tab4, tab5;    //하단 탭 버튼들
-    private SessionManager session;            // session
+    private SessionManager session;    // session
+    private SQLiteHandler db;    //SQLite
+
+    //사용자 정보
+    private String login_method;
+    private String uid;
+    private String user_profile_path;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +64,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             //세션 유지
             startActivity(new Intent(getApplicationContext(), Splash_Page.class));
 
+            //SQLite로부터 사용자 정보를 가져옴
+            db = new SQLiteHandler(this);
+            HashMap<String, String> user = db.getUserDetails();
+            login_method = user.get("login_method");
+            uid = user.get("uid");
+            user_profile_path = user.get("profile_img");
+            Toast.makeText(getApplicationContext(),login_method+uid+user_profile_path+"",Toast.LENGTH_SHORT).show();
             //최초 UI 초기화
             InitUI();
         }
@@ -107,7 +124,11 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 fragment.setArguments(bundle);
                 break ;
             case R.id.tab_3 :
-                startActivity(new Intent(getApplicationContext(), Upload_Page1.class));
+                Intent intent = new Intent(getApplicationContext(), Upload_Page1.class);
+                intent.putExtra("login_method", login_method);
+                intent.putExtra("user_uid", uid);
+                intent.putExtra("user_profile_path", user_profile_path);
+                startActivity(intent);
                 overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 break ;
             case R.id.tab_4:
