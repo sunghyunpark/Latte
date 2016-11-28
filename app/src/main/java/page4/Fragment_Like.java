@@ -5,12 +5,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
 
 public class Fragment_Like extends Fragment {
 
+    View v;
 
     public Fragment_Like() {
         // Required empty public constructor
@@ -27,7 +29,9 @@ public class Fragment_Like extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_ranking, container, false);
+        v = inflater.inflate(R.layout.fragment_like, container, false);
+
+        return v;
     }
 
 }

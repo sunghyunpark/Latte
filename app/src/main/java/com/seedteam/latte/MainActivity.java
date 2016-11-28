@@ -3,7 +3,6 @@ package com.seedteam.latte;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,6 +11,7 @@ import app_controller.SessionManager;
 import login.Login_Page;
 import page1.Fragment_Ranking;
 import page2.Fragment_Timeline;
+import page3.Upload_Page1;
 import page4.Fragment_Like;
 import page5.Fragment_MyPage;
 
@@ -75,12 +75,10 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tab4.setOnClickListener(this);
         tab5.setOnClickListener(this);
 
-        Fragment fragment = new Fragment_Ranking();
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.replace(R.id.main_frame, new Fragment_Ranking());
         fragmentTransaction.commit();
-
         tab1.setImageResource(R.mipmap.ic_page1_selected);
     }
 
@@ -92,31 +90,45 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         tab3.setImageResource(R.mipmap.ic_page3_no_selected);
         tab4.setImageResource(R.mipmap.ic_page4_no_selected);
         tab5.setImageResource(R.mipmap.ic_page5_no_selected);
+
+        Bundle bundle = new Bundle();
+
         switch (view.getId()) {
             case R.id.tab_1 :
                 tab1.setImageResource(R.mipmap.ic_page1_selected);
                 fragment = new Fragment_Ranking();
+                bundle.putString("KEY_MSG", "replace");
+                fragment.setArguments(bundle);
                 break ;
             case R.id.tab_2 :
                 tab2.setImageResource(R.mipmap.ic_page2_selected);
                 fragment = new Fragment_Timeline();
+                bundle.putString("KEY_MSG", "replace");
+                fragment.setArguments(bundle);
                 break ;
             case R.id.tab_3 :
-                tab3.setImageResource(R.mipmap.ic_page3_selected);
-                fragment = new Fragment_Timeline();
+                startActivity(new Intent(getApplicationContext(), Upload_Page1.class));
+                overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 break ;
             case R.id.tab_4:
                 tab4.setImageResource(R.mipmap.ic_page4_selected);
                 fragment = new Fragment_Like();
+                bundle.putString("KEY_MSG", "replace");
+                fragment.setArguments(bundle);
                 break;
             case R.id.tab_5:
                 tab5.setImageResource(R.mipmap.ic_page5_selected);
                 fragment = new Fragment_MyPage();
+                bundle.putString("KEY_MSG", "replace");
+                fragment.setArguments(bundle);
                 break;
         }
-        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, fragment);
-        fragmentTransaction.commit();
+        // 업로드 버튼이 아닌경우에만...
+        if(view.getId() != R.id.tab_3){
+            android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+            android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.replace(R.id.main_frame, fragment);
+            fragmentTransaction.commit();
+        }
     }
 }
