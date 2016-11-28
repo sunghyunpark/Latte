@@ -73,7 +73,7 @@ public class Upload_Page1 extends Activity {
     RecyclerAdapter adapter;
     RecyclerView recyclerView;
     //일단 공유하기 버튼을 눌렀을 때 전 화면까지 닫기처리하려고 두었음. 원래는 플래그처리하면되는데 현재 스플래시 화면이 다시 보이는 것 떄문에 임시로 해둠
-    public static Activity tab3_upload_board_activity_1 = new Activity();
+    public static Activity upload_page1 = new Activity();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +81,7 @@ public class Upload_Page1 extends Activity {
         setContentView(R.layout.upload_page1);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        tab3_upload_board_activity_1 = this;
+        upload_page1 = this;
 
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
