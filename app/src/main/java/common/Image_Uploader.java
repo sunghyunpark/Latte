@@ -19,7 +19,6 @@ import retrofit2.Response;
 
 public class Image_Uploader {
 
-    private Util util = new Util();
     private SQLiteHandler mSQLite;
 
     /**

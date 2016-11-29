@@ -176,7 +176,13 @@ public class Register_Page3 extends Activity {
                         }
                         String UserUid = userdata.getUser().getUid();
                         String ImageName = util.MakeImageName(UserUid);
+                        //서버에 업로드
                         image_uploader.Upload_ProfileImage(Register_Page3.this, "profile", login_method, UserUid, ImageName, local_profile_path);
+                        //서버에 업로드 후 로컬에 남아있는 이미지 파일 삭제
+                        File path = new File(local_profile_path);
+                        if(path.exists()) {
+                            path.delete();
+                        }
                     }
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

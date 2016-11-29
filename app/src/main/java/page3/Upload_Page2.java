@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.UploadBoardResponse;
@@ -58,12 +60,70 @@ import retrofit2.Response;
  */
 public class Upload_Page2 extends Activity {
 
+    //업로드 할 이미지 로컬 경로
+    private String upload_img_path;
+    private String upload_img_name;
+    //사용자정보
+    private String login_method;
+    private String uid;
+    private String user_profile_path;
+
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.upload_page1);
+        setContentView(R.layout.upload_page2);
 
+        Intent intent = getIntent();
+        upload_img_path = intent.getExtras().getString("ImagePath");
+        login_method = intent.getExtras().getString("login_method");
+        uid = intent.getExtras().getString("user_uid");
+        user_profile_path = intent.getExtras().getString("user_profile_path");
+        Toast.makeText(getApplicationContext(),user_profile_path+"",Toast.LENGTH_SHORT).show();
+
+        InitView();
+
+    }
+
+    private void InitView(){
+
+        //사용자 프로필 사진
+        ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
+        // 사용자 프로필 사진
+        Glide.clear(user_profile_img);
+        Glide.with(getApplicationContext())
+                .load(util.GetProfile_Url(login_method, user_profile_path))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .transform(new Util.CircleTransform(getApplicationContext()))
+                .error(null)
+                .into(user_profile_img);
+        //업로드 이미지
+        final ImageView upload_img = (ImageView)findViewById(R.id.upload_img);
+
+        Glide.clear(upload_img);
+        Glide.with(getApplicationContext())
+                .load(new File(upload_img_path))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .error(null)
+                .into(upload_img);
+
+        final EditText upload_edit_box = (EditText)findViewById(R.id.upload_edit_box);
+        //공유하기 버튼
+        Button upload_btn = (Button)findViewById(R.id.upload_btn);
+        upload_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String board_str = upload_edit_box.getText().toString();
+                board_str = board_str.trim();
+                if(board_str.equals("")){
+                    Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                }else{
+                    upload_img_name = util.MakeImageName(uid);
+                    UploadBoard(uid, board_str, upload_img_name);
+                }
+            }
+        });
     }
 
     /**
@@ -72,7 +132,7 @@ public class Upload_Page2 extends Activity {
      * 그리고 서버에서 해당
      * @param uid -> 사용자 uid
      * @param board_text -> 게시글 내용
-     * @param upload_img_name -> 파일 이름(경로 포함 x)
+     * @param upload_img_name -> 파일 이름(경로 포함 x, 랜덤 이름)
      */
     private void UploadBoard(String uid, String board_text, String upload_img_name){
         ApiInterface apiService =
@@ -86,6 +146,12 @@ public class Upload_Page2 extends Activity {
                 UploadBoardResponse uploadBoardResponse = response.body();
                 if (!uploadBoardResponse.isError()) {
                     Toast.makeText(getApplicationContext(), "업로드 성공!", Toast.LENGTH_SHORT).show();
+
+                    //이미지 파일 업로드 후 로컬에 남아있는 이미지 삭제해주기
+                    File path = new File("storage/emulated/0/latte/upload_img.jpg");
+                    if(path.exists()) {
+                        path.delete();
+                    }
                     Upload_Page1.upload_page1.finish();
                     finish();
                 } else {
