@@ -49,15 +49,26 @@ public interface ApiInterface {
             , @Field("kt_id") String kt_id
             , @Field("email") String email);
 
-    //프로필 이미지 업로드
+    /**
+     * upload.php로 데이터 전송
+     * @param tag -> tag를 통해 프로필인지 아티클인지 판별 (프로필 -> profile, 아티클 -> article
+     * @param login_method
+     * @param uid
+     * @param file
+     * @return
+     */
     @Multipart
-    @POST("upload/upload_profile_s.php")
-    Call<ImageUploadeResponse> Upload_Profile_Image(@Part("login_method") RequestBody login_method, @Part("uid") RequestBody uid, @Part MultipartBody.Part file);
+    @POST("upload/upload_img.php")
+    Call<ImageUploadeResponse> Upload_Profile_Image(@Part("tag") String tag,
+                                                    @Part("login_method") RequestBody login_method,
+                                                    @Part("uid") RequestBody uid,
+                                                    @Part MultipartBody.Part file);
 
     //게시글 이미지 업로드
     @Multipart
-    @POST("upload/upload_test_s.php")
-    Call<ImageUploadeResponse> Upload_Board_Image(@Part("uid") RequestBody uid, @Part MultipartBody.Part file);
+    @POST("upload/upload_img.php")
+    Call<ImageUploadeResponse> Upload_Article_Image(@Part("tag") String tag,
+                                                  @Part MultipartBody.Part file);
 
     /**
      *
@@ -73,5 +84,5 @@ public interface ApiInterface {
     Call<UploadBoardResponse> PostBoard(@Field("tag") String tag
             , @Field("uid") String uid
             , @Field("article_text") String board_text
-            , @Field("article_photo_url") String upload_img);
+            , @Field("article_photo_name") String upload_img);
 }

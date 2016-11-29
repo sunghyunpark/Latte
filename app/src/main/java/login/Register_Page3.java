@@ -174,7 +174,9 @@ public class Register_Page3 extends Activity {
                         }else if(login_method.equals("facebook")){
                             local_profile_path = profile_img_path;
                         }
-                        image_uploader.Upload_Image(Register_Page3.this, "profile", login_method, userdata.getUser().getUid(), local_profile_path);
+                        String UserUid = userdata.getUser().getUid();
+                        String ImageName = util.MakeImageName(UserUid);
+                        image_uploader.Upload_ProfileImage(Register_Page3.this, "profile", login_method, UserUid, ImageName, local_profile_path);
                     }
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
