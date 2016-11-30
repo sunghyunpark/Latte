@@ -59,7 +59,7 @@ public interface ApiInterface {
      */
     @Multipart
     @POST("upload/upload_img.php")
-    Call<ImageUploadeResponse> Upload_Profile_Image(@Part("tag") String tag,
+    Call<ImageUploadeResponse> Upload_Profile_Image(@Part("tag") RequestBody tag,
                                                     @Part("login_method") RequestBody login_method,
                                                     @Part("uid") RequestBody uid,
                                                     @Part MultipartBody.Part file);
@@ -67,7 +67,7 @@ public interface ApiInterface {
     //게시글 이미지 업로드
     @Multipart
     @POST("upload/upload_img.php")
-    Call<ImageUploadeResponse> Upload_Article_Image(@Part("tag") String tag,
+    Call<ImageUploadeResponse> Upload_Article_Image(@Part("tag") RequestBody tag,
                                                   @Part MultipartBody.Part file);
 
     /**

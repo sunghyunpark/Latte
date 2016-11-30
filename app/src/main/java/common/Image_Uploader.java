@@ -30,7 +30,7 @@ public class Image_Uploader {
      * @param uid
      * @param img_path
      */
-    public void Upload_ProfileImage(final Context context, String tag, String login_method, final String uid, String img_name, String img_path){
+    public void Upload_ProfileImage(final Context context, String tag, String login_method, final String uid, String img_name, final String img_path){
 
         final ProgressDialog progressDialog;
         progressDialog = new ProgressDialog(context);
@@ -44,9 +44,10 @@ public class Image_Uploader {
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
         MultipartBody.Part Image_body = MultipartBody.Part.createFormData("uploaded_file", img_name, requestFile);
+        RequestBody Tag_body = RequestBody.create(MediaType.parse("multipart/form-data"), tag);
         RequestBody Uid_body = RequestBody.create(MediaType.parse("multipart/form-data"), uid);
         RequestBody LoginMethod_body = RequestBody.create(MediaType.parse("multipart/form-data"), login_method);
-        Call<ImageUploadeResponse> resultCall = apiService.Upload_Profile_Image(tag,LoginMethod_body, Uid_body,Image_body);
+        Call<ImageUploadeResponse> resultCall = apiService.Upload_Profile_Image(Tag_body,LoginMethod_body, Uid_body,Image_body);
 
         resultCall.enqueue(new Callback<ImageUploadeResponse>() {
             @Override
@@ -57,11 +58,17 @@ public class Image_Uploader {
                     mSQLite = new SQLiteHandler(context);
 
                     if(!response.body().isError()){
-                        Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
                         mSQLite.updateUser(uid, response.body().getFile_path());
+                        //서버에 업로드 후 로컬에 남아있는 이미지 파일 삭제
+
+                        File path = new File(img_path);
+                        if(path.exists()) {
+                            path.delete();
+                        }
 
                     }else{
-                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
@@ -98,10 +105,10 @@ public class Image_Uploader {
         final File file = new File(img_path);
 
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
-
+        RequestBody Tag_body = RequestBody.create(MediaType.parse("multipart/form-data"), tag);
         MultipartBody.Part Image_body = MultipartBody.Part.createFormData("uploaded_file", img_name, requestFile);
 
-        Call<ImageUploadeResponse> resultCall = apiService.Upload_Article_Image(tag ,Image_body);
+        Call<ImageUploadeResponse> resultCall = apiService.Upload_Article_Image(Tag_body ,Image_body);
 
         resultCall.enqueue(new Callback<ImageUploadeResponse>() {
             @Override

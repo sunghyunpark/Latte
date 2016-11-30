@@ -157,7 +157,7 @@ public class Register_Page3 extends Activity {
                     mSQLite = new SQLiteHandler(getApplicationContext());
                     //회원가입 성공 후 uid값을 받아와 이미지 업로더에 넘김
                     String local_profile_path = "";
-                    Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
                     mSessionManager.setLogin(true);//로그인 성공 시 세션 유지
                     //내장 디비에 insert
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
@@ -178,11 +178,7 @@ public class Register_Page3 extends Activity {
                         String ImageName = util.MakeImageName(UserUid);
                         //서버에 업로드
                         image_uploader.Upload_ProfileImage(Register_Page3.this, "profile", login_method, UserUid, ImageName, local_profile_path);
-                        //서버에 업로드 후 로컬에 남아있는 이미지 파일 삭제
-                        File path = new File(local_profile_path);
-                        if(path.exists()) {
-                            path.delete();
-                        }
+
                     }
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

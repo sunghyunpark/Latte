@@ -179,12 +179,6 @@ public class User_Profile_Edit_Dialog extends Activity {
         }
     }
 
-    public byte[] bitmapToByteArray( Bitmap $bitmap ) {
-        ByteArrayOutputStream stream = new ByteArrayOutputStream() ;
-        $bitmap.compress( Bitmap.CompressFormat.JPEG, 100, stream) ;
-        byte[] byteArray = stream.toByteArray() ;
-        return byteArray ;
-    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -297,9 +291,7 @@ public class User_Profile_Edit_Dialog extends Activity {
         @Override
         protected void onPostExecute(String result){
             // BusProvider.getInstance().post(new PushEvent("profile", fb_id, uid, imageFileName));
-            if(path.exists()) {
-                path.delete();
-            }
+
         }
     }
 }
