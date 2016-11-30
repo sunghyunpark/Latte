@@ -46,6 +46,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import common.Image_Uploader;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -69,6 +70,7 @@ public class Upload_Page2 extends Activity {
     private String user_profile_path;
 
     Util util = new Util();
+    Image_Uploader image_uploader = new Image_Uploader();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,7 +122,7 @@ public class Upload_Page2 extends Activity {
                     Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
                 }else{
                     upload_img_name = util.MakeImageName(uid);
-                    UploadBoard(uid, board_str, upload_img_name);
+                    UploadBoard(uid, board_str, upload_img_name, upload_img_path);
                 }
             }
         });
@@ -134,7 +136,7 @@ public class Upload_Page2 extends Activity {
      * @param board_text -> 게시글 내용
      * @param upload_img_name -> 파일 이름(경로 포함 x, 랜덤 이름)
      */
-    private void UploadBoard(String uid, String board_text, String upload_img_name){
+    private void UploadBoard(String uid, String board_text, final String upload_img_name, final String upload_img_local_path){
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -147,11 +149,7 @@ public class Upload_Page2 extends Activity {
                 if (!uploadBoardResponse.isError()) {
                     Toast.makeText(getApplicationContext(), "업로드 성공!", Toast.LENGTH_SHORT).show();
 
-                    //이미지 파일 업로드 후 로컬에 남아있는 이미지 삭제해주기
-                    File path = new File("storage/emulated/0/latte/upload_img.jpg");
-                    if(path.exists()) {
-                        path.delete();
-                    }
+                    image_uploader.Upload_ArticleImage(Upload_Page2.this, "article", upload_img_name, upload_img_local_path);
                     Upload_Page1.upload_page1.finish();
                     finish();
                 } else {

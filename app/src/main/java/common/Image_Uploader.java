@@ -119,13 +119,18 @@ public class Image_Uploader {
                     mSQLite = new SQLiteHandler(context);
 
                     if(!response.body().isError()){
-                        Toast.makeText(context, "ok", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
                         /**
                          * 이미지 업로드 성공했으니 로컬에 저장되어있던 이미지는 삭제.
                          */
+                        //이미지 파일 업로드 후 로컬에 남아있는 이미지 삭제해주기
+                        File path = new File("storage/emulated/0/latte/upload_img.jpg");
+                        if(path.exists()) {
+                            path.delete();
+                        }
 
                     }else{
-                        Toast.makeText(context, "fail", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
                     }
 
                 } else {
