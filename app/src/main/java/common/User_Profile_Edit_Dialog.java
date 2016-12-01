@@ -36,8 +36,6 @@ public class User_Profile_Edit_Dialog extends Activity {
 
     private String mCurrentPhotoPath;
     private Uri contentUri;
-    public static App_Config SERVER_URL = new App_Config();// 서버객체 생성
-    public static String server_url = SERVER_URL.get_SERVER_IP();//서버 아이피
 
     String imageFileName;
     File path;
@@ -59,7 +57,7 @@ public class User_Profile_Edit_Dialog extends Activity {
 
         mCurrentPhotoPath = null;
 
-        path = new File("storage/emulated/0/latte/"); // 꼭 매니페스트에 권한 추가->내부 저장소에 폴더만들기
+        path = new File("storage/emulated/0/PoPo/"); // 꼭 매니페스트에 권한 추가->내부 저장소에 폴더만들기
 
         if(!path.exists()) {
             path.mkdirs();
@@ -183,7 +181,7 @@ public class User_Profile_Edit_Dialog extends Activity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String imageFileName = email + "_profile";
-        storageDir = new File("storage/emulated/0/latte/");
+        storageDir = new File("storage/emulated/0/PoPo/");
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */
@@ -268,7 +266,7 @@ public class User_Profile_Edit_Dialog extends Activity {
         protected String doInBackground(Bitmap... bit){
             String result = "";
             OutputStream outStream = null;
-            File file = new File("storage/emulated/0/latte/",imageFileName);//현재 카메라로 직접 촬영하면 저장소에 두개의 사진이 저장됨.->수정필요.
+            File file = new File("storage/emulated/0/PoPo/",imageFileName);//현재 카메라로 직접 촬영하면 저장소에 두개의 사진이 저장됨.->수정필요.
             Bitmap bitmap = bit[0];
 
             try{

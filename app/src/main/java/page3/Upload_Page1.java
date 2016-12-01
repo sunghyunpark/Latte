@@ -306,7 +306,7 @@ public class Upload_Page1 extends Activity {
      * @return
      */
     private String getUploadImagePath(){
-        String path = "storage/emulated/0/Latte/upload_img.jpg";
+        String path = "storage/emulated/0/PoPo/upload_img.jpg";
 
         //로컬에 저장
         OutputStream outStream = null;

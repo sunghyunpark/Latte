@@ -225,7 +225,7 @@ public class Register_Page2 extends Activity {
         if(login_method.equals("email")){
             Glide.clear(profile_img);
             Glide.with(getApplicationContext())
-                    .load(new File("storage/emulated/0/latte/",img_path))
+                    .load(new File("storage/emulated/0/PoPo/",img_path))
                     .transform(new Util.CircleTransform(getApplicationContext()))
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .error(null)

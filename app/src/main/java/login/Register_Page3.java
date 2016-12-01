@@ -123,7 +123,7 @@ public class Register_Page3 extends Activity {
             profile_plus_img.setVisibility(View.GONE);
             if(login_method.equals("email")){
                 Glide.with(getApplicationContext())
-                        .load(new File("storage/emulated/0/latte/",img_path))
+                        .load(new File("storage/emulated/0/PoPo/",img_path))
                         .transform(new Util.CircleTransform(getApplicationContext()))
                         .signature(new StringSignature(UUID.randomUUID().toString()))
                         .error(null)
@@ -170,7 +170,7 @@ public class Register_Page3 extends Activity {
                          * ImageUploader에서 프로필 경로를 다시 받아와 내장 DB에서 프로필 부분만 update
                          */
                         if(login_method.equals("email")){
-                            local_profile_path = "storage/emulated/0/latte/"+profile_img_path;
+                            local_profile_path = "storage/emulated/0/PoPo/"+profile_img_path;
                         }else if(login_method.equals("facebook")){
                             local_profile_path = profile_img_path;
                         }
