@@ -50,7 +50,7 @@
         <activity
             android:name="common.User_Profile_Edit_Dialog"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Dialog" >
+            android:theme="@style/CustomDialog" >
         </activity>
         <activity
             android:name="login.Register_Page3"

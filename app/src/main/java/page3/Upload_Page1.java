@@ -197,12 +197,16 @@ public class Upload_Page1 extends Activity {
         BitmapDrawable bd = (BitmapDrawable)((ImageView)findViewById(id)).getDrawable();
         bitmap = bd.getBitmap();
 
-        //사이즈를 단말기 가로 사이즈에 맞게 정사각형으로 함
+
         int w;
+        /*
+        단말기 사이즈를 기준으로 하면 이미지의 크기가 작을 경우 에러남
         Display display;
         display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         w = display.getWidth();
-
+*/
+        //단말기 사이즈 기준이 아닌 해당 이미지의 크기를 기준으로 사진을 자름
+        w = bitmap.getWidth();
         int nHeight = w;
         int nWidth = w;
 
