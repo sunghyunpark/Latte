@@ -198,6 +198,11 @@ public class Upload_Page1 extends Activity {
         bitmap = bd.getBitmap();
 
 
+        /**
+         * 선택한 사진이 세로/가로인지 판별 후 다르게 분기처리해야할듯함..
+         * 일반적인 세로 사진은 w기준
+         * 가로 사진은 h기준으로 해야할듯함.
+         */
         int w;
         /*
         단말기 사이즈를 기준으로 하면 이미지의 크기가 작을 경우 에러남
@@ -205,7 +210,7 @@ public class Upload_Page1 extends Activity {
         display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
         w = display.getWidth();
 */
-        //단말기 사이즈 기준이 아닌 해당 이미지의 크기를 기준으로 사진을 자름
+        //단말기 사이즈 기이 아닌 해당 이미지의 크기를 기준으로 사진을 자름
         w = bitmap.getWidth();
         int nHeight = w;
         int nWidth = w;

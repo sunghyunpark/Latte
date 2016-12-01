@@ -102,11 +102,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     public void onClick(View view) {
         Fragment fragment = null;
-        tab1.setImageResource(R.mipmap.ic_page1_no_selected);
-        tab2.setImageResource(R.mipmap.ic_page2_no_selected);
-        tab3.setImageResource(R.mipmap.ic_page3_no_selected);
-        tab4.setImageResource(R.mipmap.ic_page4_no_selected);
-        tab5.setImageResource(R.mipmap.ic_page5_no_selected);
+        /**
+         * 3번쨰 카메라 버튼 탭 시 하단 탭 메뉴에서 이전에 선택한 아이콘 유지하기 위해
+         */
+        if(view.getId() != R.id.tab_3){
+            tab1.setImageResource(R.mipmap.ic_page1_no_selected);
+            tab2.setImageResource(R.mipmap.ic_page2_no_selected);
+            tab3.setImageResource(R.mipmap.ic_page3_no_selected);
+            tab4.setImageResource(R.mipmap.ic_page4_no_selected);
+            tab5.setImageResource(R.mipmap.ic_page5_no_selected);
+        }
 
         Bundle bundle = new Bundle();
 
