@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,6 +55,14 @@ public class Email_Login_Page extends Activity {
 
         final EditText email_edit_box = (EditText)findViewById(R.id.email_edit_box);    //email입력창
         final EditText pw_edit_box = (EditText)findViewById(R.id.pw_edit_box);    //비밀번호
+
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         Button login_btn = (Button)findViewById(R.id.login_btn);
         login_btn.setOnClickListener(new View.OnClickListener() {

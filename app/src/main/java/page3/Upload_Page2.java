@@ -90,6 +90,14 @@ public class Upload_Page2 extends Activity {
 
     private void InitView(){
 
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         //사용자 프로필 사진
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         // 사용자 프로필 사진

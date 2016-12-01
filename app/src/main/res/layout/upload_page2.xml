@@ -77,7 +77,8 @@
             android:layout_width="130dp"
             android:layout_height="130dp"
             android:layout_centerVertical="true"
-            android:layout_alignParentRight="true"/>
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"/>
     </RelativeLayout>
 
     <!--구분선-->
