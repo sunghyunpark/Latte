@@ -32,11 +32,6 @@ public class Image_Uploader {
      */
     public void Upload_ProfileImage(final Context context, String tag, String login_method, final String uid, String img_name, final String img_path){
 
-        final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("upload...");
-        progressDialog.show();
-
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
         final File file = new File(img_path);
@@ -52,7 +47,6 @@ public class Image_Uploader {
         resultCall.enqueue(new Callback<ImageUploadeResponse>() {
             @Override
             public void onResponse(Call<ImageUploadeResponse> call, Response<ImageUploadeResponse> response) {
-                progressDialog.dismiss();
                 // Response Success or Fail
                 if (response.isSuccessful()) {
                     mSQLite = new SQLiteHandler(context);
@@ -81,7 +75,6 @@ public class Image_Uploader {
             public void onFailure(Call<ImageUploadeResponse> call, Throwable t) {
                 Toast.makeText(context, "retrofit_fail", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
-                progressDialog.dismiss();
             }
         });
     }
@@ -93,12 +86,7 @@ public class Image_Uploader {
      * @param img_name -> 이미지 파일명(랜덤으로 변환된것으로)
      * @param img_path -> 로컬에 저장된 이미지 경로
      */
-    public void Upload_ArticleImage(final Context context, String tag, String img_name, String img_path){
-
-        final ProgressDialog progressDialog;
-        progressDialog = new ProgressDialog(context);
-        progressDialog.setMessage("upload...");
-        progressDialog.show();
+    public void Upload_ArticleImage(final Context context, String tag, String img_name, final String img_path){
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -113,7 +101,6 @@ public class Image_Uploader {
         resultCall.enqueue(new Callback<ImageUploadeResponse>() {
             @Override
             public void onResponse(Call<ImageUploadeResponse> call, Response<ImageUploadeResponse> response) {
-                progressDialog.dismiss();
                 // Response Success or Fail
                 if (response.isSuccessful()) {
                     mSQLite = new SQLiteHandler(context);
@@ -124,7 +111,7 @@ public class Image_Uploader {
                          * 이미지 업로드 성공했으니 로컬에 저장되어있던 이미지는 삭제.
                          */
                         //이미지 파일 업로드 후 로컬에 남아있는 이미지 삭제해주기
-                        File path = new File("storage/emulated/0/latte/upload_img.jpg");
+                        File path = new File(img_path);
                         if(path.exists()) {
                             path.delete();
                         }
@@ -143,7 +130,6 @@ public class Image_Uploader {
             public void onFailure(Call<ImageUploadeResponse> call, Throwable t) {
                 Toast.makeText(context, "retrofit_fail", Toast.LENGTH_SHORT).show();
                 t.printStackTrace();
-                progressDialog.dismiss();
             }
         });
     }
