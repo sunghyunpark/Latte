@@ -44,6 +44,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import common.Util;
+
 /**
  * created by sunghyun 2016-11-28
  *
@@ -68,12 +70,25 @@ public class Upload_Page1 extends Activity {
 
     private ArrayList<Upload_Page1_item> listItems;
     private GridLayoutManager lLayout;
+    private int degree;    //현재 이미지 rotate
+    private Bitmap mCurrentImg_bitmap;    //현재 이미지 비트맵
+
     CollapsingToolbarLayout collapsingToolbarLayout;
     //리사이클러뷰
     RecyclerAdapter adapter;
     RecyclerView recyclerView;
     //일단 공유하기 버튼을 눌렀을 때 전 화면까지 닫기처리하려고 두었음. 원래는 플래그처리하면되는데 현재 스플래시 화면이 다시 보이는 것 떄문에 임시로 해둠
     public static Activity upload_page1 = new Activity();
+    Util util = new Util();
+
+    /**
+     * 현재 이미지 반환
+     */
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        mCurrentImg_bitmap.recycle();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,10 +134,10 @@ public class Upload_Page1 extends Activity {
         change_picture_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (upload_img.getScaleType() == ImageView.ScaleType.CENTER_INSIDE) {
-                    upload_img.setScaleType(ImageView.ScaleType.CENTER);
+                if (upload_img.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
+                    upload_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
                 } else {
-                    upload_img.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+                    upload_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
                 }
             }
         });
@@ -182,8 +197,11 @@ public class Upload_Page1 extends Activity {
         //정확한 이유는 모르겠지만 여기서 글라이드를 쓰면 비트맵으로 추출이 불가능함
         BitmapFactory.Options bfo = new BitmapFactory.Options();
         bfo.inSampleSize = 1;
-        Bitmap bm = BitmapFactory.decodeFile(listItems.get(position).getUpload_picture(), bfo);
-        upload_img.setImageBitmap(bm);
+        mCurrentImg_bitmap = BitmapFactory.decodeFile(listItems.get(position).getUpload_picture(), bfo);
+        degree = util.GetExifOrientation(listItems.get(position).getUpload_picture());
+        mCurrentImg_bitmap = util.GetRotatedBitmap(mCurrentImg_bitmap,degree);
+        upload_img.setImageBitmap(mCurrentImg_bitmap);
+        Toast.makeText(getApplicationContext(),"rotate : "+degree, Toast.LENGTH_SHORT).show();
 
     }
 
@@ -193,58 +211,33 @@ public class Upload_Page1 extends Activity {
      * @return -> 업로드 이미지 비트맵
      */
     private Bitmap getBitmapUploadImg(int id){
-        Bitmap bitmap = null;
-        BitmapDrawable bd = (BitmapDrawable)((ImageView)findViewById(id)).getDrawable();
-        bitmap = bd.getBitmap();
-
-
         /**
          * 선택한 사진이 세로/가로인지 판별 후 다르게 분기처리해야할듯함..
          * 일반적인 세로 사진은 w기준
          * 가로 사진은 h기준으로 해야할듯함.
+         * 스크린샷의 경우 원인은 모르겠으나 rotate가 0으로 됨
+         * rotate -> 0, 180 가로
+         * rotate -> 90, 270 세로
          */
-        int w;
-        /*
-        단말기 사이즈를 기준으로 하면 이미지의 크기가 작을 경우 에러남
-        Display display;
-        display = ((WindowManager)getSystemService(WINDOW_SERVICE)).getDefaultDisplay();
-        w = display.getWidth();
-*/
+        int size;
+
         //단말기 사이즈 기이 아닌 해당 이미지의 크기를 기준으로 사진을 자름
-        w = bitmap.getWidth();
-        int nHeight = w;
-        int nWidth = w;
+        if((degree == 0) || (degree == 180)){
+            size = mCurrentImg_bitmap.getHeight();
+        }else{
+            size = mCurrentImg_bitmap.getWidth();
+        }
 
-        if(upload_img.getScaleType() != ImageView.ScaleType.CENTER_INSIDE){
-            //확대인 경우
-            //원본 이미지에서 잘라낸 비트맵 이미지 영역의 색상값을 저장
-            int[] nPixels = new int[nWidth * nHeight];
-
-            //원본 이미지의 좌측 상단을 기준으로 가로, 세로 가로 3분의1 지점에서 w만큼의 크기를 가져와 저장
-            bitmap.getPixels(nPixels,0,nWidth,0,nWidth/3,nWidth,nHeight);
-
-            //잘라낸 이미지를 저장할 새로운 비트맵 이미지 생성
-            Bitmap editbit = Bitmap.createBitmap(nWidth, nHeight, Bitmap.Config.ARGB_8888);
-            editbit.setPixels(nPixels,0,nWidth,0,0,nWidth,nHeight);
-
-            //크기 리사이징 단말기 가로 크기에 맞게 리사이징함
-            double aspectRatio = (double) editbit.getHeight() / (double) editbit.getWidth();
-            int targetHeight = (int) (nWidth * aspectRatio);
-
-            Bitmap result = Bitmap.createScaledBitmap(editbit, nWidth, targetHeight, false);
-            if(result!=editbit){
-                editbit.recycle();
-            }
+        if(upload_img.getScaleType() != ImageView.ScaleType.FIT_CENTER){
+            Bitmap result = util.cropCenterBitmap(mCurrentImg_bitmap,size,size);
             return result;
         }else{
             //축소인 경우(원본비율)
-            double aspectRatio = (double) bitmap.getHeight() / (double) bitmap.getWidth();
-            int targetHeight = (int) (nWidth * aspectRatio);
+            double aspectRatio = (double) mCurrentImg_bitmap.getHeight() / (double) mCurrentImg_bitmap.getWidth();
+            int targetHeight = (int) (size * aspectRatio);
 
-            Bitmap result = Bitmap.createScaledBitmap(bitmap, nWidth, targetHeight, false);
-            if(result!=bitmap){
-                bitmap.recycle();
-            }
+            Bitmap result = Bitmap.createScaledBitmap(mCurrentImg_bitmap, size, targetHeight, false);
+
             return result;
         }
     }

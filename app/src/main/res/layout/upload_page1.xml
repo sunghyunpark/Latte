@@ -72,9 +72,8 @@
                     android:layout_height="330dp">
                     <ImageView
                         android:id="@+id/upload_img"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:scaleType="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="330dp"
                         android:background="#ffffff"
                         android:fitsSystemWindows="true"
                         app:layout_collapseMode="parallax"
