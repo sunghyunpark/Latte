@@ -1,13 +1,106 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="page1.Fragment_Ranking">
+    android:background="#ffffff">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
+        android:id="@+id/search_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="timeline page" />
+        android:layout_height="40dp">
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/search_img"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="5dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_launcher"/>
+
+        <EditText
+            android:id="@+id/search_edit_box"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@+id/search_img"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:maxLines="1"
+            android:hint="검색"
+            android:textSize="14dp"
+            android:paddingLeft="5dp"/>
+    </RelativeLayout>
+
+    <!--구분선-->
+    <LinearLayout
+        android:id="@+id/divider_lay"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/search_layout"
+        android:background="#ffe0e0e0"></LinearLayout>
+    <LinearLayout
+        android:id="@+id/menu_layout"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="#ffe0e0e0"
+        android:layout_below="@+id/divider_lay"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:layout_marginRight="0.5dp"
+            android:background="#ffffff">
+            <Button
+                android:id="@+id/follow_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:text="팔로워"/>
+            <LinearLayout
+                android:id="@+id/follow_underbar"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/follow_btn"
+
+                android:background="@color/PrimaryColor"></LinearLayout>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="0.5dp"
+            android:layout_weight="1"
+            android:background="#ffffff">
+            <Button
+                android:id="@+id/all_btn"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@null"
+                android:text="전체 이용자"/>
+            <LinearLayout
+                android:id="@+id/all_underbar"
+                android:layout_width="fill_parent"
+                android:layout_height="3dp"
+                android:orientation="horizontal"
+                android:layout_below="@+id/all_btn"
+
+                android:background="@null"></LinearLayout>
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/menu_layout"
+        android:requiresFadingEdge="horizontal" />
+
+</RelativeLayout>
