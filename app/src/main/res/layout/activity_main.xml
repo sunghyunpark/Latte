@@ -9,10 +9,12 @@
     <FrameLayout
         android:id="@+id/main_frame"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:paddingBottom="50dp">
     </FrameLayout>
 
     <LinearLayout
+        android:id="@+id/bottom_tab_menu"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:orientation="horizontal"
@@ -58,4 +60,5 @@
             android:padding="15dp"
             android:src="@mipmap/ic_page5_no_selected"/>
     </LinearLayout>
+
 </RelativeLayout>
