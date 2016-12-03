@@ -101,7 +101,8 @@
         <!-- 좋아요 갯수 및 조회수 -->
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp">
+            android:layout_height="30dp"
+            android:layout_marginTop="5dp">
             <!--좋아요 레이아웃 따로 둠 좋아요가 0개 인경우 없애기 위해 -->
             <RelativeLayout
                 android:id="@+id/like_cnt_layout"
@@ -160,7 +161,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="14dp"
-                android:padding="15dp"
+                android:paddingTop="5dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingBottom="5dp"
                 android:maxLines="3"
                 android:ellipsize="end"
                 android:textColor="#000000"/>
@@ -188,7 +192,9 @@
                 android:text="댓글 모두 보기 340개"
                 android:layout_toRightOf="@+id/go_all_comment_img"
                 android:layout_marginLeft="5dp"
-                android:textSize="10dp"/>
+                android:textColor="#000000"
+                android:textStyle="bold"
+                android:textSize="12dp"/>
 
             <TextView
                 android:id="@+id/created_at_txt"
@@ -197,6 +203,7 @@
                 android:text="2주전"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
+                android:textSize="10dp"
                 android:layout_marginRight="10dp"/>
         </RelativeLayout>
     </LinearLayout>
@@ -206,5 +213,6 @@
         android:layout_height="1dp"
         android:orientation="horizontal"
         android:layout_below="@+id/contents_layout"
+        android:layout_marginTop="5dp"
         android:background="#ffe0e0e0"></LinearLayout>
 </RelativeLayout>
