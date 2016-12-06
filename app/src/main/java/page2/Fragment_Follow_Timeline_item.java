@@ -3,6 +3,7 @@ package page2;
 public class Fragment_Follow_Timeline_item{
 
     /**
+     * uid : 사용자 uid
      * user_nickname : 사용자 닉네임
      * user_profile_img_path : 사용자 프로필 경로
      * article_img_path : 아티클 사진 경로
@@ -13,6 +14,7 @@ public class Fragment_Follow_Timeline_item{
      * article_comment_cnt : 아티클 댓글 수
      * created_at : 아티클 생성날짜
      */
+    private String uid;
     private String user_nickname;
     private String user_profile_img_path;
     private String article_img_path;
@@ -22,6 +24,14 @@ public class Fragment_Follow_Timeline_item{
     private String article_contents;
     private String article_comment_cnt;
     private String created_at;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
 
     public String getUser_nickname() {
         return user_nickname;

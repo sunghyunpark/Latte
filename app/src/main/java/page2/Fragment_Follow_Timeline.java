@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
@@ -19,6 +21,12 @@ import java.util.UUID;
 
 import app_controller.App_Config;
 import common.Util;
+import rest.ApiClient;
+import rest.ApiInterface;
+import rest.TimelineFollowResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
@@ -81,8 +89,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
                 getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
 
-        SetList();
+        //SetList();
 
+        LoadArticle();
     }
     //리스트 초기화
     private void SetList(){
@@ -107,6 +116,67 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+    }
+
+    //서버에서 article 정보들을 받아옴
+    private void LoadArticle(){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<TimelineFollowResponse> call = apiService.PostTimeLineArticle("follow", uid);
+        call.enqueue(new Callback<TimelineFollowResponse>() {
+            @Override
+            public void onResponse(Call<TimelineFollowResponse> call, Response<TimelineFollowResponse> response) {
+
+                TimelineFollowResponse articledata = response.body();
+                if (!articledata.isError()) {
+                    /**
+                     * 받아온 리스트 초기화
+                     */
+                    listItems = new ArrayList<Fragment_Follow_Timeline_item>();
+                    listItems.clear();
+
+                    int size = articledata.getArticle().size();
+                    for(int i=0;i<size;i++){
+                        Fragment_Follow_Timeline_item item = new Fragment_Follow_Timeline_item();
+                        item.setUid(articledata.getArticle().get(i).getUid());
+                        item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
+                        item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img_thumb());
+                        item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
+                        item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
+                        item.setArticle_like_cnt(articledata.getArticle().get(i).getArticle_like_cnt());
+                        item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
+                        item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
+                        item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
+                        Log.d("article_data",articledata.getArticle().get(i).getUid());
+                        Log.d("article_data",articledata.getArticle().get(i).getNick_name());
+                        Log.d("article_data",articledata.getArticle().get(i).getProfile_img_thumb());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_photo_url());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_text());
+                        //Log.d("article_data",articledata.getArticle().get(i).getArticle_like_cnt());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_comment_cnt());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_view_cnt());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
+                        listItems.add(item);
+                    }
+
+                    adapter = new RecyclerAdapter(listItems);
+                    adapter.notifyDataSetChanged();
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                    recyclerView.setAdapter(adapter);
+                } else {
+                    Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<TimelineFollowResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

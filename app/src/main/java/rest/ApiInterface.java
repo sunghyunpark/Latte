@@ -85,4 +85,14 @@ public interface ApiInterface {
             , @Field("uid") String uid
             , @Field("article_text") String board_text
             , @Field("article_photo_name") String upload_img);
+
+    /**
+     *
+     * @param tag -> follow / all
+     * @param uid -> 사용자 uid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline.php")
+    Call<TimelineFollowResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
 }
