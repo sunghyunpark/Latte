@@ -2,9 +2,13 @@ package common;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 
 import app_controller.SQLiteHandler;
 import okhttp3.MediaType;
@@ -34,7 +38,9 @@ public class Image_Uploader {
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        final File file = new File(img_path);
+        //final File file = new File(img_path);
+        final String local_path = ResizeBitmap(img_path);
+        final File file = new File(local_path);
 
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
@@ -59,6 +65,10 @@ public class Image_Uploader {
                         File path = new File(img_path);
                         if(path.exists()) {
                             path.delete();
+                        }
+                        File path2 = new File(local_path);
+                        if(path2.exists()){
+                            path2.delete();
                         }
 
                     }else{
@@ -132,6 +142,51 @@ public class Image_Uploader {
                 t.printStackTrace();
             }
         });
+    }
+
+    /**
+     * 파일 용량을 줄이기 위해 리사이징작업을 함.
+     * @param img_path -> 로컬주소
+     * @return
+     */
+
+    public String ResizeBitmap(String img_path) {
+
+        String local_path = "storage/emulated/0/PoPo/";
+        String file_name = "upload_img2.jpg";
+        File file = new File(local_path);
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inSampleSize = 4;
+        Bitmap bitmap = BitmapFactory.decodeFile(img_path, options);
+
+        // If no folders
+        if (!file.exists()) {
+            file.mkdirs();
+            // Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
+        }
+        File fileCacheItem = new File(local_path + file_name);
+        OutputStream out = null;
+
+        try {
+
+            //int height=bitmap.getHeight();
+            //int width=bitmap.getWidth();
+            fileCacheItem.createNewFile();
+            out = new FileOutputStream(fileCacheItem);
+            //160 부분을 자신이 원하는 크기로 변경할 수 있습니다.
+            //bitmap = Bitmap.createScaledBitmap(bitmap, 160, height/(width/160), true);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                out.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return local_path + file_name;
     }
 
 }

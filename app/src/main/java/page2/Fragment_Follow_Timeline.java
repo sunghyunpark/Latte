@@ -141,7 +141,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Fragment_Follow_Timeline_item item = new Fragment_Follow_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
-                        item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img_thumb());
+                        item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
                         item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
                         item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
                         item.setArticle_like_cnt(articledata.getArticle().get(i).getArticle_like_cnt());
@@ -153,7 +153,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Log.d("article_data",articledata.getArticle().get(i).getProfile_img_thumb());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_photo_url());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_text());
-                        //Log.d("article_data",articledata.getArticle().get(i).getArticle_like_cnt());
+                        Log.d("article_data",articledata.getArticle().get(i).getArticle_like_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_comment_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_view_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
@@ -231,7 +231,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 //article_img
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
-                        .signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .into(VHitem.article_img);

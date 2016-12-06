@@ -10,8 +10,10 @@ public class Article {
     private String uid;    //작성자 uid
     private String nick_name;    //작성자 닉네임
     private String profile_img_thumb;    //작성자 프로필 경로
+    private String profile_img;    //작성자 프로필 원본 경로
     private String article_id;    //article id
     private String article_photo_url;    //article 사진 경로
+    private String article_photo_thumb_url;    //article 사진 썸네일 경로
     private String article_text;    //article 설명글
     private String article_created_at;    //article 작성날짜
     private String article_like_cnt;    //article 좋아요 갯수
@@ -105,6 +107,22 @@ public class Article {
 
     public void setArticle_like_state(String article_like_state) {
         this.article_like_state = article_like_state;
+    }
+
+    public String getProfile_img() {
+        return profile_img;
+    }
+
+    public void setProfile_img(String profile_img) {
+        this.profile_img = profile_img;
+    }
+
+    public String getArticle_photo_thumb_url() {
+        return article_photo_thumb_url;
+    }
+
+    public void setArticle_photo_thumb_url(String article_photo_thumb_url) {
+        this.article_photo_thumb_url = article_photo_thumb_url;
     }
 
 }
