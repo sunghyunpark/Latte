@@ -15,6 +15,8 @@ import com.seedteam.latte.R;
 
 public class Fragment_Timeline extends Fragment {
 
+    //사용자 정보
+    private String uid;
     //뷰페이저
     private ViewPager mViewPager;
     private pagerAdapter adapter;
@@ -48,6 +50,7 @@ public class Fragment_Timeline extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null){
             String msg = bundle.getString("KEY_MSG");
+            uid = bundle.getString("user_uid");
             if(msg != null){
 
             }
@@ -150,12 +153,19 @@ public class Fragment_Timeline extends Fragment {
         public Fragment getItem(int position) {
 
             Fragment fragment = null;
+            Bundle bundle = new Bundle();
             switch (position) {
                 case 0:
                     fragment = new Fragment_Follow_Timeline();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    fragment.setArguments(bundle);
                     break;
                 case 1:
                     fragment = new Fragment_All_Timeline();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    fragment.setArguments(bundle);
                     break;
                 default:
                     return null;

@@ -26,6 +26,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private static final App_Config Server_url = new App_Config();
     private static final String Server_ip = Server_url.get_SERVER_IP();
 
+    //사용자 정보
+    private String uid;
+
     //리사이클러뷰
     private RecyclerAdapter adapter;
     private RecyclerView recyclerView;
@@ -58,6 +61,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         Bundle bundle = getArguments();
         if(bundle != null){
             String msg = bundle.getString("KEY_MSG");
+            uid = bundle.getString("user_uid");
             if(msg != null){
 
             }

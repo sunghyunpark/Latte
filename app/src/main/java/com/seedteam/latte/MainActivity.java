@@ -126,6 +126,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 tab2.setImageResource(R.mipmap.ic_page2_selected);
                 fragment = new Fragment_Timeline();
                 bundle.putString("KEY_MSG", "replace");
+                bundle.putString("user_uid", uid);
                 fragment.setArguments(bundle);
                 break ;
             case R.id.tab_3 :
