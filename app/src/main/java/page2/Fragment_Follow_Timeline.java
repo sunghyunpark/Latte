@@ -15,9 +15,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import app_controller.App_Config;
 import common.Util;
@@ -44,6 +46,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private ArrayList<Fragment_Follow_Timeline_item> listItems;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
+    Util util = new Util();
     View v;
 
 
@@ -89,34 +92,10 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
                 getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
 
-        //SetList();
 
         LoadArticle();
     }
-    //리스트 초기화
-    private void SetList(){
-        listItems = new ArrayList<Fragment_Follow_Timeline_item>();
-        listItems.clear();
 
-        for(int i=0;i<5;i++){
-            Fragment_Follow_Timeline_item item = new Fragment_Follow_Timeline_item();
-            item.setUser_profile_img_path("img/profile/test1.jpg");
-            item.setUser_nickname("sangjoo83");
-            item.setArticle_img_path("img/board/test1.jpg");
-            item.setArticle_like_cnt("80,340");
-            item.setArticle_view_cnt("1,340");
-            item.setArticle_contents("sangjoo83 하하하.안녕..기찻길에서 걷고있는 ...외롭다 ㅋㅋㅋㅋㅋ기찻길에서 걷고있는 ...외롭다 ㅋㅋㅋㅋㅋ기찻길에서 걷고있는 ...외롭다 ㅋㅋㅋㅋㅋ기찻길에서 걷고있는 ...외롭다 ㅋㅋㅋㅋㅋ기찻길에서 걷고있는 ...외롭다 ㅋㅋㅋㅋㅋ 오늘날씨구리다...ㅋㅋ 하하하.. 안녕우헤헤헤ㅔ헤헤헤헤헤");
-            item.setArticle_comment_cnt("340");
-            item.setCreated_at("2주전");
-            listItems.add(item);
-        }
-
-        adapter = new RecyclerAdapter(listItems);
-        adapter.notifyDataSetChanged();
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-
-    }
 
     //서버에서 article 정보들을 받아옴
     private void LoadArticle(){
@@ -213,7 +192,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
                         .transform(new Util.CircleTransform(getContext()))
-                        .signature(new StringSignature(UUID.randomUUID().toString()))
+                        //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .into(VHitem.user_profile_img);
@@ -247,14 +226,23 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.view_cnt_txt.setText("조회 "+currentItem.getArticle_view_cnt());
 
                 //설명글
-                VHitem.article_contents_txt.setText(currentItem.getArticle_contents());
+                VHitem.article_contents_txt.setText(currentItem.getUser_nickname()+"  "+currentItem.getArticle_contents());
 
                 //댓글 갯수
                 VHitem.go_all_comment_txt.setText("댓글 모두보기 "+currentItem.getArticle_comment_cnt());
 
+                /**
+                 * 서버에서 받아온 생성날짜 string을 Date타입으로 변환
+                 */
+                Date to = null;
+                try{
+                    SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    to = transFormat.parse(currentItem.getCreated_at());
+                }catch (ParseException p){
+                    p.printStackTrace();
+                }
                 //시간
-                VHitem.created_at.setText(currentItem.getCreated_at());
-
+                VHitem.created_at.setText(util.formatTimeString(to));
             }
         }
         private boolean isPositionHeader(int position) {
