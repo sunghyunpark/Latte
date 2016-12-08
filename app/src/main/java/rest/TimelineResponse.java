@@ -6,7 +6,7 @@ import java.util.ArrayList;
 /**
  * 회원가입/로그인의 response 값들
  */
-public class TimelineFollowResponse {
+public class TimelineResponse {
 
     private ArrayList<Article> article;
     private boolean error;

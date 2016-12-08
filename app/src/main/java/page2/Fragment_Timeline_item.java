@@ -1,12 +1,14 @@
 package page2;
 
-public class Fragment_Follow_Timeline_item{
+public class Fragment_Timeline_item {
 
     /**
+     * timeline에서 follow랑 all이랑 받아오는 정보가 현재 같아서 공통으로 사용
      * uid : 사용자 uid
      * user_nickname : 사용자 닉네임
      * user_profile_img_path : 사용자 프로필 경로
      * article_img_path : 아티클 사진 경로
+     * article_img_thumb_path : 아티클 사진 썸네일 경로
      * article_like_state : 아티클 좋아요 상태
      * article_like_cnt : 아티클 좋아요 갯수
      * article_view_cnt : 아티클 조회수
@@ -18,6 +20,7 @@ public class Fragment_Follow_Timeline_item{
     private String user_nickname;
     private String user_profile_img_path;
     private String article_img_path;
+    private String article_img_thumb_path;
     private boolean article_like_state;
     private String article_like_cnt;
     private String article_view_cnt;
@@ -55,6 +58,14 @@ public class Fragment_Follow_Timeline_item{
 
     public void setArticle_img_path(String article_img_path) {
         this.article_img_path = article_img_path;
+    }
+
+    public String getArticle_img_thumb_path() {
+        return article_img_thumb_path;
+    }
+
+    public void setArticle_img_thumb_path(String article_img_thumb_path) {
+        this.article_img_thumb_path = article_img_thumb_path;
     }
 
     public boolean isArticle_like_state() {

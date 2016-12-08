@@ -94,5 +94,5 @@ public interface ApiInterface {
      */
     @FormUrlEncoded
     @POST("timeline/timeline.php")
-    Call<TimelineFollowResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
+    Call<TimelineResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
 }

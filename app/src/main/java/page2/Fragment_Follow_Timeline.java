@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
 
 import java.text.ParseException;
@@ -26,7 +25,7 @@ import app_controller.App_Config;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
-import rest.TimelineFollowResponse;
+import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +33,7 @@ import retrofit2.Response;
 /**
  * created by sunghyun 2016-12-08
  */
+
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final App_Config Server_url = new App_Config();
@@ -46,7 +46,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private RecyclerAdapter adapter;
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
-    private ArrayList<Fragment_Follow_Timeline_item> listItems;
+    private ArrayList<Fragment_Timeline_item> listItems;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     Util util = new Util();
@@ -57,7 +57,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
-
+        LoadArticle();
         mSwipeRefresh.setRefreshing(false);
     }
     @Override
@@ -105,22 +105,22 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineFollowResponse> call = apiService.PostTimeLineArticle("follow", uid);
-        call.enqueue(new Callback<TimelineFollowResponse>() {
+        Call<TimelineResponse> call = apiService.PostTimeLineArticle("follow", uid);
+        call.enqueue(new Callback<TimelineResponse>() {
             @Override
-            public void onResponse(Call<TimelineFollowResponse> call, Response<TimelineFollowResponse> response) {
+            public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
 
-                TimelineFollowResponse articledata = response.body();
+                TimelineResponse articledata = response.body();
                 if (!articledata.isError()) {
                     /**
                      * 받아온 리스트 초기화
                      */
-                    listItems = new ArrayList<Fragment_Follow_Timeline_item>();
+                    listItems = new ArrayList<Fragment_Timeline_item>();
                     listItems.clear();
 
                     int size = articledata.getArticle().size();
                     for(int i=0;i<size;i++){
-                        Fragment_Follow_Timeline_item item = new Fragment_Follow_Timeline_item();
+                        Fragment_Timeline_item item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
@@ -153,7 +153,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             }
 
             @Override
-            public void onFailure(Call<TimelineFollowResponse> call, Throwable t) {
+            public void onFailure(Call<TimelineResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e("tag", t.toString());
                 Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
@@ -164,9 +164,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
-        List<Fragment_Follow_Timeline_item> listItems;
+        List<Fragment_Timeline_item> listItems;
 
-        public RecyclerAdapter(List<Fragment_Follow_Timeline_item> listItems) {
+        public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
         }
 
@@ -179,7 +179,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
 
-        private Fragment_Follow_Timeline_item getItem(int position) {
+        private Fragment_Timeline_item getItem(int position) {
             return listItems.get(position+1);
         }
 
@@ -188,7 +188,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
             if (holder instanceof Fragment_Follow_Timeline_VHitem) {
-                final Fragment_Follow_Timeline_item currentItem = getItem(position-1);
+                final Fragment_Timeline_item currentItem = getItem(position-1);
                 final Fragment_Follow_Timeline_VHitem VHitem = (Fragment_Follow_Timeline_VHitem)holder;
 
                 //user_profile
@@ -266,9 +266,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 //시간
                 VHitem.created_at.setText(util.formatTimeString(to));
             }
-        }
-        private boolean isPositionHeader(int position) {
-            return position == 0;
         }
         @Override
         public int getItemViewType(int position) {
