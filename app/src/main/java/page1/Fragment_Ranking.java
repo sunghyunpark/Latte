@@ -2,14 +2,12 @@ package page1;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
@@ -17,7 +15,9 @@ import com.seedteam.latte.R;
 import app_controller.SQLiteHandler;
 import app_controller.SessionManager;
 
-
+/**
+ * created by sunghyun 2016-12-08
+ */
 public class Fragment_Ranking extends Fragment {
 
     //세션

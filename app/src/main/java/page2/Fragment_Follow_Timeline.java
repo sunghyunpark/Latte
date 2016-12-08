@@ -1,5 +1,6 @@
 package page2;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -30,7 +31,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
+/**
+ * created by sunghyun 2016-12-08
+ */
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final App_Config Server_url = new App_Config();
@@ -213,6 +216,25 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .into(VHitem.article_img);
+
+                VHitem.article_img.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
+                        intent.putExtra("user_uid", uid);    // 내 uid
+                        intent.putExtra("article_user_uid", currentItem.getUid());    //작성자 uid
+                        intent.putExtra("article_user_nickname", currentItem.getUser_nickname());    //작성자 닉네임
+                        intent.putExtra("article_user_profile_path", currentItem.getUser_profile_img_path());    //작성자 프로필 경로
+                        intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
+                        intent.putExtra("article_like_cnt", currentItem.getArticle_like_cnt());    //아티클 좋아요 갯수
+                        intent.putExtra("article_view_cnt", currentItem.getArticle_view_cnt());    //아티클 조회수
+                        intent.putExtra("article_contents", currentItem.getArticle_contents());    //아티클 설명글
+                        intent.putExtra("article_comment_cnt", currentItem.getArticle_comment_cnt());    //아티클 댓글 수
+                        intent.putExtra("article_created_at", currentItem.getCreated_at());    //아티클 생성날짜
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
 
                 /**
                  * 각 아이템마다 상태값들이 다른것들은 포지션값으로 잡아줘야함

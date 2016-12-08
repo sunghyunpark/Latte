@@ -9,7 +9,9 @@ import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
-
+/**
+ * created by sunghyun 2016-12-08
+ */
 public class Fragment_MyPage extends Fragment {
 
     View v;
