@@ -9,7 +9,7 @@ public class Fragment_Timeline_item {
      * user_profile_img_path : 사용자 프로필 경로
      * article_img_path : 아티클 사진 경로
      * article_img_thumb_path : 아티클 사진 썸네일 경로
-     * article_like_state : 아티클 좋아요 상태
+     * article_like_state : 아티클 좋아요 상태 (Y/N)
      * article_like_cnt : 아티클 좋아요 갯수
      * article_view_cnt : 아티클 조회수
      * article_contents : 아티클 설명글
@@ -21,7 +21,7 @@ public class Fragment_Timeline_item {
     private String user_profile_img_path;
     private String article_img_path;
     private String article_img_thumb_path;
-    private boolean article_like_state;
+    private String article_like_state;
     private String article_like_cnt;
     private String article_view_cnt;
     private String article_contents;
@@ -68,11 +68,11 @@ public class Fragment_Timeline_item {
         this.article_img_thumb_path = article_img_thumb_path;
     }
 
-    public boolean isArticle_like_state() {
+    public String getArticle_like_state() {
         return article_like_state;
     }
 
-    public void setArticle_like_state(boolean article_like_state) {
+    public void setArticle_like_state(String article_like_state) {
         this.article_like_state = article_like_state;
     }
 

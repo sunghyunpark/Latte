@@ -126,6 +126,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
                         item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
                         item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
+                        item.setArticle_like_state(articledata.getArticle().get(i).getArticle_like_state());
                         item.setArticle_like_cnt(articledata.getArticle().get(i).getArticle_like_cnt());
                         item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
@@ -160,6 +161,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             }
         });
     }
+
+
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -180,15 +183,56 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         }
 
         private Fragment_Timeline_item getItem(int position) {
-            return listItems.get(position+1);
+            return listItems.get(position);
         }
 
+        /**
+         * 이 메소드는 최초 데이터를 불러와 아이템들을 만들때 해당 포지셥값에 따른 좋아요 상태들을 반환함
+         * @param position
+         * @return
+         */
+        private boolean CurrentLikeState(int position){
+            boolean state = true;
+            String state_str = getItem(position).getArticle_like_state();
+
+            if(state_str.equals("Y")){
+                state = true;
+            }else{
+                state = false;
+            }
+
+            return state;
+        }
+
+        /**
+         * 좋아요 상태가 변경되었을 때 해당 아아템의 데이터 값을 변경해줌
+         * 이 메소드는 좋아요 버튼을 눌렀을 때 클릭이벤트에 따라 설정값을 다르게 해줌
+         * @param state
+         * @param position
+         * @return
+         */
+        private boolean ChangeLikeState(boolean state, int position){
+            int like_cnt = Integer.parseInt(getItem(position).getArticle_like_cnt());
+            if(state){
+                state = false;
+                like_cnt -= 1;
+                getItem(position).setArticle_like_state("N");
+                getItem(position).setArticle_like_cnt(""+like_cnt);
+                return state;
+            }else{
+                like_cnt += 1;
+                state = true;
+                getItem(position).setArticle_like_state("Y");
+                getItem(position).setArticle_like_cnt(""+like_cnt);
+                return state;
+            }
+        }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
             if (holder instanceof Fragment_Follow_Timeline_VHitem) {
-                final Fragment_Timeline_item currentItem = getItem(position-1);
+                final Fragment_Timeline_item currentItem = getItem(position);
                 final Fragment_Follow_Timeline_VHitem VHitem = (Fragment_Follow_Timeline_VHitem)holder;
 
                 //user_profile
@@ -226,6 +270,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         intent.putExtra("article_user_nickname", currentItem.getUser_nickname());    //작성자 닉네임
                         intent.putExtra("article_user_profile_path", currentItem.getUser_profile_img_path());    //작성자 프로필 경로
                         intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
+                        intent.putExtra("article_like_state", currentItem.getArticle_like_state());    //아티클 좋아요 상태
                         intent.putExtra("article_like_cnt", currentItem.getArticle_like_cnt());    //아티클 좋아요 갯수
                         intent.putExtra("article_view_cnt", currentItem.getArticle_view_cnt());    //아티클 조회수
                         intent.putExtra("article_contents", currentItem.getArticle_contents());    //아티클 설명글
@@ -240,6 +285,28 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                  * 각 아이템마다 상태값들이 다른것들은 포지션값으로 잡아줘야함
                  * 좋아요 상태값
                  */
+
+                if(CurrentLikeState(position)){
+                    //좋아요 일때
+                    VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_like_btn_img
+                }else{
+                    VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_not_like_btn_img
+                }
+
+                VHitem.like_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(CurrentLikeState(position)){
+                            ChangeLikeState(true, position);
+                            VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_not_like_btn_img
+                        }else{
+                            ChangeLikeState(false, position);
+                            VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_like_btn_img
+                        }
+                        //좋아요 갯수
+                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());
+                    }
+                });
 
                 //좋아요 갯수
                 VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());

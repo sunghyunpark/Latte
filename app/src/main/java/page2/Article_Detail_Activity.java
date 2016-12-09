@@ -27,6 +27,7 @@ public class Article_Detail_Activity extends Activity {
     private String article_user_nickname;    //작성자 닉네임
     private String article_user_profile_path;    //작성자 프로필 경로
     private String article_photo_path;    //아티클 사진 경로
+    private String article_like_state;    //아티클 좋아요 상태
     private String article_like_cnt;    //아티클 좋아요 갯수
     private String article_view_cnt;    //아티클 조회수
     private String article_contents;    //아티클 설명글
@@ -45,6 +46,7 @@ public class Article_Detail_Activity extends Activity {
         article_user_nickname = intent.getExtras().getString("article_user_nickname");
         article_user_profile_path = intent.getExtras().getString("article_user_profile_path");
         article_photo_path = intent.getExtras().getString("article_photo_path");
+        article_like_state = intent.getExtras().getString("article_like_state");
         article_like_cnt = intent.getExtras().getString("article_like_cnt");
         article_view_cnt = intent.getExtras().getString("article_view_cnt");
         article_contents = intent.getExtras().getString("article_contents");
