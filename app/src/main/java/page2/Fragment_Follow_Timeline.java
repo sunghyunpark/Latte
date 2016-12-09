@@ -288,9 +288,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 if(CurrentLikeState(position)){
                     //좋아요 일때
-                    VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_like_btn_img
+                    VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                 }else{
-                    VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_not_like_btn_img
+                    VHitem.like_btn.setBackgroundResource(R.mipmap.article_not_like_btn_img);    //article_not_like_btn_img
                 }
 
                 VHitem.like_btn.setOnClickListener(new View.OnClickListener() {
@@ -298,10 +298,10 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     public void onClick(View view) {
                         if(CurrentLikeState(position)){
                             ChangeLikeState(true, position);
-                            VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_not_like_btn_img
+                            VHitem.like_btn.setBackgroundResource(R.mipmap.article_not_like_btn_img);    //article_not_like_btn_img
                         }else{
                             ChangeLikeState(false, position);
-                            VHitem.like_btn.setBackgroundResource(R.mipmap.ic_launcher);    //article_like_btn_img
+                            VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수
                         VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());

@@ -18,8 +18,7 @@
             android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:layout_marginLeft="10dp" />
 
         <TextView
             android:id="@+id/user_nickname_txt"
@@ -58,29 +57,28 @@
 
         <ImageView
             android:id="@+id/like_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="15dp"/>
 
         <ImageView
             android:id="@+id/comment_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher"
             android:layout_toRightOf="@+id/like_btn"
-            android:layout_marginLeft="10dp"/>
+            android:src="@mipmap/article_comment_btn_img"
+            android:layout_marginLeft="18dp"/>
 
         <ImageView
             android:id="@+id/share_btn"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
             android:layout_centerVertical="true"
-            android:src="@mipmap/ic_launcher"
             android:layout_toRightOf="@+id/comment_btn"
-            android:layout_marginLeft="10dp"/>
+            android:src="@mipmap/article_share_btn_img"
+            android:layout_marginLeft="18dp"/>
 
     </RelativeLayout>
     <!--구분선-->
