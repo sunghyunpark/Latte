@@ -7,6 +7,7 @@ public class Fragment_Timeline_item {
      * uid : 사용자 uid
      * user_nickname : 사용자 닉네임
      * user_profile_img_path : 사용자 프로필 경로
+     * article_id : 아티클 id
      * article_img_path : 아티클 사진 경로
      * article_img_thumb_path : 아티클 사진 썸네일 경로
      * article_like_state : 아티클 좋아요 상태 (Y/N)
@@ -19,6 +20,7 @@ public class Fragment_Timeline_item {
     private String uid;
     private String user_nickname;
     private String user_profile_img_path;
+    private String article_id;
     private String article_img_path;
     private String article_img_thumb_path;
     private String article_like_state;
@@ -50,6 +52,14 @@ public class Fragment_Timeline_item {
 
     public void setUser_profile_img_path(String user_profile_img_path) {
         this.user_profile_img_path = user_profile_img_path;
+    }
+
+    public String getArticle_id() {
+        return article_id;
+    }
+
+    public void setArticle_id(String article_id) {
+        this.article_id = article_id;
     }
 
     public String getArticle_img_path() {

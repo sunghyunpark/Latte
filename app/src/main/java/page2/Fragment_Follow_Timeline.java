@@ -25,6 +25,7 @@ import app_controller.App_Config;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
+import rest.CommonErrorResponse;
 import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -124,6 +125,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
+                        item.setArticle_id(articledata.getArticle().get(i).getArticle_id());
                         item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
                         item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
                         item.setArticle_like_state(articledata.getArticle().get(i).getArticle_like_state());
@@ -162,6 +164,34 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         });
     }
 
+    private void PostArticleLikeState(String uid, String article_id, String like_state){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.PostArticleLike("like", uid, article_id, like_state);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse likeresponse = response.body();
+                if (!likeresponse.isError()) {
+                    Toast.makeText(getActivity(),"좋아요 성공", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(),"좋아요 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -269,6 +299,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         intent.putExtra("article_user_uid", currentItem.getUid());    //작성자 uid
                         intent.putExtra("article_user_nickname", currentItem.getUser_nickname());    //작성자 닉네임
                         intent.putExtra("article_user_profile_path", currentItem.getUser_profile_img_path());    //작성자 프로필 경로
+                        intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
                         intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
                         intent.putExtra("article_like_state", currentItem.getArticle_like_state());    //아티클 좋아요 상태
                         intent.putExtra("article_like_cnt", currentItem.getArticle_like_cnt());    //아티클 좋아요 갯수
@@ -298,9 +329,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     public void onClick(View view) {
                         if(CurrentLikeState(position)){
                             ChangeLikeState(true, position);
+                            PostArticleLikeState(uid, currentItem.getArticle_id(), "N");
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_not_like_btn_img);    //article_not_like_btn_img
                         }else{
                             ChangeLikeState(false, position);
+                            PostArticleLikeState(uid, currentItem.getArticle_id(), "Y");
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수

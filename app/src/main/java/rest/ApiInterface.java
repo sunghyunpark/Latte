@@ -95,4 +95,18 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline.php")
     Call<TimelineResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
+
+    /**
+     * 아티클에서 좋아요 탭했을 때 상태값 전송
+     * @param tag -> like
+     * @param uid -> 좋아요 누르는 사용자의 uid
+     * @param article_id -> 아티클 id
+     * @param like_state -> 상태값 Y/N
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> PostArticleLike(@Field("tag") String tag, @Field("uid") String uid,
+                                           @Field("article_id") String article_id,
+                                           @Field("like_state") String like_state);
 }
