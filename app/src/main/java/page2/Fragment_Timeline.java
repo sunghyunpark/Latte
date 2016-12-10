@@ -1,5 +1,6 @@
 package page2;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -77,6 +78,8 @@ public class Fragment_Timeline extends Fragment {
             @Override
             public void onClick(View view) {
                 mViewPager.setCurrentItem(0);
+                all_btn.setTextColor(getResources().getColor(R.color.GrayColor));
+                follow_btn.setTextColor(getResources().getColor(R.color.BlackColor));
                 follow_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
                 all_underbar.setBackgroundColor(getResources().getColor(R.color.white));
             }
@@ -86,6 +89,8 @@ public class Fragment_Timeline extends Fragment {
             @Override
             public void onClick(View view) {
                 mViewPager.setCurrentItem(1);
+                follow_btn.setTextColor(getResources().getColor(R.color.GrayColor));
+                all_btn.setTextColor(getResources().getColor(R.color.BlackColor));
                 follow_underbar.setBackgroundColor(getResources().getColor(R.color.white));
                 all_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
             }
@@ -106,10 +111,14 @@ public class Fragment_Timeline extends Fragment {
 
                 switch (temp) {
                     case 0:
+                        all_btn.setTextColor(getResources().getColor(R.color.GrayColor));
+                        follow_btn.setTextColor(getResources().getColor(R.color.BlackColor));
                         follow_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
                         all_underbar.setBackgroundColor(getResources().getColor(R.color.white));
                         break;
                     case 1:
+                        all_btn.setTextColor(getResources().getColor(R.color.BlackColor));
+                        follow_btn.setTextColor(getResources().getColor(R.color.GrayColor));
                         follow_underbar.setBackgroundColor(getResources().getColor(R.color.white));
                         all_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
                         break;

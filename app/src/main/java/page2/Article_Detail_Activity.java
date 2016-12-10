@@ -13,6 +13,10 @@ import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import app_controller.App_Config;
 import common.Common;
 import common.Util;
@@ -53,6 +57,7 @@ public class Article_Detail_Activity extends Activity {
     TextView article_created_at_txt;
 
     Common common = new Common();
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,20 +67,6 @@ public class Article_Detail_Activity extends Activity {
         Intent intent = getIntent();
         user_uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
-
-        /*
-        article_user_nickname = intent.getExtras().getString("article_user_nickname");
-        article_user_profile_path = intent.getExtras().getString("article_user_profile_path");
-        article_id = intent.getExtras().getString("article_id");
-        article_user_uid = intent.getExtras().getString("article_user_uid");
-        article_photo_path = intent.getExtras().getString("article_photo_path");
-        article_like_state = intent.getExtras().getString("article_like_state");
-        article_like_cnt = intent.getExtras().getInt("article_like_cnt");
-        article_view_cnt = intent.getExtras().getString("article_view_cnt");
-        article_contents = intent.getExtras().getString("article_contents");
-        article_comments_cnt = intent.getExtras().getString("article_comment_cnt");
-        article_created_at = intent.getExtras().getString("article_created_at");
-        */
 
         InitView();
 
@@ -147,8 +138,18 @@ public class Article_Detail_Activity extends Activity {
                     //아티클 댓글 수
                     article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+"모두 보기");
 
+                    /**
+                     * 서버에서 받아온 생성날짜 string을 Date타입으로 변환
+                     */
+                    Date to = null;
+                    try{
+                        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        to = transFormat.parse(articledata.getArticle().getArticle_created_at());
+                    }catch (ParseException p){
+                        p.printStackTrace();
+                    }
                     //아티클 생성날짜
-                    article_created_at_txt.setText(articledata.getArticle().getArticle_created_at());
+                    article_created_at_txt.setText(util.formatTimeString(to));
 
 
                 } else {
