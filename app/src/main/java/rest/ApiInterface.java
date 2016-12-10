@@ -97,6 +97,18 @@ public interface ApiInterface {
     Call<TimelineResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
 
     /**
+     * 디테일뷰에서 새롭게 데이터들을 서버에서 불러옴
+     * @param tag -> detail
+     * @param uid -> 사용자 uid
+     * @param article_id -> 아티클 id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline.php")
+    Call<ArticleDetailResponse> PostTimeLineDetailData(@Field("tag") String tag, @Field("uid") String uid,
+                                                  @Field("article_id") String article_id);
+
+    /**
      * 아티클에서 좋아요 탭했을 때 상태값 전송
      * @param tag -> like
      * @param uid -> 좋아요 누르는 사용자의 uid

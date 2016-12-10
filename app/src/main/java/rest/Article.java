@@ -20,6 +20,8 @@ public class Article {
     private String article_view_cnt;    //article 조회수
     private String article_comment_cnt;    //article 댓글 수
     private String article_like_state;    //좋아요 상태 (Y or N)
+    private String article_follow_state;    //팔로우 상태
+
 
     public String getUid() {
         return uid;
@@ -123,6 +125,14 @@ public class Article {
 
     public void setArticle_photo_thumb_url(String article_photo_thumb_url) {
         this.article_photo_thumb_url = article_photo_thumb_url;
+    }
+
+    public String getArticle_follow_state() {
+        return article_follow_state;
+    }
+
+    public void setArticle_follow_state(String article_follow_state) {
+        this.article_follow_state = article_follow_state;
     }
 
 }
