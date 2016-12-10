@@ -121,6 +121,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
+                        item.setArticle_id(articledata.getArticle().get(i).getArticle_id());
                         item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
                         item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
                         item.setArticle_img_thumb_path(articledata.getArticle().get(i).getArticle_photo_thumb_url());
@@ -195,15 +196,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
-                        intent.putExtra("article_user_uid", currentItem.getUid());    //작성자 uid
-                        intent.putExtra("article_user_nickname", currentItem.getUser_nickname());    //작성자 닉네임
-                        intent.putExtra("article_user_profile_path", currentItem.getUser_profile_img_path());    //작성자 프로필 경로
-                        intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
-                        intent.putExtra("article_like_cnt", currentItem.getArticle_like_cnt());    //아티클 좋아요 갯수
-                        intent.putExtra("article_view_cnt", currentItem.getArticle_view_cnt());    //아티클 조회수
-                        intent.putExtra("article_contents", currentItem.getArticle_contents());    //아티클 설명글
-                        intent.putExtra("article_comment_cnt", currentItem.getArticle_comment_cnt());    //아티클 댓글 수
-                        intent.putExtra("article_created_at", currentItem.getCreated_at());    //아티클 생성날짜
+                        intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }

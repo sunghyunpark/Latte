@@ -135,6 +135,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
                         item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
+                        /*
                         Log.d("article_data",articledata.getArticle().get(i).getUid());
                         Log.d("article_data",articledata.getArticle().get(i).getNick_name());
                         Log.d("article_data",articledata.getArticle().get(i).getProfile_img_thumb());
@@ -144,6 +145,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_comment_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_view_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
+                        */
                         listItems.add(item);
                     }
 
@@ -268,22 +270,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        int like_cnt = Integer.parseInt(currentItem.getArticle_like_cnt());
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
-                        /*
-                        intent.putExtra("article_user_nickname", currentItem.getUser_nickname());    //작성자 닉네임
-                        intent.putExtra("article_user_profile_path", currentItem.getUser_profile_img_path());    //작성자 프로필 경로
-                        intent.putExtra("article_user_uid", currentItem.getUid());    //작성자 uid
-                        intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
-                        intent.putExtra("article_like_state", currentItem.getArticle_like_state());    //아티클 좋아요 상태
-                        intent.putExtra("article_like_cnt", like_cnt);    //아티클 좋아요 갯수 int
-                        intent.putExtra("article_view_cnt", currentItem.getArticle_view_cnt());    //아티클 조회수
-                        intent.putExtra("article_contents", currentItem.getArticle_contents());    //아티클 설명글
-                        intent.putExtra("article_comment_cnt", currentItem.getArticle_comment_cnt());    //아티클 댓글 수
-                        intent.putExtra("article_created_at", currentItem.getCreated_at());    //아티클 생성날짜
-                        */
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
