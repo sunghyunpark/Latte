@@ -26,6 +26,7 @@ import rest.ArticleDetailResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import common.Cancel_Following_Dialog;
 
 /**
  * created by sunghyun 2016-12-08
@@ -162,7 +163,8 @@ public class Article_Detail_Activity extends Activity {
                         article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
                     }
                     //Follow버튼 이벤트
-                    FollowBtn(articledata.getArticle().getArticle_follow_state());
+                    FollowBtn(articledata.getArticle().getArticle_follow_state(), articledata.getArticle().getProfile_img(),
+                            articledata.getArticle().getNick_name());
 
 
 
@@ -181,7 +183,7 @@ public class Article_Detail_Activity extends Activity {
         });
     }
 
-    private void FollowBtn(String follow_state){
+    private void FollowBtn(String follow_state, final String article_user_profile_path, final String article_user_nick_name){
         if(follow_state.equals("Y")){
             follow_state_flag = true;
         }else{
@@ -195,6 +197,11 @@ public class Article_Detail_Activity extends Activity {
                 if(follow_state_flag){
                     follow_state_flag = false;
                     article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                    Intent intent  = new Intent(getApplicationContext(), Cancel_Following_Dialog.class);
+                    intent.putExtra("article_user_profile_img_path",article_user_profile_path);
+                    intent.putExtra("article_user_nickname", article_user_nick_name);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 }else{
                     follow_state_flag = true;
                     article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
