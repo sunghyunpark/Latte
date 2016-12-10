@@ -155,13 +155,6 @@ public class Article_Detail_Activity extends Activity {
                     //아티클 생성날짜
                     article_created_at_txt.setText(util.formatTimeString(to));
 
-                    //아티클 팔로잉 버튼 상태
-                    if(articledata.getArticle().getArticle_follow_state().equals("Y")){
-                        //팔로잉 상태 ok
-                        article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
-                    }else{
-                        article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
-                    }
                     //Follow버튼 이벤트
                     FollowBtn(articledata.getArticle().getArticle_follow_state(), articledata.getArticle().getProfile_img(),
                             articledata.getArticle().getNick_name());
@@ -183,11 +176,19 @@ public class Article_Detail_Activity extends Activity {
         });
     }
 
+    /**
+     * 팔로잉 버튼 이벤트
+     * @param follow_state -> 서버에서 받아온 상태
+     * @param article_user_profile_path -> 취소 다이얼로그에 보여질 프로필
+     * @param article_user_nick_name -> 취소 다이얼로그에 보여질 닉네임
+     */
     private void FollowBtn(String follow_state, final String article_user_profile_path, final String article_user_nick_name){
         if(follow_state.equals("Y")){
             follow_state_flag = true;
+            article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
         }else{
             follow_state_flag = false;
+            article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
         }
 
         article_follow_state_img.setOnClickListener(new View.OnClickListener() {
