@@ -82,26 +82,25 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="15dp"/>
 
                 <ImageView
                     android:id="@+id/comment_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/article_comment_btn_img"
                     android:layout_toRightOf="@+id/like_btn"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="18dp"/>
 
                 <ImageView
                     android:id="@+id/share_btn"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher"
+                    android:src="@mipmap/article_share_btn_img"
                     android:layout_toRightOf="@+id/comment_btn"
-                    android:layout_marginLeft="10dp"/>
+                    android:layout_marginLeft="18dp"/>
 
                 <ImageView
                     android:id="@+id/follow_btn"
@@ -109,8 +108,7 @@
                     android:layout_height="20dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="15dp"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:layout_marginRight="15dp"/>
 
             </RelativeLayout>
             <!--구분선-->

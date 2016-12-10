@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import app_controller.App_Config;
+import common.Common;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -51,6 +52,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     Util util = new Util();
+    Common common = new Common();
     View v;
 
 
@@ -164,34 +166,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         });
     }
 
-    private void PostArticleLikeState(String uid, String article_id, String like_state){
-
-        ApiInterface apiService =
-                ApiClient.getClient().create(ApiInterface.class);
-
-        Call<CommonErrorResponse> call = apiService.PostArticleLike("like", uid, article_id, like_state);
-        call.enqueue(new Callback<CommonErrorResponse>() {
-            @Override
-            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
-
-                CommonErrorResponse likeresponse = response.body();
-                if (!likeresponse.isError()) {
-                    Toast.makeText(getActivity(),"좋아요 성공", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getActivity(),"좋아요 실패", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-
-            @Override
-            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
-                // Log error here since request failed
-                Log.e("tag", t.toString());
-                Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-    }
 
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -294,6 +268,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        int like_cnt = Integer.parseInt(currentItem.getArticle_like_cnt());
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_user_uid", currentItem.getUid());    //작성자 uid
@@ -302,7 +277,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
                         intent.putExtra("article_photo_path", currentItem.getArticle_img_path());    //아티클 사진 경로
                         intent.putExtra("article_like_state", currentItem.getArticle_like_state());    //아티클 좋아요 상태
-                        intent.putExtra("article_like_cnt", currentItem.getArticle_like_cnt());    //아티클 좋아요 갯수
+                        intent.putExtra("article_like_cnt", like_cnt);    //아티클 좋아요 갯수 int
                         intent.putExtra("article_view_cnt", currentItem.getArticle_view_cnt());    //아티클 조회수
                         intent.putExtra("article_contents", currentItem.getArticle_contents());    //아티클 설명글
                         intent.putExtra("article_comment_cnt", currentItem.getArticle_comment_cnt());    //아티클 댓글 수
@@ -329,11 +304,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     public void onClick(View view) {
                         if(CurrentLikeState(position)){
                             ChangeLikeState(true, position);
-                            PostArticleLikeState(uid, currentItem.getArticle_id(), "N");
+                            common.PostArticleLikeState(getActivity(),uid, currentItem.getArticle_id(), "N");
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_not_like_btn_img);    //article_not_like_btn_img
                         }else{
                             ChangeLikeState(false, position);
-                            PostArticleLikeState(uid, currentItem.getArticle_id(), "Y");
+                            common.PostArticleLikeState(getActivity(),uid, currentItem.getArticle_id(), "Y");
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수
