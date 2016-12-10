@@ -104,8 +104,8 @@
 
                 <ImageView
                     android:id="@+id/follow_btn"
-                    android:layout_width="40dp"
-                    android:layout_height="20dp"
+                    android:layout_width="48dp"
+                    android:layout_height="30dp"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="15dp"/>

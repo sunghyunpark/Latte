@@ -44,17 +44,19 @@ public class Article_Detail_Activity extends Activity {
 
 
     private boolean like_state_flag;   //좋아요 상태 플래그
+    private boolean follow_state_flag;    //팔로잉 상태 플래그
     private int like_cnt;    //좋아요 카운트
 
-    ImageView article_user_profile_img;
-    TextView article_user_nickname_txt;
+    ImageView article_user_profile_img;    //아티클 작성자 프로필 경로
+    TextView article_user_nickname_txt;    //아티클 작성자 닉네임
     ImageView article_like_img;    //좋아요 버튼
     TextView article_like_cnt_txt;   //좋아요 txt
-    ImageView article_photo_img;
-    TextView article_view_cnt_txt;
-    TextView article_contents_txt;
-    TextView article_all_comment_txt;
-    TextView article_created_at_txt;
+    ImageView article_photo_img;    //아티클 사진 경로
+    TextView article_view_cnt_txt;    //아티클 조회수
+    TextView article_contents_txt;    //아티클 설명글
+    TextView article_all_comment_txt;    //아티클 댓글 수
+    TextView article_created_at_txt;    //아티클 생성날짜
+    ImageView article_follow_state_img;    //아티클 팔로잉 상태
 
     Common common = new Common();
     Util util = new Util();
@@ -83,6 +85,7 @@ public class Article_Detail_Activity extends Activity {
         article_contents_txt = (TextView)findViewById(R.id.article_contents_txt);
         article_all_comment_txt = (TextView)findViewById(R.id.go_all_comment_txt);
         article_created_at_txt = (TextView)findViewById(R.id.created_at_txt);
+        article_follow_state_img = (ImageView)findViewById(R.id.follow_btn);
 
         LoadDetailData();
 
@@ -151,6 +154,17 @@ public class Article_Detail_Activity extends Activity {
                     //아티클 생성날짜
                     article_created_at_txt.setText(util.formatTimeString(to));
 
+                    //아티클 팔로잉 버튼 상태
+                    if(articledata.getArticle().getArticle_follow_state().equals("Y")){
+                        //팔로잉 상태 ok
+                        article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                    }else{
+                        article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                    }
+                    //Follow버튼 이벤트
+                    FollowBtn(articledata.getArticle().getArticle_follow_state());
+
+
 
                 } else {
                     Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();
@@ -167,6 +181,27 @@ public class Article_Detail_Activity extends Activity {
         });
     }
 
+    private void FollowBtn(String follow_state){
+        if(follow_state.equals("Y")){
+            follow_state_flag = true;
+        }else{
+            follow_state_flag = false;
+        }
+
+        article_follow_state_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if(follow_state_flag){
+                    follow_state_flag = false;
+                    article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                }else{
+                    follow_state_flag = true;
+                    article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                }
+            }
+        });
+    }
     /**
      * 좋아요 상태에 따른 좋아요 버튼 초기화
      * @param like_state
