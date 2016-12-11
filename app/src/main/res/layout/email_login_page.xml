@@ -84,6 +84,7 @@
             android:background="@drawable/login_btn_transparent"
             android:hint="이메일"
             android:textColor="#ffffff"
+            android:maxLines="1"
             android:textColorHint="#55ffffff"
             android:paddingLeft="20dp"/>
 
@@ -93,6 +94,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="5dp"
             android:hint="비밀번호"
+            android:maxLines="1"
             android:inputType="textPassword"
             android:textColor="#ffffff"
             android:textColorHint="#55ffffff"

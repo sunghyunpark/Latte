@@ -33,12 +33,12 @@
 
         <ImageView
             android:id="@+id/more_btn"
-            android:layout_width="35dp"
-            android:layout_height="35dp"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/article_more_btn"/>
     </RelativeLayout>
 
     <ImageView
@@ -80,19 +80,12 @@
             android:layout_marginLeft="18dp"/>
 
     </RelativeLayout>
-    <!--구분선-->
-    <LinearLayout
-        android:id="@+id/divider_lay"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/like_comment_share_layout"
-        android:background="#ffe0e0e0"></LinearLayout>
+
     <LinearLayout
         android:id="@+id/contents_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/divider_lay"
+        android:layout_below="@+id/like_comment_share_layout"
         android:orientation="vertical">
         <!-- 좋아요 갯수 및 조회수 -->
         <RelativeLayout
@@ -122,6 +115,7 @@
                     android:layout_toRightOf="@+id/small_like_img"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
                     android:textSize="13dp"
                     android:textColor="#000000"/>
             </RelativeLayout>
@@ -141,7 +135,7 @@
                 android:layout_toLeftOf="@+id/view_cnt_txt"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="5dp"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/view_cnt_img"/>
         </RelativeLayout>
 
         <!--아티클 설명 부분 -->
