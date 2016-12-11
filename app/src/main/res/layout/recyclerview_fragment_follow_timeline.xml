@@ -101,12 +101,12 @@
 
                 <ImageView
                     android:id="@+id/small_like_img"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="15dp"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/ic_launcher"/>
+                    android:src="@mipmap/article_like_small_img"/>
 
                 <TextView
                     android:id="@+id/like_cnt_txt"
@@ -166,9 +166,9 @@
 
             <ImageView
                 android:id="@+id/go_all_comment_img"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@mipmap/ic_launcher"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@mipmap/article_comments_small_img"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="15dp"/>
 
