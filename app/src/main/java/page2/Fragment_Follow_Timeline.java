@@ -51,7 +51,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_Timeline_item> listItems;
-    private int first_pos, last_pos;
+    private int first_pos=0;
+    private int last_pos=0;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     Util util = new Util();
@@ -59,21 +60,27 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     View v;
 
 
+
     @Override
     public void onResume(){
         super.onResume();
         try{
-            new LoadDataTask().execute("");
+            //listItems.clear();
+            new LoadDataTask().execute(first_pos,last_pos,1);
         }catch (Exception e){
             e.printStackTrace();
         }
+        //adapter.notifyDataSetChanged();
     }
     //리프레쉬
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
+        InitView();
+        first_pos = 0;
         try{
-            new LoadDataTask().execute("");
+            //listItems.clear();
+            new LoadDataTask().execute(0,0,0);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -119,31 +126,104 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-        adapter.notifyDataSetChanged();
+        //adapter.notifyDataSetChanged();
+
+        recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int current_page) {
+                // do something...
+                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                try{
+                    new LoadDataTask().execute(first_pos,last_pos,1);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
 
     }
 
-    public class LoadDataTask extends AsyncTask<String, String, String>{
+    public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
+
+
+        private int previousTotal = 0; // The total number of items in the dataset after the last load
+        private boolean loading = true; // True if we are still waiting for the last set of data to load.
+        private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+        int firstVisibleItem, visibleItemCount, totalItemCount;
+
+        private int current_page = 1;
+
+        private LinearLayoutManager mLinearLayoutManager;
+
+        public EndlessRecyclerOnScrollListener(LinearLayoutManager linearLayoutManager) {
+            this.mLinearLayoutManager = linearLayoutManager;
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            visibleItemCount = recyclerView.getChildCount();
+            totalItemCount = mLinearLayoutManager.getItemCount();
+            firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+            if (loading) {
+                if (totalItemCount > previousTotal) {
+                    loading = false;
+                    previousTotal = totalItemCount;
+                }
+            }
+            if (!loading && (totalItemCount - visibleItemCount)
+                    <= (firstVisibleItem + visibleThreshold)) {
+                // End has been reached
+
+                // Do something
+                current_page++;
+
+                onLoadMore(current_page);
+
+                loading = true;
+            }
+        }
+
+        public abstract void onLoadMore(int current_page);
+    }
+
+    public class LoadDataTask extends AsyncTask<Integer, String, String>{
         @Override
         protected void onPreExecute(){
             super.onPreExecute();
         }
 
         @Override
-        protected String doInBackground(String... result){
-            LoadArticle(0,0);
+        protected String doInBackground(Integer... position){
+
+            boolean refresh_flag = false;
+            //0이면 처음 진입하거나 refersh를 한경우
+            if(position[2] == 0){
+                refresh_flag = true;
+            }
+            LoadArticle(refresh_flag,position[0],position[1]);
             return null;
         }
         @Override
         protected void onPostExecute(String result){
-
+            adapter.notifyDataSetChanged();
         }
     }
 
+    /**
+     * @param refresh_flag -> 최초 진입인지 refresh인지 판별
+     * @param first_id -> 처음 보이는 아티클 id
+     * @param last_id -> 마지막 보이는 아티클 id
+     */
     //서버에서 article 정보들을 받아옴
-    private void LoadArticle(final int first_id, final int last_id){
-        listItems.clear();
+    private void LoadArticle(boolean refresh_flag, final int first_id, final int last_id){
+        if(refresh_flag){
+            listItems.clear();
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -157,10 +237,12 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     /**
                      * 받아온 리스트 초기화
                      */
-
                     int size = articledata.getArticle().size();
-                    first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
+                    if(first_pos == 0){
+                        first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
+                    }
                     last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
+
                     for(int i=0;i<size;i++){
                         Fragment_Timeline_item item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
@@ -174,6 +256,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
                         item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
+
                         /*
                         Log.d("article_data",articledata.getArticle().get(i).getUid());
                         Log.d("article_data",articledata.getArticle().get(i).getNick_name());
@@ -184,7 +267,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_comment_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_view_cnt());
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
-                        */
+*/
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();

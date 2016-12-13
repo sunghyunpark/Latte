@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class TimelineResponse {
 
     private ArrayList<Article> article;
-    private boolean refresh_result;    //새로운 아티클이 있는지 여부 
+    private boolean refresh_result;    //새로운 아티클이 있는지 여부
     private boolean error;
     public String error_msg;
 
