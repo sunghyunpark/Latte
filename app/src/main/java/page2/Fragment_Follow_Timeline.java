@@ -72,7 +72,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
-        InitView();
+        try{
+            new LoadDataTask().execute("");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         mSwipeRefresh.setRefreshing(false);
     }
     @Override
