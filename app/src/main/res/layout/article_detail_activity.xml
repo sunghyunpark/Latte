@@ -161,6 +161,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
+                        android:textColor="#a9a9a9"
                         android:textSize="10dp"/>
 
                     <ImageView
@@ -222,6 +223,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
                         android:textSize="10dp"
+                        android:textColor="#a9a9a9"
                         android:layout_marginRight="10dp"/>
                 </RelativeLayout>
             </LinearLayout>

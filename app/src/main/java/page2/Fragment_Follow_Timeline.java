@@ -246,7 +246,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         .load(Server_ip+currentItem.getUser_profile_img_path())
                         .transform(new Util.CircleTransform(getContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
-                        .placeholder(R.mipmap.ic_launcher)
+                        .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);
                 //user_nickname

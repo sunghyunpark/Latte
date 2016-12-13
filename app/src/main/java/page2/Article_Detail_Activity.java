@@ -111,7 +111,7 @@ public class Article_Detail_Activity extends Activity {
                     Glide.with(getApplicationContext())
                             .load(Server_ip+articledata.getArticle().getProfile_img_thumb())
                             .transform(new Util.CircleTransform(getApplicationContext()))
-                            .placeholder(R.mipmap.ic_launcher)
+                            .placeholder(R.drawable.profile_basic_img)
                             .error(null)
                             .into(article_user_profile_img);
 

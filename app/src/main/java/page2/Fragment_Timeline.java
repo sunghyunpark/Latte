@@ -80,7 +80,7 @@ public class Fragment_Timeline extends Fragment {
                 mViewPager.setCurrentItem(0);
                 all_btn.setTextColor(getResources().getColor(R.color.GrayColor));
                 follow_btn.setTextColor(getResources().getColor(R.color.BlackColor));
-                follow_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
+                follow_underbar.setBackgroundColor(Color.BLACK);
                 all_underbar.setBackgroundColor(getResources().getColor(R.color.white));
             }
         });
@@ -92,7 +92,7 @@ public class Fragment_Timeline extends Fragment {
                 follow_btn.setTextColor(getResources().getColor(R.color.GrayColor));
                 all_btn.setTextColor(getResources().getColor(R.color.BlackColor));
                 follow_underbar.setBackgroundColor(getResources().getColor(R.color.white));
-                all_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
+                all_underbar.setBackgroundColor(Color.BLACK);
             }
         });
 
@@ -113,14 +113,14 @@ public class Fragment_Timeline extends Fragment {
                     case 0:
                         all_btn.setTextColor(getResources().getColor(R.color.GrayColor));
                         follow_btn.setTextColor(getResources().getColor(R.color.BlackColor));
-                        follow_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
+                        follow_underbar.setBackgroundColor(Color.BLACK);
                         all_underbar.setBackgroundColor(getResources().getColor(R.color.white));
                         break;
                     case 1:
                         all_btn.setTextColor(getResources().getColor(R.color.BlackColor));
                         follow_btn.setTextColor(getResources().getColor(R.color.GrayColor));
                         follow_underbar.setBackgroundColor(getResources().getColor(R.color.white));
-                        all_underbar.setBackgroundColor(getResources().getColor(R.color.PrimaryColor));
+                        all_underbar.setBackgroundColor(Color.BLACK);
                         break;
                 }
             }

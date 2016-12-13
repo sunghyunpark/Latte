@@ -68,8 +68,7 @@
                 android:layout_height="3dp"
                 android:orientation="horizontal"
                 android:layout_below="@+id/follow_btn"
-
-                android:background="@color/PrimaryColor"></LinearLayout>
+                android:background="#000000"></LinearLayout>
         </RelativeLayout>
 
         <RelativeLayout

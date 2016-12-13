@@ -48,7 +48,7 @@ public class Cancel_Following_Dialog extends Activity {
         Glide.with(getApplicationContext())
                 .load(Server_ip+user_profile_img_path)
                 .transform(new Util.CircleTransform(getApplicationContext()))
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_prof);
 
