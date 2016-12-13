@@ -1,6 +1,7 @@
 package page2;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -20,6 +21,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import app_controller.App_Config;
 import common.Common;
@@ -56,11 +58,17 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     View v;
 
 
+    @Override
+    public void onResume(){
+        super.onResume();
+
+        LoadArticle();
+    }
     //리프레쉬
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
-        LoadArticle();
+        InitView();
         mSwipeRefresh.setRefreshing(false);
     }
     @Override
@@ -98,13 +106,39 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
                 getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
 
+        listItems = new ArrayList<Fragment_Timeline_item>();
 
-        LoadArticle();
+        adapter = new RecyclerAdapter(listItems);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
+        try{
+            new LoadDataTask().execute("");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
+    public class LoadDataTask extends AsyncTask<String, String, String>{
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... result){
+            LoadArticle();
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            adapter.notifyDataSetChanged();
+        }
+    }
 
     //서버에서 article 정보들을 받아옴
     private void LoadArticle(){
+        listItems.clear();
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
@@ -118,8 +152,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     /**
                      * 받아온 리스트 초기화
                      */
-                    listItems = new ArrayList<Fragment_Timeline_item>();
-                    listItems.clear();
 
                     int size = articledata.getArticle().size();
                     for(int i=0;i<size;i++){
@@ -148,11 +180,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         */
                         listItems.add(item);
                     }
-
-                    adapter = new RecyclerAdapter(listItems);
                     adapter.notifyDataSetChanged();
-                    recyclerView.setLayoutManager(linearLayoutManager);
-                    recyclerView.setAdapter(adapter);
+
                 } else {
                     Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
                 }
