@@ -102,7 +102,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid);
+        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid,0,0);
         call.enqueue(new Callback<TimelineResponse>() {
             @Override
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {

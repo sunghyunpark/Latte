@@ -51,6 +51,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_Timeline_item> listItems;
+    private int first_pos, last_pos;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     Util util = new Util();
@@ -61,8 +62,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onResume(){
         super.onResume();
-
-        LoadArticle();
+        try{
+            new LoadDataTask().execute("");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
     //리프레쉬
     @Override
@@ -111,12 +115,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
 
-        try{
-            new LoadDataTask().execute("");
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
     }
 
     public class LoadDataTask extends AsyncTask<String, String, String>{
@@ -127,22 +128,22 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         @Override
         protected String doInBackground(String... result){
-            LoadArticle();
+            LoadArticle(0,0);
             return null;
         }
         @Override
         protected void onPostExecute(String result){
-            adapter.notifyDataSetChanged();
+
         }
     }
 
     //서버에서 article 정보들을 받아옴
-    private void LoadArticle(){
+    private void LoadArticle(final int first_id, final int last_id){
         listItems.clear();
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineResponse> call = apiService.PostTimeLineArticle("follow", uid);
+        Call<TimelineResponse> call = apiService.PostTimeLineArticle("follow", uid, first_id, last_id);
         call.enqueue(new Callback<TimelineResponse>() {
             @Override
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
@@ -154,6 +155,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                      */
 
                     int size = articledata.getArticle().size();
+                    first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
+                    last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
                     for(int i=0;i<size;i++){
                         Fragment_Timeline_item item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());

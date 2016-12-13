@@ -280,15 +280,11 @@ public class User_Profile_Edit_Dialog extends Activity {
 
             }
 
-            //uploadProfileServer.uploadFile("storage/emulated/0/Eggslide/" + imageFileName);// 저 주소(즉 단말기 내에서 사진을 서버로 전송)
-
-
             return result;
         }
 
         @Override
         protected void onPostExecute(String result){
-            // BusProvider.getInstance().post(new PushEvent("profile", fb_id, uid, imageFileName));
 
         }
     }

@@ -94,7 +94,9 @@ public interface ApiInterface {
      */
     @FormUrlEncoded
     @POST("timeline/timeline.php")
-    Call<TimelineResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid);
+    Call<TimelineResponse> PostTimeLineArticle(@Field("tag") String tag, @Field("uid") String uid,
+                                               @Field("top_article") int first_article_id,
+                                               @Field("bottom_article") int last_article_id);
 
     /**
      * 디테일뷰에서 새롭게 데이터들을 서버에서 불러옴
