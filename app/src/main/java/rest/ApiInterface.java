@@ -111,6 +111,18 @@ public interface ApiInterface {
                                                   @Field("article_id") String article_id);
 
     /**
+     * 디테일뷰 진입 후 다시 돌아왔을 때 해당 아티클의 최신정보 갱신
+     * @param tag -> detail_back
+     * @param uid -> 로그인 유저 id
+     * @param article_id -> 해당 아티클 id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline.php")
+    Call<ArticleDetailBack> PostTimeLineDetailBack(@Field("tag") String tag, @Field("uid") String uid,
+                                                       @Field("article_id") String article_id);
+
+    /**
      * 아티클에서 좋아요 탭했을 때 상태값 전송
      * @param tag -> like
      * @param uid -> 좋아요 누르는 사용자의 uid

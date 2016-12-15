@@ -28,6 +28,7 @@ import common.Common;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
+import rest.ArticleDetailBack;
 import rest.CommonErrorResponse;
 import rest.TimelineResponse;
 import retrofit2.Call;
@@ -53,8 +54,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private ArrayList<Fragment_Timeline_item> listItems;
     private int first_pos=0;
     private int last_pos=0;
+    private static final int LOAD_DATA_COUNT = 5;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
+    private int detail_pos = -1;    //디테일뷰 클릭했을 때의 position
+    private String detail_article_id;    //디테일뷰 클릭했을 때의 id값
     Util util = new Util();
     Common common = new Common();
     View v;
@@ -64,13 +68,16 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onResume(){
         super.onResume();
-        try{
-            //listItems.clear();
-            new LoadDataTask().execute(first_pos,last_pos,1);
-        }catch (Exception e){
-            e.printStackTrace();
+
+        if(detail_pos>=0){
+            LoadDetailBack(detail_article_id);
+        }else{
+            try{
+                new LoadDataTask().execute(first_pos,last_pos,1);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
-        //adapter.notifyDataSetChanged();
     }
     //리프레쉬
     @Override
@@ -150,7 +157,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         private int previousTotal = 0; // The total number of items in the dataset after the last load
         private boolean loading = true; // True if we are still waiting for the last set of data to load.
-        private int visibleThreshold = 5; // The minimum amount of items to have below your current scroll position before loading more.
+        private int visibleThreshold = LOAD_DATA_COUNT; // The minimum amount of items to have below your current scroll position before loading more.
         int firstVisibleItem, visibleItemCount, totalItemCount;
 
         private int current_page = 1;
@@ -287,6 +294,63 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         });
     }
 
+    /**
+     * 디테일뷰 진입 후 다시 해당 아티클의 최신 정보를 받아옴
+     * @param article_id
+     */
+    private void LoadDetailBack(final String article_id){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<ArticleDetailBack> call = apiService.PostTimeLineDetailBack("detail_back", uid, article_id);
+        call.enqueue(new Callback<ArticleDetailBack>() {
+            @Override
+            public void onResponse(Call<ArticleDetailBack> call, Response<ArticleDetailBack> response) {
+
+                ArticleDetailBack articledata = response.body();
+                if(!articledata.isError()){
+                    Fragment_Timeline_item item = new Fragment_Timeline_item();
+                    item.setUid(articledata.getArticle().getUid());
+                    item.setUser_nickname(articledata.getArticle().getNick_name());
+                    item.setUser_profile_img_path(articledata.getArticle().getProfile_img());
+                    item.setArticle_id(articledata.getArticle().getArticle_id());
+                    item.setArticle_img_path(articledata.getArticle().getArticle_photo_url());
+                    item.setArticle_contents(articledata.getArticle().getArticle_text());
+                    item.setArticle_like_state(articledata.getArticle().getArticle_like_state());
+                    item.setArticle_like_cnt(articledata.getArticle().getArticle_like_cnt());
+                    item.setArticle_comment_cnt(articledata.getArticle().getArticle_comment_cnt());
+                    item.setArticle_view_cnt(articledata.getArticle().getArticle_view_cnt());
+                    item.setCreated_at(articledata.getArticle().getArticle_created_at());
+
+                    Log.d("article_data111",articledata.getArticle().getUid());
+                    Log.d("article_data111",articledata.getArticle().getNick_name());
+                    Log.d("article_data111",articledata.getArticle().getProfile_img_thumb());
+                    Log.d("article_data111",articledata.getArticle().getArticle_photo_url());
+                    Log.d("article_data111",articledata.getArticle().getArticle_text());
+                    Log.d("article_data111",articledata.getArticle().getArticle_like_cnt());
+                    Log.d("article_data111",articledata.getArticle().getArticle_comment_cnt());
+                    Log.d("article_data111",articledata.getArticle().getArticle_view_cnt());
+                    Log.d("article_data111",articledata.getArticle().getArticle_created_at());
+
+                    listItems.set(detail_pos,item);
+
+                    adapter.notifyDataSetChanged();
+                }else{
+                    Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<ArticleDetailBack> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -389,6 +453,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
