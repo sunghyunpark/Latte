@@ -69,6 +69,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     public void onResume(){
         super.onResume();
 
+        /**
+         * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
+         */
         if(detail_pos>=0){
             LoadDetailBack(detail_article_id);
         }else{
@@ -323,18 +326,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     item.setArticle_view_cnt(articledata.getArticle().getArticle_view_cnt());
                     item.setCreated_at(articledata.getArticle().getArticle_created_at());
 
-                    Log.d("article_data111",articledata.getArticle().getUid());
-                    Log.d("article_data111",articledata.getArticle().getNick_name());
-                    Log.d("article_data111",articledata.getArticle().getProfile_img_thumb());
-                    Log.d("article_data111",articledata.getArticle().getArticle_photo_url());
-                    Log.d("article_data111",articledata.getArticle().getArticle_text());
-                    Log.d("article_data111",articledata.getArticle().getArticle_like_cnt());
-                    Log.d("article_data111",articledata.getArticle().getArticle_comment_cnt());
-                    Log.d("article_data111",articledata.getArticle().getArticle_view_cnt());
-                    Log.d("article_data111",articledata.getArticle().getArticle_created_at());
 
-                    listItems.set(detail_pos,item);
-
+                    listItems.set(detail_pos,item);    //해당 아티클의 최신정보를 받아온 뒤 배열에서 해당 아티클만 변경해줌
                     adapter.notifyDataSetChanged();
                 }else{
                     Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
