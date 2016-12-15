@@ -329,6 +329,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                     listItems.set(detail_pos,item);    //해당 아티클의 최신정보를 받아온 뒤 배열에서 해당 아티클만 변경해줌
                     adapter.notifyDataSetChanged();
+                    detail_pos = -1;
                 }else{
                     Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
                 }

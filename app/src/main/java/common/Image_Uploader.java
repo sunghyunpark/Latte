@@ -100,7 +100,8 @@ public class Image_Uploader {
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        final File file = new File(img_path);
+        final String local_path = ResizeBitmap(img_path);
+        final File file = new File(local_path);
 
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         RequestBody Tag_body = RequestBody.create(MediaType.parse("multipart/form-data"), tag);
@@ -125,7 +126,10 @@ public class Image_Uploader {
                         if(path.exists()) {
                             path.delete();
                         }
-
+                        File path2 = new File(local_path);
+                        if(path2.exists()){
+                            path2.delete();
+                        }
                     }else{
                         Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
                     }
