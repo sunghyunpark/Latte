@@ -171,7 +171,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_ITEM) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_timeline_article_img, parent, false);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_all_timeline, parent, false);
                 return new Fragment_All_Timeline_VHitem(v);
             }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
