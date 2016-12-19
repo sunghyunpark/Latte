@@ -194,9 +194,8 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                 VHitem.article_img_layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
+                        Intent intent = new Intent(getActivity(),Timeline_Look_Around_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
-                        intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
