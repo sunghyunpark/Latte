@@ -88,6 +88,14 @@ public class Article_Detail_Activity extends Activity {
         article_created_at_txt = (TextView)findViewById(R.id.created_at_txt);
         article_follow_state_img = (ImageView)findViewById(R.id.follow_btn);
 
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
         LoadDetailData();
 
     }
