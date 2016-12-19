@@ -135,4 +135,18 @@ public interface ApiInterface {
     Call<CommonErrorResponse> PostArticleLike(@Field("tag") String tag, @Field("uid") String uid,
                                            @Field("article_id") String article_id,
                                            @Field("like_state") String like_state);
+
+    /**
+     * 댓글화면에서 댓글 전송
+     * @param tag -> comment_input
+     * @param uid -> 댓글 전송하는 사용자
+     * @param article_id -> 해당 아티클
+     * @param comment_text -> 댓글 내용
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> PostSendArticleComment(@Field("tag") String tag, @Field("uid") String uid,
+                                                     @Field("article_id") String article_id,
+                                                     @Field("comment_text") String comment_text);
 }
