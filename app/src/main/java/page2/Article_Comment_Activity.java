@@ -49,6 +49,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
     //사용자 정보
     private String uid;    //로그인 user uid
     private String user_nick_name;    //로그인 user_nick_name
+    private String user_profile_path;    //로그인 user profile_path
     //article 정보
     private String article_id;
 
@@ -98,6 +99,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         db = new SQLiteHandler(this);
         HashMap<String, String> user = db.getUserDetails();
         user_nick_name = user.get("nick_name");
+        user_profile_path = user.get("profile_img");
 
         InitView();
         try{
@@ -124,6 +126,13 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+        ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
+        Glide.with(getApplicationContext())
+                .load(Server_ip+user_profile_path)
+                .transform(new Util.CircleTransform(getApplicationContext()))
+                .placeholder(R.drawable.profile_basic_img)
+                .error(null)
+                .into(user_profile_img);
         /*
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override

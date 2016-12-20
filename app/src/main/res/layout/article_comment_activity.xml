@@ -70,13 +70,20 @@
         android:layout_alignParentBottom="true">
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            >
+            android:layout_height="40dp">
+            <ImageView
+                android:id="@+id/user_profile_img"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="7dp"
+                android:layout_alignParentLeft="true"/>
             <EditText
                 android:id="@+id/comment_edit_box"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginRight="40dp"
+                android:layout_toRightOf="@+id/user_profile_img"
                 android:paddingLeft="10dp"
                 android:textSize="14dp"
                 android:background="@null"/>
