@@ -2,13 +2,20 @@ package page2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
+import android.text.style.TypefaceSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -22,7 +29,10 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -73,6 +83,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
     //댓글이 비었을 때의 뷰
     private TextView empty_view;
 
+    Util util = new Util();
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
@@ -342,6 +353,26 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         }
 
 
+        private SpannableStringBuilder getComment(int position){
+            Date to = null;
+            try{
+                SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                to = transFormat.parse(getItem(position).getCreated_at());
+            }catch (ParseException p){
+                p.printStackTrace();
+            }
+
+            String comment_str = getItem(position).getUser_nick_name()+"  "+getItem(position).getComment()+"  "+util.formatTimeString(to);
+            int color_black = Color.BLACK;
+            int color_gray = Color.GRAY;
+            SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
+            builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUser_nick_name().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUser_nick_name().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUser_nick_name().length()+getItem(position).getComment().length()+3,
+                    getItem(position).getUser_nick_name().length()+getItem(position).getComment().length()+util.formatTimeString(to).length()+4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            return builder;
+        }
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
@@ -358,7 +389,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         .error(null)
                         .into(VHitem.user_profile_img);
 
-                VHitem.comment_txt.setText(currentItem.getComment());
+                VHitem.comment_txt.append(getComment(position));
 
             }
         }
