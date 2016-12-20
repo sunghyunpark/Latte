@@ -373,6 +373,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
         List<Fragment_Timeline_item> listItems;
+        private int displaySize = getDisplaySize();
 
         public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
@@ -390,6 +391,17 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
             return listItems.get(position);
         }
 
+        /**
+         * 단말기 사이즈 반환
+         * @return
+         */
+        private int getDisplaySize(){
+            int w;
+            Display display;
+            display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+            w = display.getWidth();
+            return w;
+        }
         /**
          * 이 메소드는 최초 데이터를 불러와 아이템들을 만들때 해당 포지셥값에 따른 좋아요 상태들을 반환함
          * @param position
@@ -457,16 +469,13 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                     }
                 });
-                int w;
-                Display display;
-                display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-                w = display.getWidth();
+
                 //article_img
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
-                        .override(w,w)
+                        .override(displaySize,displaySize)
                         .into(VHitem.article_img);
 
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {

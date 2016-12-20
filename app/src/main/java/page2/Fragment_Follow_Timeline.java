@@ -353,6 +353,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
         List<Fragment_Timeline_item> listItems;
+        private int displaySize = getDisplaySize();
 
         public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
@@ -369,6 +370,18 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         private Fragment_Timeline_item getItem(int position) {
             return listItems.get(position);
+        }
+
+        /**
+         * 단말기 사이즈 반환
+         * @return
+         */
+        private int getDisplaySize(){
+            int w;
+            Display display;
+            display = ((WindowManager)getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay();
+            w = display.getWidth();
+            return w;
         }
 
         /**
@@ -452,16 +465,12 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     }
                 });
 
-                int w;
-                Display display;
-                display = ((WindowManager)getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay();
-                w = display.getWidth();
                 //article_img
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
-                        .override(w,w)
+                        .override(displaySize,displaySize)
                         .into(VHitem.article_img);
 
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
