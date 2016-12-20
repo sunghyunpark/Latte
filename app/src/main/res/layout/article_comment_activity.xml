@@ -85,7 +85,6 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentRight="true"
-                android:src="@mipmap/comment_not_click_btn_img"
                 />
         </RelativeLayout>
     </RelativeLayout>

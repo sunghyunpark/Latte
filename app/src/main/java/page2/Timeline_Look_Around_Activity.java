@@ -476,6 +476,16 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                     }
                 });
 
+                VHitem.comment_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
+                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
                 /**
                  * 각 아이템마다 상태값들이 다른것들은 포지션값으로 잡아줘야함
                  * 좋아요 상태값
@@ -516,6 +526,16 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                 //댓글 갯수
                 VHitem.go_all_comment_txt.setText("댓글 모두보기 "+currentItem.getArticle_comment_cnt());
+                VHitem.go_all_comment_txt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
+                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
 
                 /**
                  * 서버에서 받아온 생성날짜 string을 Date타입으로 변환

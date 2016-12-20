@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -508,6 +509,16 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //댓글 갯수
                 VHitem.go_all_comment_txt.setText("댓글 모두보기 "+currentItem.getArticle_comment_cnt());
+                VHitem.go_all_comment_txt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
+                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
 
                 /**
                  * 서버에서 받아온 생성날짜 string을 Date타입으로 변환
