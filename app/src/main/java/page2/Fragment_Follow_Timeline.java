@@ -71,7 +71,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onResume(){
         super.onResume();
-
         /**
          * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
          */
@@ -443,6 +442,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.comment_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
                         intent.putExtra("user_uid", currentItem.getUid());
                         intent.putExtra("article_id", currentItem.getArticle_id());
@@ -519,6 +520,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.go_all_comment_txt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
                         intent.putExtra("user_uid", currentItem.getUid());
                         intent.putExtra("article_id", currentItem.getArticle_id());
