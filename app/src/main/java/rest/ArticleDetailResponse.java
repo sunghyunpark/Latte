@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ArticleDetailResponse {
 
     private Article article;
-    private ArrayList<ArticleCommetResponse> comment;
+    private ArrayList<ArticleCommentResponse> comment;
     private ArrayList<ArticleGridResponse> grid_articlce;
     private boolean error;
     private String error_msg;
@@ -25,11 +25,11 @@ public class ArticleDetailResponse {
     }
 
 
-    public ArrayList<ArticleCommetResponse> getComment() {
+    public ArrayList<ArticleCommentResponse> getComment() {
         return comment;
     }
 
-    public void setComment(ArrayList<ArticleCommetResponse> comment) {
+    public void setComment(ArrayList<ArticleCommentResponse> comment) {
         this.comment = comment;
     }
 

@@ -5,6 +5,7 @@ public class Article_Comment_item {
     private String user_uid;
     private String user_nick_name;
     private String user_profile_img_path;
+    private String comment_id;
     private String comment;
     private String created_at;
 
@@ -47,4 +48,13 @@ public class Article_Comment_item {
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
     }
+
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
+    }
+
 }

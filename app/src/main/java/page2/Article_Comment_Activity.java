@@ -7,14 +7,19 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
 
 import java.util.ArrayList;
@@ -23,10 +28,11 @@ import java.util.List;
 
 import app_controller.App_Config;
 import app_controller.SQLiteHandler;
+import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
+import rest.ArticleCommentResponse;
 import rest.CommonErrorResponse;
-import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,7 +41,7 @@ import retrofit2.Response;
  * created by sunghyun 2016-12-29
  * 댓글 화면
  */
-public class Article_Comment_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
+public class Article_Comment_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener,TextWatcher {
 
     private static final App_Config Server_url = new App_Config();
     private static final String Server_ip = Server_url.get_SERVER_IP();
@@ -63,6 +69,8 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
     private ImageView send_comment_btn;
     //자신이 작성한 댓글 내용
     private String my_comment_str;
+    //댓글이 비었을 때의 뷰
+    private TextView empty_view;
 
     @Override
     public void onRefresh() {
@@ -84,6 +92,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         setContentView(R.layout.article_comment_activity);
 
         Intent intent = getIntent();
+        uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
 
         db = new SQLiteHandler(this);
@@ -91,9 +100,16 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         user_nick_name = user.get("nick_name");
 
         InitView();
+        try{
+            //listItems.clear();
+            new LoadDataTask().execute(0,0,0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void InitView(){
+        empty_view = (TextView)findViewById(R.id.empty_comment_txt);
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //리프레쉬
@@ -108,6 +124,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+        /*
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int current_page) {
@@ -119,24 +136,21 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                     e.printStackTrace();
                 }
             }
-        });
+        });*/
+
+        //back_btn
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnTouchListener(myOnTouchListener);
 
         //comment_edit_box 초기화
         comment_edit_box = (EditText)findViewById(R.id.comment_edit_box);
         comment_edit_box.setHint(user_nick_name+"(으)로 댓글 달기");
+        comment_edit_box.addTextChangedListener(this);
 
         //send btn
         send_comment_btn = (ImageView)findViewById(R.id.send_btn);
-        send_comment_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                my_comment_str = comment_edit_box.getText().toString();
-                SendComment(uid, article_id, my_comment_str);
-                send_comment_btn.setBackgroundResource(R.mipmap.comment_not_click_btn_img);
-                comment_edit_box.setText("");
-            }
-        });
-
+        send_comment_btn.setBackgroundResource(R.mipmap.comment_not_click_btn_img);
+        send_comment_btn.setOnTouchListener(myOnTouchListener);
     }
     public class LoadDataTask extends AsyncTask<Integer, String, String> {
         @Override
@@ -166,7 +180,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
      * @param first_id -> 처음 보이는 댓글 id
      * @param last_id -> 마지막 보이는 댓글 id
      */
-    //서버에서 article 정보들을 받아옴
+    //서버에서 article 댓글들을 받아옴
     private void LoadArticleComment(boolean refresh_flag, final int first_id, final int last_id){
         if(refresh_flag){
             listItems.clear();
@@ -174,45 +188,51 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineResponse> call = apiService.PostTimeLineArticle("follow", uid, first_id, last_id);
-        call.enqueue(new Callback<TimelineResponse>() {
+        Call<ArticleCommentResponse> call = apiService.PostArticleComment("comment", article_id, last_id);
+        call.enqueue(new Callback<ArticleCommentResponse>() {
             @Override
-            public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
+            public void onResponse(Call<ArticleCommentResponse> call, Response<ArticleCommentResponse> response) {
 
-                TimelineResponse articledata = response.body();
-                if (!articledata.isError()) {
+                ArticleCommentResponse comment_data = response.body();
+                if (!comment_data.isError()) {
                     /**
                      * 받아온 리스트 초기화
                      */
-                    int size = articledata.getArticle().size();
+                    int size = comment_data.getComment().size();
                     if(first_pos == 0){
-                        first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
+                        first_pos = Integer.parseInt(comment_data.getComment().get(0).getComment_id());
                     }
-                    last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
+                    last_pos = Integer.parseInt(comment_data.getComment().get(size-1).getComment_id());
 
                     for(int i=0;i<size;i++){
                         Article_Comment_item item = new Article_Comment_item();
-
-
+                        item.setUser_uid(comment_data.getComment().get(i).getUid());
+                        item.setUser_nick_name(comment_data.getComment().get(i).getNick_name());
+                        item.setUser_profile_img_path(comment_data.getComment().get(i).getProfile_img_thumb());
+                        item.setComment(comment_data.getComment().get(i).getComment_text());
+                        item.setComment_id(comment_data.getComment().get(i).getComment_id());
+                        item.setCreated_at(comment_data.getComment().get(i).getComment_created_at());
+                        Log.d("comment##", comment_data.getComment().get(i).getComment_text());
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
 
                 } else {
-                    Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();
+                    empty_view.setVisibility(View.VISIBLE);
+                    Toast.makeText(getApplicationContext(),comment_data.getError_msg(), Toast.LENGTH_SHORT).show();
                 }
 
             }
 
             @Override
-            public void onFailure(Call<TimelineResponse> call, Throwable t) {
+            public void onFailure(Call<ArticleCommentResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e("tag", t.toString());
                 Toast.makeText(getApplicationContext(), "retrofit error", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
+    // 댓글 전송
     private void SendComment(String uid, String article_id, String comment_text){
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -288,7 +308,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private static final int TYPE_ITEM_USER_ATTICLE = 0;
+        private static final int TYPE_COMMENT = 0;
         List<Article_Comment_item> listItems;
 
         public RecyclerAdapter(List<Article_Comment_item> listItems) {
@@ -297,9 +317,9 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == TYPE_ITEM_USER_ATTICLE) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_follow_timeline, parent, false);
-                return new Fragment_Follow_Timeline_VHitem(v);
+            if (viewType == TYPE_COMMENT) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_article_comment, parent, false);
+                return new Article_Comment_VHitem(v);
             }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
@@ -312,16 +332,26 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-            if (holder instanceof Fragment_Follow_Timeline_VHitem) {
+            if (holder instanceof Article_Comment_VHitem) {
                 final Article_Comment_item currentItem = getItem(position);
-                final Fragment_Follow_Timeline_VHitem VHitem = (Fragment_Follow_Timeline_VHitem)holder;
+                final Article_Comment_VHitem VHitem = (Article_Comment_VHitem)holder;
 
+                //user_profile
+                Glide.with(getApplicationContext())
+                        .load(Server_ip+currentItem.getUser_profile_img_path())
+                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        //.signature(new StringSignature(UUID.randomUUID().toString()))
+                        .placeholder(R.drawable.profile_basic_img)
+                        .error(null)
+                        .into(VHitem.user_profile_img);
+
+                VHitem.comment_txt.setText(currentItem.getComment());
 
             }
         }
         @Override
         public int getItemViewType(int position) {
-            return TYPE_ITEM_USER_ATTICLE;
+            return TYPE_COMMENT;
         }
         //increasing getItemcount to 1. This will be the row of header.
         @Override
@@ -329,5 +359,54 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
             return listItems.size();
         }
     }
+    @Override
+    public void afterTextChanged(Editable s) {
 
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count,
+                                  int after) {
+
+    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        //s = s.toString().trim();
+        if(s.length() > 0){
+            send_comment_btn.setBackgroundResource(R.mipmap.comment_click_btn_img);
+        }else{
+            send_comment_btn.setBackgroundResource(R.mipmap.comment_not_click_btn_img);
+        }
+
+    }
+    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.send_btn:
+                        my_comment_str = comment_edit_box.getText().toString();
+                        my_comment_str = my_comment_str.trim();
+                        if(my_comment_str.equals("")){
+                            Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            SendComment(uid, article_id, my_comment_str);
+                            send_comment_btn.setBackgroundResource(R.mipmap.comment_not_click_btn_img);
+                            comment_edit_box.setText("");
+                        }
+                        break;
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

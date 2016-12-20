@@ -1,17 +1,18 @@
 package rest;
 
 
-
 /**
- * 아티클 댓글
+ * 아티클 댓글 정보
+ *
  */
-public class ArticleCommetResponse {
+public class ArticleComment {
 
     private String uid;
     private String nick_name;
     private String profile_img_thumb;
+    private String comment_id;
     private String comment_text;
-    private String created_at;
+    private String comment_created_at;
 
     public String getUid() {
         return uid;
@@ -37,6 +38,14 @@ public class ArticleCommetResponse {
         this.profile_img_thumb = profile_img_thumb;
     }
 
+    public String getComment_id() {
+        return comment_id;
+    }
+
+    public void setComment_id(String comment_id) {
+        this.comment_id = comment_id;
+    }
+
     public String getComment_text() {
         return comment_text;
     }
@@ -45,12 +54,12 @@ public class ArticleCommetResponse {
         this.comment_text = comment_text;
     }
 
-    public String getCreated_at() {
-        return created_at;
+    public String getComment_created_at() {
+        return comment_created_at;
     }
 
-    public void setCreated_at(String created_at) {
-        this.created_at = created_at;
+    public void setComment_created_at(String comment_created_at) {
+        this.comment_created_at = comment_created_at;
     }
 
 }

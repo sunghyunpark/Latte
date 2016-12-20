@@ -149,4 +149,17 @@ public interface ApiInterface {
     Call<CommonErrorResponse> PostSendArticleComment(@Field("tag") String tag, @Field("uid") String uid,
                                                      @Field("article_id") String article_id,
                                                      @Field("comment_text") String comment_text);
+
+    /**
+     * 아티클 댓글 화면 진입 시 댓글 데이터들을 불러옴
+     * @param tag -> comment
+     * @param article_id -> 해당 아티클 id
+     * @param comment_id -> 마지막 댓글 id
+     * @return
+     */
+
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<ArticleCommentResponse> PostArticleComment(@Field("tag") String tag, @Field("article_id") String article_id,
+                                                    @Field("bottom_comment") int comment_id);
 }
