@@ -525,7 +525,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.article_contents_txt.setText(currentItem.getUser_nickname()+"  "+currentItem.getArticle_contents());
 
                 //댓글 갯수
-                VHitem.go_all_comment_txt.setText("댓글 모두보기 "+currentItem.getArticle_comment_cnt());
+                VHitem.go_all_comment_txt.setText("댓글 "+currentItem.getArticle_comment_cnt()+"모두 보기");
                 VHitem.go_all_comment_txt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
