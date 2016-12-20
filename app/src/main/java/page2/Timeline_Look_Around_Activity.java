@@ -8,9 +8,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
@@ -455,12 +457,16 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                     }
                 });
-
+                int w;
+                Display display;
+                display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+                w = display.getWidth();
                 //article_img
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
                         .placeholder(R.mipmap.ic_launcher)
                         .error(null)
+                        .override(w,w)
                         .into(VHitem.article_img);
 
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {

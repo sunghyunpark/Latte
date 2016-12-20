@@ -69,11 +69,11 @@
                     android:background="#ffe0e0e0"></LinearLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="330dp">
+                    android:layout_height="350dp">
                     <ImageView
                         android:id="@+id/upload_img"
                         android:layout_width="match_parent"
-                        android:layout_height="330dp"
+                        android:layout_height="350dp"
                         android:background="#ffffff"
                         android:fitsSystemWindows="true"
                         app:layout_collapseMode="parallax"
