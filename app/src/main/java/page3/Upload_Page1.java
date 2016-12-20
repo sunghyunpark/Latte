@@ -55,9 +55,6 @@ import common.Util;
  * 추후 프리뷰 화면 핀치줌 적용해야함
  * 테스트 버전에서 핀치줌을 구현해서 적용했는데 CollapsingToolbarLayout랑 프리뷰의 터치 이벤트가 겹침.
  *
- * [이슈]
- * 1. 단말기 갤러리 내에 축소된 이미지나 가로로된 이미지를 넘길 시 crash는 경우가 있음.
- * 가로, 세로 판별 여부는 적용해서 rotate할 수 있도록 추후 적용하겠음.
  */
 public class Upload_Page1 extends Activity {
 
@@ -72,7 +69,6 @@ public class Upload_Page1 extends Activity {
 
     private ArrayList<Upload_Page1_item> listItems;
     private GridLayoutManager lLayout;
-    private int degree;    //현재 이미지 rotate
     private Bitmap mCurrentImg_bitmap;    //현재 이미지 비트맵
 
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -201,6 +197,9 @@ public class Upload_Page1 extends Activity {
         display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
         w = display.getWidth();
 
+        /**
+         * glide를 이용하여 비트맵 추출
+         */
         Glide.with(getApplicationContext())
                 .load(new File(listItems.get(position).getUpload_picture()))
                 .asBitmap()
@@ -232,11 +231,9 @@ public class Upload_Page1 extends Activity {
     private Bitmap getBitmapUploadImg(int id){
         /**
          * 선택한 사진이 세로/가로인지 판별 후 다르게 분기처리해야할듯함..
-         * 일반적인 세로 사진은 w기준
-         * 가로 사진은 h기준으로 해야할듯함.
-         * 스크린샷의 경우 원인은 모르겠으나 rotate가 0으로 됨
-         * rotate -> 0, 180 가로
-         * rotate -> 90, 270 세로
+         * 기존에는 rotate degree로 가로/세로를 판별했었는데
+         * 단말기 갤러리에서 세로 이미지인데도 0도로 나오는 경우가 있어서
+         * 실제 크기를 비교하여 구별함.
          */
         int size;
 
