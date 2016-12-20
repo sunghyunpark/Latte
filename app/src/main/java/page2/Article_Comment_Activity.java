@@ -216,7 +216,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
-
+                    empty_view.setVisibility(View.GONE);
                 } else {
                     empty_view.setVisibility(View.VISIBLE);
                     Toast.makeText(getApplicationContext(),comment_data.getError_msg(), Toast.LENGTH_SHORT).show();
@@ -245,7 +245,11 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                 CommonErrorResponse error = response.body();
                 if (!error.isError()) {
                     Toast.makeText(getApplicationContext(),"댓글 전송 성공", Toast.LENGTH_SHORT).show();
-
+                    try{
+                        new LoadDataTask().execute(0,0,0);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(),"댓글 전송 실패", Toast.LENGTH_SHORT).show();
                 }
