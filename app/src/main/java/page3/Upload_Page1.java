@@ -31,6 +31,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
 
@@ -194,7 +196,24 @@ public class Upload_Page1 extends Activity {
         upload_img = (ImageView)findViewById(R.id.upload_img);
         SetImageViewSize();
 
-        //정확한 이유는 모르겠지만 여기서 글라이드를 쓰면 비트맵으로 추출이 불가능함
+        int w;
+        Display display;
+        display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+        w = display.getWidth();
+
+        Glide.with(getApplicationContext())
+                .load(new File(listItems.get(position).getUpload_picture()))
+                .asBitmap()
+                .override(w,w)
+                .into(new SimpleTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                        mCurrentImg_bitmap = resource;
+                        upload_img.setImageBitmap(mCurrentImg_bitmap);
+                    }
+                });
+
+        /* glide로 비트맵 추출하기 전에 사용하던 로직
         BitmapFactory.Options bfo = new BitmapFactory.Options();
         bfo.inSampleSize = 1;
         mCurrentImg_bitmap = BitmapFactory.decodeFile(listItems.get(position).getUpload_picture(), bfo);
@@ -202,7 +221,7 @@ public class Upload_Page1 extends Activity {
         mCurrentImg_bitmap = util.GetRotatedBitmap(mCurrentImg_bitmap,degree);
         upload_img.setImageBitmap(mCurrentImg_bitmap);
         Toast.makeText(getApplicationContext(),"rotate : "+degree, Toast.LENGTH_SHORT).show();
-
+        */
     }
 
     /**
@@ -221,11 +240,10 @@ public class Upload_Page1 extends Activity {
          */
         int size;
 
-        //단말기 사이즈 기이 아닌 해당 이미지의 크기를 기준으로 사진을 자름
-        if((degree == 0) || (degree == 180)){
-            size = mCurrentImg_bitmap.getHeight();
-        }else{
+        if(mCurrentImg_bitmap.getHeight()>mCurrentImg_bitmap.getWidth()){
             size = mCurrentImg_bitmap.getWidth();
+        }else{
+            size = mCurrentImg_bitmap.getHeight();
         }
 
         if(upload_img.getScaleType() != ImageView.ScaleType.FIT_CENTER){
@@ -299,6 +317,12 @@ public class Upload_Page1 extends Activity {
      * @return
      */
     private String getUploadImagePath(){
+
+        File folder_path = new File("storage/emulated/0/PoPo/");
+        if(!folder_path.exists()){
+            folder_path.mkdir();
+        }
+
         String path = "storage/emulated/0/PoPo/upload_img.jpg";
 
         //로컬에 저장
