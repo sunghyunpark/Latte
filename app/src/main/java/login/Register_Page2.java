@@ -24,6 +24,7 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.UUID;
 
+import app_controller.App_Config;
 import common.BusProvider;
 import common.PushEvent;
 import common.User_Profile_Edit_Dialog;
@@ -33,6 +34,9 @@ import common.Util;
  * created by sunghyun 2016-11-26
  */
 public class Register_Page2 extends Activity {
+
+    private static final App_Config Local_path = new App_Config();
+    private static final String LocalPath = Local_path.getLocalPath();
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_EXTERNAL_STORAGE = 10;
     // 남자, 여자 구분
@@ -225,7 +229,7 @@ public class Register_Page2 extends Activity {
         if(login_method.equals("email")){
             Glide.clear(profile_img);
             Glide.with(getApplicationContext())
-                    .load(new File("storage/emulated/0/PoPo/",img_path))
+                    .load(new File(LocalPath,img_path))
                     .transform(new Util.CircleTransform(getApplicationContext()))
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .error(null)

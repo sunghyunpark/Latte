@@ -47,6 +47,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import app_controller.App_Config;
 import common.Util;
 
 /**
@@ -58,6 +59,9 @@ import common.Util;
  *
  */
 public class Upload_Page1 extends Activity {
+
+    private static final App_Config Local_path = new App_Config();
+    private static final String LocalPath = Local_path.getLocalPath();
 
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_EXTERNAL_STORAGE = 10;
@@ -306,12 +310,12 @@ public class Upload_Page1 extends Activity {
      */
     private String getUploadImagePath(){
 
-        File folder_path = new File("storage/emulated/0/PoPo/");
+        File folder_path = new File(LocalPath);
         if(!folder_path.exists()){
             folder_path.mkdir();
         }
 
-        String path = "storage/emulated/0/PoPo/upload_img.jpg";
+        String path = LocalPath+"upload_img.jpg";
 
         //로컬에 저장
         OutputStream outStream = null;

@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
 
+import app_controller.App_Config;
 import app_controller.SQLiteHandler;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -23,6 +24,8 @@ import retrofit2.Response;
 
 public class Image_Uploader {
 
+    private static final App_Config Local_path = new App_Config();
+    private static final String LocalPath = Local_path.getLocalPath();
     private SQLiteHandler mSQLite;
 
     /**
@@ -161,9 +164,8 @@ public class Image_Uploader {
         if(resize_before.getHeight() < 1920 || resize_before.getWidth() < 1080){
             return img_path;
         }else{
-            String local_path = "storage/emulated/0/PoPo/";
             String file_name = "upload_img2.jpg";
-            File file = new File(local_path);
+            File file = new File(LocalPath);
 
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inSampleSize = 4;
@@ -174,7 +176,7 @@ public class Image_Uploader {
                 file.mkdirs();
                 // Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
             }
-            File fileCacheItem = new File(local_path + file_name);
+            File fileCacheItem = new File(LocalPath + file_name);
             OutputStream out = null;
 
             try {
@@ -195,7 +197,7 @@ public class Image_Uploader {
                     e.printStackTrace();
                 }
             }
-            return local_path + file_name;
+            return LocalPath + file_name;
         }
 
     }
