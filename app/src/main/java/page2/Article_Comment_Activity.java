@@ -389,6 +389,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         .error(null)
                         .into(VHitem.user_profile_img);
 
+                VHitem.comment_txt.setText("");//    빈값으로 초기화를 해줘야함 append특성상...
                 VHitem.comment_txt.append(getComment(position));
 
             }
