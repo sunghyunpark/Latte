@@ -2,6 +2,7 @@ package page2;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -55,6 +56,7 @@ public class Article_Detail_Activity extends Activity {
     ImageView article_photo_img;    //아티클 사진 경로
     TextView article_view_cnt_txt;    //아티클 조회수
     TextView article_contents_txt;    //아티클 설명글
+    ImageView article_comment_btn;    //아티클 댓글 아이콘
     TextView article_all_comment_txt;    //아티클 댓글 수
     TextView article_created_at_txt;    //아티클 생성날짜
     ImageView article_follow_state_img;    //아티클 팔로잉 상태
@@ -84,6 +86,7 @@ public class Article_Detail_Activity extends Activity {
         article_like_cnt_txt = (TextView)findViewById(R.id.like_cnt_txt);
         article_view_cnt_txt = (TextView)findViewById(R.id.view_cnt_txt);
         article_contents_txt = (TextView)findViewById(R.id.article_contents_txt);
+        article_comment_btn = (ImageView)findViewById(R.id.comment_btn);
         article_all_comment_txt = (TextView)findViewById(R.id.go_all_comment_txt);
         article_created_at_txt = (TextView)findViewById(R.id.created_at_txt);
         article_follow_state_img = (ImageView)findViewById(R.id.follow_btn);
@@ -93,6 +96,18 @@ public class Article_Detail_Activity extends Activity {
             @Override
             public void onClick(View view) {
                 finish();
+            }
+        });
+
+        //comment
+        article_comment_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
+                intent.putExtra("user_uid", user_uid);
+                intent.putExtra("article_id", article_id);
+                startActivity(intent);
+                overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
             }
         });
 
@@ -148,8 +163,17 @@ public class Article_Detail_Activity extends Activity {
                             +"  "+articledata.getArticle().getArticle_text());
 
                     //아티클 댓글 수
-                    article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+"모두 보기");
-
+                    article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+" 모두 보기");
+                    article_all_comment_txt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
+                            intent.putExtra("user_uid", user_uid);
+                            intent.putExtra("article_id", article_id);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                        }
+                    });
                     /**
                      * 서버에서 받아온 생성날짜 string을 Date타입으로 변환
                      */
