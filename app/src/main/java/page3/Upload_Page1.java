@@ -21,6 +21,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -118,27 +119,13 @@ public class Upload_Page1 extends Activity {
         recyclerView.setLayoutManager(lLayout);
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        back_btn.setOnTouchListener(myOnTouchListener);
 
         /**
          * 프리뷰 화면 좌측 하단 크기변환
          */
         ImageView change_picture_btn = (ImageView)findViewById(R.id.change_picture_size_btn);
-        change_picture_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (upload_img.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
-                    upload_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                } else {
-                    upload_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                }
-            }
-        });
+        change_picture_btn.setOnTouchListener(myOnTouchListener);
 
         /**
          * os 6.0 권한체크 및 요청
@@ -375,19 +362,7 @@ public class Upload_Page1 extends Activity {
 
                 //다음 버튼 이벤트
                 Button next_btn = (Button)findViewById(R.id.next_btn);
-                next_btn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent intent = new Intent(getApplicationContext(), Upload_Page2.class);
-                        intent.putExtra("ImagePath", getUploadImagePath());
-                        intent.putExtra("login_method", login_method);
-                        intent.putExtra("user_uid", uid);
-                        intent.putExtra("user_profile_path", user_profile_path);
-                        startActivity(intent);
-                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
-                    }
-                });
+                next_btn.setOnTouchListener(myOnTouchListener);
 
                 VHitem.upload_picture_layout.setLayoutParams(Set_HalfSize_Display(getApplicationContext()));
                 VHitem.upload_picture_layout.setOnClickListener(new View.OnClickListener() {
@@ -468,4 +443,40 @@ public class Upload_Page1 extends Activity {
 
         }
     }
+
+    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                    case R.id.next_btn:
+                        Intent intent = new Intent(getApplicationContext(), Upload_Page2.class);
+                        intent.putExtra("ImagePath", getUploadImagePath());
+                        intent.putExtra("login_method", login_method);
+                        intent.putExtra("user_uid", uid);
+                        intent.putExtra("user_profile_path", user_profile_path);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                        break;
+                    case R.id.change_picture_size_btn:
+                        if (upload_img.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
+                            upload_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                        } else {
+                            upload_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        }
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

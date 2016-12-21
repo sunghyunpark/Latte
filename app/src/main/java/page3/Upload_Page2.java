@@ -22,6 +22,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -69,6 +70,8 @@ public class Upload_Page2 extends Activity {
     private String uid;
     private String user_profile_path;
 
+    EditText upload_edit_box;
+
     Util util = new Util();
     Image_Uploader image_uploader = new Image_Uploader();
 
@@ -91,12 +94,7 @@ public class Upload_Page2 extends Activity {
     private void InitView(){
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back_btn.setOnTouchListener(myOnTouchListener);
 
         //사용자 프로필 사진
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
@@ -118,22 +116,10 @@ public class Upload_Page2 extends Activity {
                 .error(null)
                 .into(upload_img);
 
-        final EditText upload_edit_box = (EditText)findViewById(R.id.upload_edit_box);
+        upload_edit_box = (EditText)findViewById(R.id.upload_edit_box);
         //공유하기 버튼
         Button upload_btn = (Button)findViewById(R.id.upload_btn);
-        upload_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String board_str = upload_edit_box.getText().toString();
-                board_str = board_str.trim();
-                if(board_str.equals("")){
-                    Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
-                }else{
-                    upload_img_name = util.MakeImageName(uid);
-                    UploadBoard(uid, board_str, upload_img_name, upload_img_path);
-                }
-            }
-        });
+        upload_btn.setOnTouchListener(myOnTouchListener);
     }
 
     /**
@@ -174,4 +160,35 @@ public class Upload_Page2 extends Activity {
             }
         });
     }
+
+    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+
+                    case R.id.upload_btn:
+                        String board_str = upload_edit_box.getText().toString();
+                        board_str = board_str.trim();
+                        if(board_str.equals("")){
+                            Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            upload_img_name = util.MakeImageName(uid);
+                            UploadBoard(uid, board_str, upload_img_name, upload_img_path);
+                        }
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }
