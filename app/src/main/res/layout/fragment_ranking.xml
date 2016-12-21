@@ -1,14 +1,8 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="page1.Fragment_Ranking">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="ranking page" />
 
     <Button
         android:id="@+id/logout_btn"
@@ -16,4 +10,11 @@
         android:layout_height="wrap_content"
         android:text="로그아웃"/>
 
-</FrameLayout>
+    <Button
+        android:id="@+id/profile_edit_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/logout_btn"
+        android:text="프로필 변경"/>
+
+</RelativeLayout>

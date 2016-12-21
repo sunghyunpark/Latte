@@ -209,7 +209,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<ArticleCommentResponse> call = apiService.PostArticleComment("comment", article_id, last_id);
+        Call<ArticleCommentResponse> call = apiService.PostArticleComment("comment_list", article_id, last_id);
         call.enqueue(new Callback<ArticleCommentResponse>() {
             @Override
             public void onResponse(Call<ArticleCommentResponse> call, Response<ArticleCommentResponse> response) {

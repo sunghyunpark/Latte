@@ -49,6 +49,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private String login_method;
     private String uid;
     private String user_profile_path;
+    private String user_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +71,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             login_method = user.get("login_method");
             uid = user.get("uid");
             user_profile_path = user.get("profile_img");
-            Toast.makeText(getApplicationContext(),login_method+uid+user_profile_path+"",Toast.LENGTH_SHORT).show();
+            user_email = user.get("email");
+            Toast.makeText(getApplicationContext(),user_email+uid+user_profile_path+"",Toast.LENGTH_SHORT).show();
             //최초 UI 초기화
             InitUI();
         }
@@ -120,6 +122,8 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 tab1.setImageResource(R.mipmap.ic_page1_selected);
                 fragment = new Fragment_Ranking();
                 bundle.putString("KEY_MSG", "replace");
+                bundle.putString("user_uid", uid);
+                bundle.putString("user_email", user_email);
                 fragment.setArguments(bundle);
                 break ;
             case R.id.tab_2 :

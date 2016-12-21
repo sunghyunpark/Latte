@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
@@ -26,10 +27,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import app_controller.App_Config;
+import app_controller.SQLiteHandler;
+import login.Register_Page3;
 
 public class User_Profile_Edit_Dialog extends Activity {
+
     private static final App_Config Local_path = new App_Config();
     private static final String LocalPath = Local_path.getLocalPath();
 
@@ -46,13 +51,25 @@ public class User_Profile_Edit_Dialog extends Activity {
 
     //from -> 어디로부터 진입한건지...  회원가입에서 진입인지... 아니면 앱 진입 후 진입인지
     private String from;
+    // 사용자 정보
+    private String uid;
     private String email;
+    private String login_method;
+
+    private SQLiteHandler db;    //SQLite
+    Image_Uploader image_uploader = new Image_Uploader();
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//위의 타이틀바 제거인데 setContentView 전에 넣어줘야함 뷰가 생성되기전에 제거되어야하므로...
         setContentView(R.layout.user_profile_edit_dialog);
+
+        db = new SQLiteHandler(this);
+        HashMap<String, String> user = db.getUserDetails();
+        uid = user.get("uid");
+        login_method = user.get("login_method");
 
         Intent intent = getIntent();
         from = intent.getExtras().getString("from");
@@ -77,6 +94,10 @@ public class User_Profile_Edit_Dialog extends Activity {
                 startActivityForResult(intent, REQUEST_IMAGE_ALBUM);
                 break;
 
+            case R.id.basic_btn:
+                image_uploader.Upload_ProfileImage(User_Profile_Edit_Dialog.this, "profile", login_method, uid, null, null);
+                finish();
+                break;
 
         }
 
@@ -121,8 +142,7 @@ public class User_Profile_Edit_Dialog extends Activity {
                     Bundle extras = data.getExtras();
                     if(extras != null) {
                         final Bitmap bitmap = (Bitmap)extras.get("data");
-                        imageFileName = email + "_profile.jpg";//jpg 확장자로 만듬. -> 이메일_profile.jpg 형태로 저장
-
+                        imageFileName = util.MakeImageName(uid);//jpg 확장자로 만듬. -> 이메일_profile.jpg 형태로 저장
 
                         /**
                          * 회원가입 부분에서 프로필 설정인지 아니면 로그인 후 앱 진입 상태에서 프로필 설정인지 분기처리
@@ -138,41 +158,11 @@ public class User_Profile_Edit_Dialog extends Activity {
                             BusProvider.getInstance().post(new PushEvent(imageFileName));
                             finish();
                         }else{
-                            // 그외
+                            // 그외 not_register
+                            image_uploader.Upload_ProfileImage(User_Profile_Edit_Dialog.this, "profile", login_method, uid, imageFileName, LocalPath+imageFileName);
+                            finish();
                         }
 
-                        /*
-                        Call<Object> req1 = ApiClient.get().Edit_User_Info("1", uid,imageFileName, "","","");
-                        req1.enqueue(new Callback<Object>() {
-                            @Override
-                            public void onResponse(Call<Object> call, Response<Object> response) {
-                                db = new SQLiteHandler(getApplicationContext());
-                                if (response.isSuccessful()) {
-                                    Object result = response.body();
-                                    String flag = result.toString();
-                                    Log.d("profile#####", flag);
-                                    if (flag.equals("true")) {
-                                        try {
-                                            new My_profile_img_Task().execute(bitmap);
-                                        } catch (Exception e) {
-
-                                        }
-                                        Toast.makeText(getApplicationContext(), "프로필이 변경되었습니다.", Toast.LENGTH_SHORT).show();
-                                    } else {
-
-                                    }
-
-                                } else {
-                                    Log.d("onResponse", "fail");
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<Object> call, Throwable t) {
-
-                            }
-                        });
-*/
                     }
 
                     break;
@@ -214,8 +204,8 @@ public class User_Profile_Edit_Dialog extends Activity {
         cropIntent.putExtra("aspectX", 1);
         cropIntent.putExtra("aspectY", 1);
         //indicate output X and Y
-        cropIntent.putExtra("outputX", 256);
-        cropIntent.putExtra("outputY", 256);
+        cropIntent.putExtra("outputX", 1080);
+        cropIntent.putExtra("outputY", 1080);
         //retrieve data on return
         cropIntent.putExtra("return-data", true);
         startActivityForResult(cropIntent, REQUEST_IMAGE_CROP);

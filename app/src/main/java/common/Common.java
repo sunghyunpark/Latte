@@ -36,7 +36,7 @@ public class Common {
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<CommonErrorResponse> call = apiService.PostArticleLike("like", uid, article_id, like_state);
+        Call<CommonErrorResponse> call = apiService.PostArticleLike("like_btn", uid, article_id, like_state);
         call.enqueue(new Callback<CommonErrorResponse>() {
             @Override
             public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
