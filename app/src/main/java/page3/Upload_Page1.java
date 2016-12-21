@@ -67,6 +67,7 @@ public class Upload_Page1 extends Activity {
     private String user_profile_path;
     //업로드 프리뷰 이미지
     private ImageView upload_img;
+    private ImageView change_picture_btn;
 
     private ArrayList<Upload_Page1_item> listItems;
     private GridLayoutManager lLayout;
@@ -124,8 +125,9 @@ public class Upload_Page1 extends Activity {
         /**
          * 프리뷰 화면 좌측 하단 크기변환
          */
-        ImageView change_picture_btn = (ImageView)findViewById(R.id.change_picture_size_btn);
+        change_picture_btn = (ImageView)findViewById(R.id.change_picture_size_btn);
         change_picture_btn.setOnTouchListener(myOnTouchListener);
+        change_picture_btn.setBackgroundResource(R.mipmap.change_picture_size_img2);
 
         /**
          * os 6.0 권한체크 및 요청
@@ -196,6 +198,8 @@ public class Upload_Page1 extends Activity {
                     public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
                         mCurrentImg_bitmap = resource;
                         upload_img.setImageBitmap(mCurrentImg_bitmap);
+                        upload_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                        change_picture_btn.setBackgroundResource(R.mipmap.change_picture_size_img2);
                     }
                 });
 
@@ -470,8 +474,10 @@ public class Upload_Page1 extends Activity {
                     case R.id.change_picture_size_btn:
                         if (upload_img.getScaleType() == ImageView.ScaleType.CENTER_CROP) {
                             upload_img.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                            change_picture_btn.setBackgroundResource(R.mipmap.change_picture_size_img);
                         } else {
                             upload_img.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                            change_picture_btn.setBackgroundResource(R.mipmap.change_picture_size_img2);
                         }
                         break;
                 }
