@@ -9,12 +9,12 @@ import java.util.ArrayList;
 public class ArticleDetailResponse {
 
     private Article article;
-    private ArrayList<ArticleCommentResponse> comment;
+    private ArrayList<ArticleComment> comment;
     private ArrayList<ArticleGridResponse> grid_articlce;
     private boolean error;
     private String error_msg;
-    private String comment_result;
-    private String grid_result;
+    private boolean comment_error;
+    private boolean grid_error;
 
     public Article getArticle() {
         return article;
@@ -24,12 +24,11 @@ public class ArticleDetailResponse {
         this.article = article;
     }
 
-
-    public ArrayList<ArticleCommentResponse> getComment() {
+    public ArrayList<ArticleComment> getComment() {
         return comment;
     }
 
-    public void setComment(ArrayList<ArticleCommentResponse> comment) {
+    public void setComment(ArrayList<ArticleComment> comment) {
         this.comment = comment;
     }
 
@@ -57,20 +56,19 @@ public class ArticleDetailResponse {
         this.error_msg = error_msg;
     }
 
-    public String getComment_result() {
-        return comment_result;
+    public boolean isComment_error() {
+        return comment_error;
     }
 
-    public void setComment_result(String comment_result) {
-        this.comment_result = comment_result;
+    public void setComment_error(boolean comment_error) {
+        this.comment_error = comment_error;
     }
 
-    public String getGrid_result() {
-        return grid_result;
+    public boolean isGrid_error() {
+        return grid_error;
     }
 
-    public void setGrid_result(String grid_result) {
-        this.grid_result = grid_result;
+    public void setGrid_error(boolean grid_error) {
+        this.grid_error = grid_error;
     }
-
 }
