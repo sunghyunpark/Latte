@@ -1,12 +1,18 @@
 package page2;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
@@ -426,6 +432,16 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             }
         }
 
+        private SpannableStringBuilder getContents(int position){
+
+            String comment_str = getItem(position).getUser_nickname()+"  "+getItem(position).getArticle_contents();
+            int color_black = Color.BLACK;
+            SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
+            builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUser_nickname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUser_nickname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            return builder;
+        }
+
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
@@ -516,13 +532,14 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 });
 
                 //좋아요 갯수
-                VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());
+                VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
 
                 //조회수
                 VHitem.view_cnt_txt.setText("조회 "+currentItem.getArticle_view_cnt());
 
                 //설명글
-                VHitem.article_contents_txt.setText(currentItem.getUser_nickname()+"  "+currentItem.getArticle_contents());
+                VHitem.article_contents_txt.setText("");
+                VHitem.article_contents_txt.append(getContents(position));
 
                 //댓글 갯수
                 VHitem.go_all_comment_txt.setText("댓글 "+currentItem.getArticle_comment_cnt()+" 모두 보기");
