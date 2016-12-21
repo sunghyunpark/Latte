@@ -2,10 +2,12 @@ package page2;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Display;
@@ -46,15 +48,28 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
     RecyclerView recyclerView;
     private ArrayList<Fragment_Timeline_item> listItems;
     private GridLayoutManager lLayout;
+    private int first_pos=0;
+    private int last_pos=0;
+    private static final int LOAD_DATA_COUNT = 45;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     View v;
 
+    /*
+    @Override
+    public void onResume(){
+        super.onResume();
+        try{
+            new LoadDataTask().execute(first_pos,last_pos,1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }*/
     //리프레쉬
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
-        LoadArticle();
+        InitView();
         mSwipeRefresh.setRefreshing(false);
     }
 
@@ -94,15 +109,106 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
                 getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
 
-        LoadArticle();
+        listItems = new ArrayList<Fragment_Timeline_item>();
+        adapter = new RecyclerAdapter(listItems);
+        recyclerView.setAdapter(adapter);
+
+        try{
+            new LoadDataTask().execute(0,0,0);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(lLayout) {
+            @Override
+            public void onLoadMore(int current_page) {
+                // do something...
+                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                try{
+                    new LoadDataTask().execute(first_pos,last_pos,1);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+        });
+
+    }
+    public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
+
+
+        private int previousTotal = 0; // The total number of items in the dataset after the last load
+        private boolean loading = true; // True if we are still waiting for the last set of data to load.
+        private int visibleThreshold = LOAD_DATA_COUNT; // The minimum amount of items to have below your current scroll position before loading more.
+        int firstVisibleItem, visibleItemCount, totalItemCount;
+
+        private int current_page = 1;
+
+        private LinearLayoutManager mLinearLayoutManager;
+
+        public EndlessRecyclerOnScrollListener(LinearLayoutManager linearLayoutManager) {
+            this.mLinearLayoutManager = linearLayoutManager;
+        }
+
+        @Override
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+
+            visibleItemCount = recyclerView.getChildCount();
+            totalItemCount = mLinearLayoutManager.getItemCount();
+            firstVisibleItem = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+            if (loading) {
+                if (totalItemCount > previousTotal) {
+                    loading = false;
+                    previousTotal = totalItemCount;
+                }
+            }
+            if (!loading && (totalItemCount - visibleItemCount)
+                    <= (firstVisibleItem + visibleThreshold)) {
+                // End has been reached
+
+                // Do something
+                current_page++;
+
+                onLoadMore(current_page);
+
+                loading = true;
+            }
+        }
+
+        public abstract void onLoadMore(int current_page);
     }
 
+    public class LoadDataTask extends AsyncTask<Integer, String, String> {
+        @Override
+        protected void onPreExecute(){
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(Integer... position){
+
+            boolean refresh_flag = false;
+            //0이면 처음 진입하거나 refersh를 한경우
+            if(position[2] == 0){
+                refresh_flag = true;
+            }
+            LoadArticle(refresh_flag,position[0],position[1]);
+            return null;
+        }
+        @Override
+        protected void onPostExecute(String result){
+            adapter.notifyDataSetChanged();
+        }
+    }
     //서버에서 article 정보들을 받아옴
-    private void LoadArticle(){
+    private void LoadArticle(boolean refresh_flag, final int first_id, final int last_id){
+        if(refresh_flag){
+            listItems.clear();
+        }
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid,0,0);
+        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid, first_id, last_id);
         call.enqueue(new Callback<TimelineResponse>() {
             @Override
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
@@ -112,10 +218,9 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                     /**
                      * 받아온 리스트 초기화
                      */
-                    listItems = new ArrayList<Fragment_Timeline_item>();
-                    listItems.clear();
 
                     int size = articledata.getArticle().size();
+                    last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
                     for(int i=0;i<size;i++){
                         Fragment_Timeline_item item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
@@ -129,20 +234,20 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
                         item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
-                        Log.d("article_data",articledata.getArticle().get(i).getUid());
-                        Log.d("article_data",articledata.getArticle().get(i).getNick_name());
-                        Log.d("article_data",articledata.getArticle().get(i).getProfile_img_thumb());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_photo_url());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_text());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_like_cnt());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_comment_cnt());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_view_cnt());
-                        Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getUid());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getNick_name());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getProfile_img_thumb());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_photo_url());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_text());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_like_cnt());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_comment_cnt());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_view_cnt());
+                        Log.d("article_data_all",articledata.getArticle().get(i).getArticle_created_at());
                         listItems.add(item);
                     }
 
-                    adapter = new RecyclerAdapter(listItems);
-                    recyclerView.setAdapter(adapter);
+                    adapter.notifyDataSetChanged();
+
                 } else {
                     Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
                 }
@@ -178,7 +283,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         }
 
         private Fragment_Timeline_item getItem(int position) {
-            return listItems.get(position+1);
+            return listItems.get(position);
         }
 
 
@@ -187,7 +292,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
             if (holder instanceof Fragment_All_Timeline_VHitem)//아이템(게시물)
             {
-                final Fragment_Timeline_item currentItem = getItem(position-1);
+                final Fragment_Timeline_item currentItem = getItem(position);
                 final Fragment_All_Timeline_VHitem VHitem = (Fragment_All_Timeline_VHitem)holder;
 
                 VHitem.article_img_layout.setLayoutParams(Set_HalfSize_Display(getActivity()));

@@ -177,7 +177,7 @@ public class Article_Detail_Activity extends Activity {
                             +"  "+articledata.getArticle().getArticle_text());
 
                     //아티클 댓글 수
-                    article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+"모두 보기");
+                    article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+" 모두 보기");
                     article_comment_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
