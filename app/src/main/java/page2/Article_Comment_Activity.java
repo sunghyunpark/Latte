@@ -32,6 +32,7 @@ import com.seedteam.latte.R;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -235,6 +236,8 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         Log.d("comment##", comment_data.getComment().get(i).getComment_text());
                         listItems.add(item);
                     }
+                    //역순으로 변경
+                    Collections.reverse(listItems);
                     adapter.notifyDataSetChanged();
                     empty_view.setVisibility(View.GONE);
                 } else {
