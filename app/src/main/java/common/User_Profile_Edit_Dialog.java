@@ -142,15 +142,23 @@ public class User_Profile_Edit_Dialog extends Activity {
                     Bundle extras = data.getExtras();
                     if(extras != null) {
                         final Bitmap bitmap = (Bitmap)extras.get("data");
-                        imageFileName = util.MakeImageName(uid);//jpg 확장자로 만듬. -> 이메일_profile.jpg 형태로 저장
+                        imageFileName = util.MakeImageName(uid);
 
                         /**
                          * 회원가입 부분에서 프로필 설정인지 아니면 로그인 후 앱 진입 상태에서 프로필 설정인지 분기처리
+                         * 기존에는 asynctask를 이용해서했는데 바로 다시 프로필 사진을 변경하면 죽는 이슈가 있어서 asynctask제거
                          */
 
-                        try {
-                            new My_profile_img_Task().execute(bitmap);
-                        } catch (Exception e) {
+                        OutputStream outStream = null;
+                        File file = new File(LocalPath,imageFileName);
+                        try{
+                            outStream = new FileOutputStream(file);
+                            bitmap.compress(Bitmap.CompressFormat.JPEG,100,outStream);
+                            outStream.flush();
+                            outStream.close();
+                        }catch(FileNotFoundException e){
+
+                        }catch(IOException e){
 
                         }
                         if(from.equals("register")){
@@ -247,38 +255,5 @@ public class User_Profile_Edit_Dialog extends Activity {
             }
         }
         return bm;
-    }
-
-    public class My_profile_img_Task extends AsyncTask<Bitmap, String, String> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Bitmap... bit){
-            String result = "";
-            OutputStream outStream = null;
-            File file = new File(LocalPath,imageFileName);//현재 카메라로 직접 촬영하면 저장소에 두개의 사진이 저장됨.->수정필요.
-            Bitmap bitmap = bit[0];
-
-            try{
-                outStream = new FileOutputStream(file);
-                bitmap.compress(Bitmap.CompressFormat.JPEG,100,outStream);
-                outStream.flush();
-                outStream.close();
-            }catch(FileNotFoundException e){
-
-            }catch(IOException e){
-
-            }
-
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String result){
-
-        }
     }
 }
