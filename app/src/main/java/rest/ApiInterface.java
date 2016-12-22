@@ -162,4 +162,16 @@ public interface ApiInterface {
     @POST("timeline/timeline_btn.php")
     Call<ArticleCommentResponse> PostArticleComment(@Field("tag") String tag, @Field("article_id") String article_id,
                                                     @Field("bottom_comment") int comment_id);
+
+    /**
+     *
+     * @param tag -> like_list
+     * @param article_id -> 해당 아티클 id
+     * @param uid -> 로그인 사용자 uid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<ArticleLikeListResponse> PostArticleLikeList(@Field("tag") String tag, @Field("article_id") String article_id,
+                                                    @Field("uid") String uid);
 }

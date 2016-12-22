@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="60dp"
+    android:layout_marginTop="13dp"
+    android:background="#ffffff">
+
+    <ImageView
+        android:id="@+id/user_profile_img"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/ic_launcher"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:id="@+id/user_nickname_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/user_profile_img"
+        android:layout_marginTop="15dp"
+        android:text="nick_name"
+        android:layout_marginLeft="10dp"
+        android:textSize="14dp"
+        android:textColor="#000000"/>
+
+    <TextView
+        android:id="@+id/user_name_txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/user_nickname_txt"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@id/user_profile_img"
+        android:text="sunghyun"
+        android:textSize="14dp"
+        android:textColor="#dcdcdc"/>
+
+
+    <ImageView
+        android:id="@+id/follow_btn"
+        android:layout_width="90dp"
+        android:layout_height="35dp"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:src="@mipmap/article_follow_state_btn_img"/>
+
+</RelativeLayout>

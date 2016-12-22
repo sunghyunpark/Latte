@@ -533,6 +533,16 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //좋아요 갯수
                 VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
+                VHitem.like_cnt_txt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getActivity(), Article_Like_Activity.class);
+                        intent.putExtra("user_uid", uid);
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        startActivity(intent);
+                        getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
 
                 //조회수
                 VHitem.view_cnt_txt.setText("조회 "+currentItem.getArticle_view_cnt());
@@ -549,7 +559,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         detail_pos = position;
                         detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
-                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("user_uid", uid);
                         intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);

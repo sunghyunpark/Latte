@@ -561,7 +561,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
-                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("user_uid", uid);
                         intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
