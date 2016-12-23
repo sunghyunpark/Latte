@@ -40,14 +40,14 @@
             android:text="둘러보기"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="#000000" />
+        <!--구분선-->
+        <LinearLayout
+            android:id="@+id/divider_lay"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="#ffe0e0e0"></LinearLayout>
     </RelativeLayout>
-    <!--구분선-->
-    <LinearLayout
-        android:id="@+id/divider_lay"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/title_bar"
-        android:background="#ffe0e0e0"></LinearLayout>
 
 </FrameLayout>

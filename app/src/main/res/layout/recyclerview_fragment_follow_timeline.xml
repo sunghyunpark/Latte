@@ -39,13 +39,21 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="8dp"
             android:src="@mipmap/article_more_btn"/>
+
+        <!--구분선-->
+        <LinearLayout
+            android:id="@+id/divider_lay"
+            android:layout_width="fill_parent"
+            android:layout_height="1dp"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:background="#ffe0e0e0"></LinearLayout>
     </RelativeLayout>
 
     <ImageView
         android:id="@+id/article_img"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
         android:layout_below="@+id/user_info_layout"/>
 
     <RelativeLayout

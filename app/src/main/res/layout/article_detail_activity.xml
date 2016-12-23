@@ -58,6 +58,14 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="8dp"
                     android:src="@mipmap/article_more_btn"/>
+
+                <!--구분선-->
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="1dp"
+                    android:orientation="horizontal"
+                    android:layout_alignParentBottom="true"
+                    android:background="#ffe0e0e0"></LinearLayout>
             </RelativeLayout>
 
             <ImageView
