@@ -20,9 +20,11 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -37,6 +39,7 @@ import java.util.List;
 import java.util.TooManyListenersException;
 
 import app_controller.App_Config;
+import common.Cancel_Following_Dialog;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -101,7 +104,10 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        LoadArticleLikeList(article_id, uid);
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnTouchListener(myOnTouchListener);
+
+        LoadArticleLikeList(uid, article_id);
     }
 
     //서버에서 article 좋아요 화면 정보들을 받아옴
@@ -171,7 +177,6 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
         }
 
 
-
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
@@ -190,6 +195,13 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                 VHitem.user_nick_name.setText(currentItem.getUser_nick_name());
 
                 VHitem.user_name.setText(currentItem.getUser_name());
+                
+                VHitem.follow_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
 
             }
         }
@@ -203,4 +215,24 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
             return listItems.size();
         }
     }
+
+    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

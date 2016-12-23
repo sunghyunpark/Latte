@@ -168,6 +168,16 @@ public class Article_Detail_Activity extends Activity {
                     //아티클 좋아요 txt
                     article_like_cnt_txt.setText("좋아요 "+articledata.getArticle().getArticle_like_cnt()+"개");
                     like_cnt = Integer.parseInt(articledata.getArticle().getArticle_like_cnt());
+                    article_like_cnt_txt.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(getApplicationContext(), Article_Like_Activity.class);
+                            intent.putExtra("user_uid", user_uid);
+                            intent.putExtra("article_id", article_id);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                        }
+                    });
 
                     //아티클 조회수
                     article_view_cnt_txt.setText("조회 "+articledata.getArticle().getArticle_view_cnt());

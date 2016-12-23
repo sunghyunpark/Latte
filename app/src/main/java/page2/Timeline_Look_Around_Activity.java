@@ -547,6 +547,16 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                 //좋아요 갯수
                 VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
+                VHitem.like_cnt_txt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), Article_Like_Activity.class);
+                        intent.putExtra("user_uid", uid);
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
 
                 //조회수
                 VHitem.view_cnt_txt.setText("조회 "+currentItem.getArticle_view_cnt());
