@@ -265,7 +265,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid,0,0);
+        Call<TimelineResponse> call = apiService.PostTimeLineArticle("all", uid,first_id,last_id);
         call.enqueue(new Callback<TimelineResponse>() {
             @Override
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
