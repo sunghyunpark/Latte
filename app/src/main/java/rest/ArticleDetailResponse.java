@@ -10,7 +10,7 @@ public class ArticleDetailResponse {
 
     private Article article;
     private ArrayList<ArticleComment> comment;
-    private ArrayList<ArticleGridResponse> grid_articlce;
+    private ArrayList<ArticleGridResponse> grid_article;
     private boolean error;
     private String error_msg;
     private boolean comment_error;
@@ -32,12 +32,12 @@ public class ArticleDetailResponse {
         this.comment = comment;
     }
 
-    public ArrayList<ArticleGridResponse> getGrid_articlce() {
-        return grid_articlce;
+    public ArrayList<ArticleGridResponse> getGrid_article() {
+        return grid_article;
     }
 
-    public void setGrid_articlce(ArrayList<ArticleGridResponse> grid_articlce) {
-        this.grid_articlce = grid_articlce;
+    public void setGrid_article(ArrayList<ArticleGridResponse> grid_article) {
+        this.grid_article = grid_article;
     }
 
     public boolean isError() {

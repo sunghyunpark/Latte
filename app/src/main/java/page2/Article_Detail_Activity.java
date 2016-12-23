@@ -1,10 +1,12 @@
 package page2;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
@@ -12,9 +14,12 @@ import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -60,6 +65,13 @@ public class Article_Detail_Activity extends Activity {
     private RecyclerView recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private ArrayList<Article_Comment_item> listItems;
+
+    //article thumb 리사이클러뷰
+    ArticleThumbRecyclerAdapter adapter_thumb;
+    RecyclerView recyclerView_thumb;
+    private ArrayList<Fragment_Timeline_item> listItems_thumb;
+    private GridLayoutManager lLayout_thumb;
+    private TextView article_thumb_title;    //article_thumb_title
 
     private boolean like_state_flag;   //좋아요 상태 플래그
     private boolean follow_state_flag;    //팔로잉 상태 플래그
@@ -115,6 +127,19 @@ public class Article_Detail_Activity extends Activity {
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+        recyclerView.setNestedScrollingEnabled(false);    //리사이클러뷰 스크롤을 false로 두어서 전체 스크롤에 지장없도록함.
+
+        //thumb
+        article_thumb_title = (TextView)findViewById(R.id.article_thumb_title);
+        recyclerView_thumb = (RecyclerView)findViewById(R.id.recyclerView_article_thumb);
+        lLayout_thumb = new GridLayoutManager(getApplicationContext(),3);
+
+        listItems_thumb = new ArrayList<Fragment_Timeline_item>();
+        recyclerView_thumb.setLayoutManager(lLayout_thumb);
+        recyclerView_thumb.setNestedScrollingEnabled(false);    //리사이클러뷰 스크롤을 false로 두어서 전체 스크롤에 지장없도록함.
+        adapter_thumb = new ArticleThumbRecyclerAdapter(listItems_thumb);
+        recyclerView_thumb.setAdapter(adapter_thumb);
+
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
         back_btn.setOnClickListener(new View.OnClickListener() {
@@ -235,6 +260,7 @@ public class Article_Detail_Activity extends Activity {
                     FollowBtn(articledata.getArticle().getArticle_follow_state(), articledata.getArticle().getProfile_img(),
                             articledata.getArticle().getNick_name());
 
+                    //댓글 부분
                     if(!articledata.isComment_error()){
                         //해당 게시글 댓글 3개
                         int size = articledata.getComment().size();
@@ -250,6 +276,23 @@ public class Article_Detail_Activity extends Activity {
                         }
                         adapter.notifyDataSetChanged();
                     }
+
+                    //article_thumb
+                    if(!articledata.isGrid_error()){
+                        int size = articledata.getGrid_article().size();
+                        for(int i=0;i<size;i++){
+                            Fragment_Timeline_item item = new Fragment_Timeline_item();
+                            item.setArticle_id(articledata.getGrid_article().get(i).getArticle_id());
+                            item.setArticle_img_thumb_path(articledata.getGrid_article().get(i).getArticle_photo_thumb_url());
+                            listItems_thumb.add(item);
+                        }
+                        adapter_thumb.notifyDataSetChanged();
+                        article_thumb_title.setText(articledata.getArticle().getNick_name()+"님의 다른 게시물");
+                        article_thumb_title.setVisibility(View.VISIBLE);
+                    }else{
+                        article_thumb_title.setVisibility(View.GONE);
+                    }
+
                 } else {
                     Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();
                 }
@@ -264,7 +307,7 @@ public class Article_Detail_Activity extends Activity {
             }
         });
     }
-    //review 리사이클러뷰 adapter
+    //3개 댓글 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_COMMENT = 0;
@@ -408,6 +451,87 @@ public class Article_Detail_Activity extends Activity {
                 article_like_cnt_txt.setText("좋아요 "+like_cnt);
             }
         });
+    }
+
+    public class ArticleThumbRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+        private static final int TYPE_ITEM = 1;
+
+        List<Fragment_Timeline_item> listItems;
+
+        public ArticleThumbRecyclerAdapter(List<Fragment_Timeline_item> listItems) {
+            this.listItems = listItems;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            if (viewType == TYPE_ITEM) {
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_all_timeline, parent, false);
+                return new Fragment_All_Timeline_VHitem(v);
+            }
+            throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
+        }
+
+        private Fragment_Timeline_item getItem(int position) {
+            return listItems.get(position);
+        }
+
+
+        @Override
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+
+            if (holder instanceof Fragment_All_Timeline_VHitem)//아이템(게시물)
+            {
+                final Fragment_Timeline_item currentItem = getItem(position);
+                final Fragment_All_Timeline_VHitem VHitem = (Fragment_All_Timeline_VHitem)holder;
+
+                VHitem.article_img_layout.setLayoutParams(Set_HalfSize_Display(getApplicationContext()));
+                VHitem.article_img_layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(),Timeline_Look_Around_Activity.class);
+                        intent.putExtra("user_uid", user_uid);    // 내 uid
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
+
+                Glide.clear(VHitem.article_img);
+                Glide.with(getApplicationContext())
+                        .load(Server_ip+currentItem.getArticle_img_thumb_path())
+                        .placeholder(R.mipmap.ic_launcher)
+                        .error(null)
+                        .into(VHitem.article_img);
+
+            }
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            return TYPE_ITEM;
+        }
+        //increasing getItemcount to 1. This will be the row of header.
+        @Override
+        public int getItemCount() {
+            return listItems.size();
+        }
+    }
+
+    /**
+     * 프리뷰 이미지 밑에 그리드 형식으로 되어있는 썸네일들의 크기
+     * @param context
+     * @return
+     */
+    private FrameLayout.LayoutParams Set_HalfSize_Display(Context context){
+        int w;
+        int h;
+        Display display;
+        display = ((WindowManager)context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
+        w = display.getWidth();
+        h = display.getHeight();
+
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(w/3, w/3);
+        return params;
     }
 
 }

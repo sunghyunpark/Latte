@@ -6,11 +6,13 @@
     android:layout_gravity="center"
     android:layout_margin="0.25dp"
     card_view:cardCornerRadius="2dp"
+    android:background="#ffffff"
     android:id="@+id/article_img_layout">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="#ffffff">
         <ImageView
             android:id="@+id/article_img"
             android:layout_width="match_parent"
