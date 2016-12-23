@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,8 +36,10 @@ import java.util.Date;
 import java.util.List;
 
 import app_controller.App_Config;
+import common.BusProvider;
 import common.Cancel_Following_Dialog;
 import common.Common;
+import common.FollowBtnPushEvent;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -75,6 +78,8 @@ public class Article_Detail_Activity extends Activity {
 
     private boolean like_state_flag;   //좋아요 상태 플래그
     private boolean follow_state_flag;    //팔로잉 상태 플래그
+    private String follow_state_from_pushevent;    //otto push event로부터 받음
+    private String follow_uid;    //otto push event로부터 받음
     private int like_cnt;    //좋아요 카운트
 
     ImageView article_user_profile_img;    //아티클 작성자 프로필 경로
@@ -100,6 +105,8 @@ public class Article_Detail_Activity extends Activity {
         Intent intent = getIntent();
         user_uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
+
+        BusProvider.getInstance().register(this);    //follow 버튼 탭 시 취소 다이얼로그로부터 받기 위해
 
         InitView();
 
@@ -258,7 +265,7 @@ public class Article_Detail_Activity extends Activity {
 
                     //Follow버튼 이벤트
                     FollowBtn(articledata.getArticle().getArticle_follow_state(), articledata.getArticle().getProfile_img(),
-                            articledata.getArticle().getNick_name());
+                            articledata.getArticle().getNick_name(), articledata.getArticle().getUid());
 
                     //댓글 부분
                     if(!articledata.isComment_error()){
@@ -382,13 +389,15 @@ public class Article_Detail_Activity extends Activity {
             return listItems.size();
         }
     }
+
     /**
      * 팔로잉 버튼 이벤트
      * @param follow_state -> 서버에서 받아온 상태
      * @param article_user_profile_path -> 취소 다이얼로그에 보여질 프로필
      * @param article_user_nick_name -> 취소 다이얼로그에 보여질 닉네임
      */
-    private void FollowBtn(String follow_state, final String article_user_profile_path, final String article_user_nick_name){
+    private void FollowBtn(String follow_state, final String article_user_profile_path, final String article_user_nick_name,
+                           final String follow_uid){
         if(follow_state.equals("Y")){
             follow_state_flag = true;
             article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
@@ -402,16 +411,18 @@ public class Article_Detail_Activity extends Activity {
             public void onClick(View view) {
 
                 if(follow_state_flag){
-                    follow_state_flag = false;
-                    article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                    //팔로우 -> 팔로우 취소
                     Intent intent  = new Intent(getApplicationContext(), Cancel_Following_Dialog.class);
                     intent.putExtra("article_user_profile_img_path",article_user_profile_path);
                     intent.putExtra("article_user_nickname", article_user_nick_name);
+                    intent.putExtra("follow_uid", follow_uid);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 }else{
+                    //팔로우 취소 -> 팔로우
                     follow_state_flag = true;
                     article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                    common.PostFollowBtn(Article_Detail_Activity.this, user_uid, follow_uid, "Y");
                 }
             }
         });
@@ -453,6 +464,9 @@ public class Article_Detail_Activity extends Activity {
         });
     }
 
+    /**
+     * 디테일뷰 하단 게시글 작성자의 다른 게시글 썸네일들
+     */
     public class ArticleThumbRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_ITEM = 1;
@@ -533,6 +547,27 @@ public class Article_Detail_Activity extends Activity {
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(w/3, w/3);
         return params;
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+
+    }
+
+    @Subscribe
+    public void FinishLoad(FollowBtnPushEvent mPushEvent) {
+
+        follow_uid = mPushEvent.getUid();
+        follow_state_from_pushevent = mPushEvent.getState();
+
+        if(follow_state_from_pushevent.equals("N")){
+            follow_state_flag = false;
+            common.PostFollowBtn(Article_Detail_Activity.this, user_uid, follow_uid, "N");
+            article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+        }
     }
 
 }

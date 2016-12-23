@@ -59,4 +59,38 @@ public class Common {
         });
 
     }
+
+    /**
+     * 팔로우 버튼을 눌렀을 때
+     * @param context
+     * @param uid -> (나) uid
+     * @param follow_uid -> 상대방 uid
+     * @param state -> N/Y
+     */
+    public void PostFollowBtn(final Context context, String uid, String follow_uid, String state){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.PostFollow("follow_btn", uid, follow_uid, state);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse likeresponse = response.body();
+                if (!likeresponse.isError()) {
+                    //Toast.makeText(context,"팔로우 성공", Toast.LENGTH_SHORT).show();
+                } else {
+                    //Toast.makeText(context,"팔로우 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(context, "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 }

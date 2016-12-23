@@ -1,6 +1,6 @@
 package common;
 
-public class PushEvent
+public class Register_ProfilePushEvent
 {
     /**
      * 회원가입 시 프로필 설정
@@ -17,7 +17,7 @@ public class PushEvent
     }
 
 
-    public PushEvent(String img_path){
+    public Register_ProfilePushEvent(String img_path){
         this.img_path = img_path;
 
     }
@@ -34,7 +34,7 @@ protected void onDestroy() {
 }
 
 	@Subscribe
-	public void FinishLoad(PushEvent mPushEvent) {
+	public void FinishLoad(Register_ProfilePushEvent mPushEvent) {
 		Toast.makeText(getApplicationContext(), "오또성공", Toast.LENGTH_SHORT).show();
 		club_intro = mPushEvent.getList();
 
@@ -42,4 +42,4 @@ protected void onDestroy() {
 
 	}*/
 
-//BusProvider.getInstance().post(new PushEvent(intro_text)); -> 이벤트를 보내는 엑티비티에 선언
+//BusProvider.getInstance().post(new Register_ProfilePushEvent(intro_text)); -> 이벤트를 보내는 엑티비티에 선언

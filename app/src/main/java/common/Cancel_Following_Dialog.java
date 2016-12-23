@@ -24,6 +24,7 @@ public class Cancel_Following_Dialog extends Activity {
     //다이얼로그에 보여질 사용자 정보
     private String user_profile_img_path;
     private String user_nickname;
+    private String user_uid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class Cancel_Following_Dialog extends Activity {
         Intent intent = getIntent();
         user_profile_img_path = intent.getExtras().getString("article_user_profile_img_path");
         user_nickname = intent.getExtras().getString("article_user_nickname");
-
+        user_uid = intent.getExtras().getString("follow_uid");
         InitView(user_profile_img_path, user_nickname);
     }
 
@@ -60,7 +61,8 @@ public class Cancel_Following_Dialog extends Activity {
     public void buttonPressed(View v) {
         switch ((v.getId())){
             case R.id.ok_btn:
-
+                BusProvider.getInstance().post(new FollowBtnPushEvent(user_uid, "N"));
+                finish();
                 break;
             case R.id.cancel_btn:
                 finish();

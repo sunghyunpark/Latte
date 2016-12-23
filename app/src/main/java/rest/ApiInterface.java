@@ -174,4 +174,19 @@ public interface ApiInterface {
     @POST("timeline/timeline_btn.php")
     Call<ArticleLikeListResponse> PostArticleLikeList(@Field("tag") String tag, @Field("article_id") String article_id,
                                                     @Field("uid") String uid);
+
+    /**
+     * 팔로우 버튼 눌렀을때
+     * @param tag -> follow_btn
+     * @param uid -> (나) uid
+     * @param following_uid -> 상대방 uid
+     * @param follow_state -> Y/N
+     * @return
+     */
+
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> PostFollow(@Field("tag") String tag, @Field("uid") String uid,
+                                             @Field("following_uid") String following_uid,
+                                             @Field("follow_state") String follow_state);
 }

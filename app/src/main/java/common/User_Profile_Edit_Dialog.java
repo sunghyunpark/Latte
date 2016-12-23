@@ -163,7 +163,7 @@ public class User_Profile_Edit_Dialog extends Activity {
                         }
                         if(from.equals("register")){
                             //회원가입인 경우
-                            BusProvider.getInstance().post(new PushEvent(imageFileName));
+                            BusProvider.getInstance().post(new Register_ProfilePushEvent(imageFileName));
                             finish();
                         }else{
                             // 그외 not_register

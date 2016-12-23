@@ -26,7 +26,8 @@ import java.util.UUID;
 
 import app_controller.App_Config;
 import common.BusProvider;
-import common.PushEvent;
+
+import common.Register_ProfilePushEvent;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
 
@@ -247,7 +248,7 @@ public class Register_Page2 extends Activity {
     }
 
     @Subscribe
-    public void FinishLoad(PushEvent mPushEvent) {
+    public void FinishLoad(Register_ProfilePushEvent mPushEvent) {
         mProfile_img_path = mPushEvent.getImg_path();
 
         /*
