@@ -448,7 +448,7 @@ public class Article_Detail_Activity extends Activity {
                     article_like_img.setBackgroundResource(R.mipmap.article_like_btn_img);
                 }
                 like_cnt = ch_cnt;
-                article_like_cnt_txt.setText("좋아요 "+like_cnt);
+                article_like_cnt_txt.setText("좋아요 "+like_cnt+"개");
             }
         });
     }

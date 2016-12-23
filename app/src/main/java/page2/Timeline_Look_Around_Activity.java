@@ -510,7 +510,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                     @Override
                     public void onClick(View view) {
                         Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
-                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("user_uid", uid);
                         intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
@@ -541,7 +541,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수
-                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());
+                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
                     }
                 });
 
