@@ -42,6 +42,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/divider_lay"
+        android:layout_marginBottom="45dp"
         android:clipChildren="false">
         <TextView
             android:id="@+id/empty_comment_txt"
