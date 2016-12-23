@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -66,6 +67,8 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
 
+    TextView empty_like_txt;
+
 
     @Override
     public void onRefresh() {
@@ -83,13 +86,13 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
         uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
 
-        Toast.makeText(getApplicationContext(),"uid : "+uid+", article_id : "+article_id, Toast.LENGTH_SHORT).show();
-
         InitView();
 
     }
 
     private void InitView(){
+        empty_like_txt = (TextView)findViewById(R.id.empty_like_txt);
+
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //리프레쉬
@@ -134,12 +137,10 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                         item.setUser_name(likeList_data.getUser().get(i).getName());
                         listItems.add(item);
                     }
-
                     adapter.notifyDataSetChanged();
-
+                    empty_like_txt.setVisibility(View.GONE);
                 } else {
-
-                    Toast.makeText(getApplicationContext(),likeList_data.getError_msg(), Toast.LENGTH_SHORT).show();
+                    empty_like_txt.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -195,7 +196,7 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                 VHitem.user_nick_name.setText(currentItem.getUser_nick_name());
 
                 VHitem.user_name.setText(currentItem.getUser_name());
-                
+
                 VHitem.follow_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
