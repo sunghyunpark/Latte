@@ -474,7 +474,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         detail_pos = position;
                         detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
-                        intent.putExtra("user_uid", currentItem.getUid());
+                        intent.putExtra("user_uid", uid);
                         intent.putExtra("article_id", currentItem.getArticle_id());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
