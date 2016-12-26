@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 25
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -21,7 +21,7 @@ android {
                 output->
                     def file = output.outputFile
                     output.outputFile = new File(file.parent,
-                            file.name.replace("app", "EggSlide." + defaultConfig.versionName))
+                            file.name.replace("app", "PoPo." + defaultConfig.versionName))
             }
         }
     }
