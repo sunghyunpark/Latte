@@ -252,9 +252,9 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                         if(CurrentFollowState(position)){
                             //follow -> cancel
                             Intent intent  = new Intent(getApplicationContext(), Cancel_Following_Dialog.class);
-                            intent.putExtra("follow_profile_img_path",getItem(position).getUser_profile_img_thumb());
-                            intent.putExtra("follow_nickname", getItem(position).getUser_nick_name());
-                            intent.putExtra("follow_uid", follow_uid);
+                            intent.putExtra("follow_profile_img_path",currentItem.getUser_profile_img_thumb());
+                            intent.putExtra("follow_nickname", currentItem.getUser_nick_name());
+                            intent.putExtra("follow_uid", currentItem.getUser_uid());
                             intent.putExtra("follow_position", position);
                             startActivity(intent);
                             overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
