@@ -8,6 +8,7 @@ public class FollowBtnPushEvent
      */
     private String uid;
     private String state;
+    private int position;    //리사이클러뷰로부터 올때의 해당 아이템 position
 
     public String getUid() {
         return uid;
@@ -25,11 +26,19 @@ public class FollowBtnPushEvent
         this.state = state;
     }
 
+    public int getPosition() {
+        return position;
+    }
 
-    public FollowBtnPushEvent(String uid, String state){
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+
+    public FollowBtnPushEvent(String uid, String state, int position){
         this.uid = uid;
         this.state = state;
-
+        this.position = position;
     }
 
 }

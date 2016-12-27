@@ -527,7 +527,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수
-                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt());
+                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
                     }
                 });
 

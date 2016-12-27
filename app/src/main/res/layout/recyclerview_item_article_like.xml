@@ -39,7 +39,6 @@
         android:layout_height="30dp"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
-        android:src="@mipmap/article_follow_state_btn_img"/>
+        android:layout_marginRight="15dp"/>
 
 </RelativeLayout>

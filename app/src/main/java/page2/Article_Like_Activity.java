@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,7 +41,10 @@ import java.util.List;
 import java.util.TooManyListenersException;
 
 import app_controller.App_Config;
+import common.BusProvider;
 import common.Cancel_Following_Dialog;
+import common.Common;
+import common.FollowBtnPushEvent;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -58,6 +62,8 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     private String uid;
     //해당 아티클 id
     private String article_id;
+    private String follow_uid;    //otto pushevent
+    private String follow_state_from_pushevent;    //otto pushevent
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
@@ -68,6 +74,7 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     private SwipeRefreshLayout mSwipeRefresh;
 
     TextView empty_like_txt;
+    Common common = new Common();
 
 
     @Override
@@ -81,6 +88,8 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.article_like_activity);
+
+        BusProvider.getInstance().register(this);    //follow 버튼 탭 시 취소 다이얼로그로부터 받기 위해
 
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
@@ -135,6 +144,7 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                         item.setUser_profile_img_thumb(likeList_data.getUser().get(i).getProfile_img_thumb());
                         item.setUser_nick_name(likeList_data.getUser().get(i).getNick_name());
                         item.setUser_name(likeList_data.getUser().get(i).getName());
+                        item.setUser_follow_state(likeList_data.getUser().get(i).getUser_follow_state());
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
@@ -177,6 +187,39 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
             return listItems.get(position);
         }
 
+        /**
+         * 해당 아이템이 현재 팔로우 상태인지 아닌지 판별
+         * @param position
+         * @return
+         */
+        private boolean CurrentFollowState(int position){
+            boolean state = true;
+            String state_str = getItem(position).getUser_follow_state();
+
+            if(state_str.equals("Y")){
+                state = true;
+            }else{
+                state = false;
+            }
+
+            return state;
+        }
+
+        private boolean ChangeFollowState(boolean state, int position, String uid, String follow_uid){
+
+            if(state){
+                state = false;
+                getItem(position).setUser_follow_state("N");
+                return state;
+            }else{
+                state = true;
+                getItem(position).setUser_follow_state("Y");
+                common.PostFollowBtn(Article_Like_Activity.this, uid, follow_uid, "Y");
+                return state;
+            }
+        }
+
+
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -197,9 +240,33 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
 
                 VHitem.user_name.setText(currentItem.getUser_name());
 
+                if(CurrentFollowState(position)){
+                    //팔로우 상태일때
+                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                }else{
+                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                }
                 VHitem.follow_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        if(CurrentFollowState(position)){
+                            //follow -> cancel
+                            Intent intent  = new Intent(getApplicationContext(), Cancel_Following_Dialog.class);
+                            intent.putExtra("follow_profile_img_path",getItem(position).getUser_profile_img_thumb());
+                            intent.putExtra("follow_nickname", getItem(position).getUser_nick_name());
+                            intent.putExtra("follow_uid", follow_uid);
+                            intent.putExtra("follow_position", position);
+                            startActivity(intent);
+                            overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
+
+                            //VHitem.follow_btn.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                            //ChangeFollowState(true,position,uid,currentItem.getUser_uid());
+                            //ChangeFollowBtn(true,VHitem);
+                        }else{
+                            //cancel -> follow
+                            ChangeFollowState(false, position,uid,currentItem.getUser_uid());
+                            VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                        }
 
                     }
                 });
@@ -214,6 +281,27 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
         @Override
         public int getItemCount() {
             return listItems.size();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+
+    }
+    @Subscribe
+    public void FinishLoad(FollowBtnPushEvent mPushEvent) {
+
+        follow_uid = mPushEvent.getUid();
+        follow_state_from_pushevent = mPushEvent.getState();
+        int position = mPushEvent.getPosition();
+
+        if(follow_state_from_pushevent.equals("N")){
+            Toast.makeText(getApplicationContext(),"팔로우취소됨", Toast.LENGTH_SHORT).show();
+            adapter.ChangeFollowState(true,position,uid,adapter.getItem(position).getUser_uid());
+            common.PostFollowBtn(Article_Like_Activity.this, uid, follow_uid, "N");
         }
     }
 

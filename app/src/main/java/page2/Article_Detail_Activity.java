@@ -413,8 +413,8 @@ public class Article_Detail_Activity extends Activity {
                 if(follow_state_flag){
                     //팔로우 -> 팔로우 취소
                     Intent intent  = new Intent(getApplicationContext(), Cancel_Following_Dialog.class);
-                    intent.putExtra("article_user_profile_img_path",article_user_profile_path);
-                    intent.putExtra("article_user_nickname", article_user_nick_name);
+                    intent.putExtra("follow_profile_img_path",article_user_profile_path);
+                    intent.putExtra("follow_nickname", article_user_nick_name);
                     intent.putExtra("follow_uid", follow_uid);
                     startActivity(intent);
                     overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);

@@ -25,6 +25,7 @@ public class Cancel_Following_Dialog extends Activity {
     private String user_profile_img_path;
     private String user_nickname;
     private String user_uid;
+    private int position;    //리사이클러뷰로부터 넘어올때의 pos
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,9 +34,10 @@ public class Cancel_Following_Dialog extends Activity {
         setContentView(R.layout.cancel_following_dialog);
 
         Intent intent = getIntent();
-        user_profile_img_path = intent.getExtras().getString("article_user_profile_img_path");
-        user_nickname = intent.getExtras().getString("article_user_nickname");
+        user_profile_img_path = intent.getExtras().getString("follow_profile_img_path");
+        user_nickname = intent.getExtras().getString("follow_nickname");
         user_uid = intent.getExtras().getString("follow_uid");
+        position = intent.getExtras().getInt("follow_position");
         InitView(user_profile_img_path, user_nickname);
     }
 
@@ -61,7 +63,7 @@ public class Cancel_Following_Dialog extends Activity {
     public void buttonPressed(View v) {
         switch ((v.getId())){
             case R.id.ok_btn:
-                BusProvider.getInstance().post(new FollowBtnPushEvent(user_uid, "N"));
+                BusProvider.getInstance().post(new FollowBtnPushEvent(user_uid, "N", position));
                 finish();
                 break;
             case R.id.cancel_btn:

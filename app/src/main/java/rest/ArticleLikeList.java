@@ -11,6 +11,7 @@ public class ArticleLikeList {
     private String name;    //작성자 이름
     private String nick_name;    //작성자 닉네임
     private String profile_img_thumb;    //작성자 프로필 썸네일
+    private String user_follow_state;    //작성자 팔로우 상태
 
     public String getUid() {
         return uid;
@@ -44,4 +45,11 @@ public class ArticleLikeList {
         this.profile_img_thumb = profile_img_thumb;
     }
 
+    public String getUser_follow_state() {
+        return user_follow_state;
+    }
+
+    public void setUser_follow_state(String user_follow_state) {
+        this.user_follow_state = user_follow_state;
+    }
 }
