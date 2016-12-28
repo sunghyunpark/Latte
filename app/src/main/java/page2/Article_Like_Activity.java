@@ -188,6 +188,21 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
         }
 
         /**
+         * 좋아요화면에서 (나)인 경우에는 팔로우 버튼을 숨기기 위해 확인함
+         * @param position
+         * @return
+         */
+        private boolean IsMe(int position){
+            boolean flag;
+            if(getItem(position).getUser_uid().equals(uid)){
+                flag = true;
+                return flag;
+            }else{
+                flag = false;
+                return flag;
+            }
+        }
+        /**
          * 해당 아이템이 현재 팔로우 상태인지 아닌지 판별
          * @param position
          * @return
@@ -240,11 +255,17 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
 
                 VHitem.user_name.setText(currentItem.getUser_name());
 
-                if(CurrentFollowState(position)){
-                    //팔로우 상태일때
-                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                if(IsMe(position)){
+                    //나 인경우 팔로우 버튼 숨김
+                    VHitem.follow_btn.setVisibility(View.GONE);
                 }else{
-                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                    //나 아닌 경우
+                    if(CurrentFollowState(position)){
+                        //팔로우 상태일때
+                        VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                    }else{
+                        VHitem.follow_btn.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                    }
                 }
                 VHitem.follow_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
