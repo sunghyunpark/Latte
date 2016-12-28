@@ -97,6 +97,15 @@ public class Article_Detail_Activity extends Activity {
     Common common = new Common();
     Util util = new Util();
 
+    /**
+     * 다른 과업(ex.댓글달기)후 바로 갱신되게 하기 위해
+     */
+    @Override
+    protected void onResume(){
+        super.onResume();
+        InitView();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -107,8 +116,6 @@ public class Article_Detail_Activity extends Activity {
         article_id = intent.getExtras().getString("article_id");
 
         BusProvider.getInstance().register(this);    //follow 버튼 탭 시 취소 다이얼로그로부터 받기 위해
-
-        InitView();
 
     }
 
