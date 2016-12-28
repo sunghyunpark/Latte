@@ -12,6 +12,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.ActivityCompat;
@@ -69,6 +70,8 @@ public class Upload_Page2 extends Activity {
     private String login_method;
     private String uid;
     private String user_profile_path;
+    //중복 클릭 방지
+    private long mLastClickTime = 0;
 
     EditText upload_edit_box;
 
@@ -177,6 +180,10 @@ public class Upload_Page2 extends Activity {
                         break;
 
                     case R.id.upload_btn:
+                        
+                        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                            break;
+                        }
                         String board_str = upload_edit_box.getText().toString();
                         board_str = board_str.trim();
                         if(board_str.equals("")){
