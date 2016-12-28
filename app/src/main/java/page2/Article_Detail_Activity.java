@@ -398,14 +398,20 @@ public class Article_Detail_Activity extends Activity {
      */
     private void FollowBtn(String follow_state, final String article_user_profile_path, final String article_user_nick_name,
                            final String follow_uid){
-        if(follow_state.equals("Y")){
-            follow_state_flag = true;
-            article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
-        }else{
-            follow_state_flag = false;
-            article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
-        }
 
+        if(user_uid.equals(follow_uid)){
+            //해당 아티클 작성자가 (나)인 경우 팔로우 버튼 숨김
+            article_follow_state_img.setVisibility(View.GONE);
+        }else{
+            if(follow_state.equals("Y")){
+                follow_state_flag = true;
+                article_follow_state_img.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+            }else{
+                follow_state_flag = false;
+                article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+            }
+
+        }
         article_follow_state_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
