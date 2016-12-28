@@ -180,7 +180,7 @@ public class Upload_Page2 extends Activity {
                         break;
 
                     case R.id.upload_btn:
-                        
+
                         if(SystemClock.elapsedRealtime() - mLastClickTime < 1000){
                             break;
                         }

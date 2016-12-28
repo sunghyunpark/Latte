@@ -512,6 +512,7 @@ public class Article_Detail_Activity extends Activity {
                         Intent intent = new Intent(getApplicationContext(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", user_uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
