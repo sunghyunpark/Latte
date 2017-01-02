@@ -83,6 +83,12 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     View v;
 
 
+    @Override
+    public void onDestroy(){
+        super.onDestroy();
+        if(mRealm!=null)
+            mRealm.close();
+    }
 
     @Override
     public void onResume(){
