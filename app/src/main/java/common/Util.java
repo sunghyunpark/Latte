@@ -11,6 +11,9 @@ import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
 import android.view.WindowManager;
@@ -263,5 +266,38 @@ public class Util {
         }
 
         return msg;
+    }
+
+    //network check
+    public static boolean isCheckNetworkState(Context context) {
+        boolean result = true;
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+        // 와이파이 연결 중일 때
+        boolean isWifiConn = ni.isConnected();
+
+        boolean isMobileConn = false;
+        try {
+            //모바일 데이터 연결 중일때
+            //try 를 건 경우는 tablet일 경우에는 catch를 탄다.
+            ni = cm.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            // boolean isMobileAvail = ni.isAvailable();
+            isMobileConn = ni.isConnected();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        boolean isAirplaneMode = false;
+        try{
+            // Airplane 모드 확인
+            isAirplaneMode = Settings.System.getInt(context.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if ( (isWifiConn == false && isMobileConn == false) || isAirplaneMode) {
+            result = false;
+        }
+        return result;
     }
 }

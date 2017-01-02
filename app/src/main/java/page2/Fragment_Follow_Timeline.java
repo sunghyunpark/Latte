@@ -35,6 +35,10 @@ import java.util.concurrent.ExecutionException;
 import app_controller.App_Config;
 import common.Common;
 import common.Util;
+import io.realm.Realm;
+import io.realm.RealmResults;
+import realm.RealmConfig;
+import realm.Realm_TimeLine_Follow;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleDetailBack;
@@ -46,12 +50,18 @@ import retrofit2.Response;
 
 /**
  * created by sunghyun 2016-12-08
+ *
+ * 2017-01-02
+ * Realm 적용
+ *
  */
 
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final App_Config Server_url = new App_Config();
     private static final String Server_ip = Server_url.get_SERVER_IP();
+    private Realm mRealm;
+    private RealmConfig realmConfig;
 
     //사용자 정보
     private String uid;
@@ -79,34 +89,58 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         super.onResume();
         /**
          * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
+         * 네트워크 체크를 하여 네트워크가 off일 때 NetworkOff를 호출하여 realm에 저장된 데이터로 보여줌
          */
-        if(detail_pos>=0){
-            LoadDetailBack(detail_article_id);
-        }else{
-            try{
-                new LoadDataTask().execute(first_pos,last_pos,1);
-            }catch (Exception e){
-                e.printStackTrace();
+        if(util.isCheckNetworkState(getActivity())){
+            if(detail_pos>=0){
+                LoadDetailBack(detail_article_id);
+            }else{
+                try{
+                    new LoadDataTask().execute(first_pos,last_pos,1);
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
             }
+        }else{
+            Toast.makeText(getActivity(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
+            NetworkOff();
         }
     }
     //리프레쉬
     @Override
     public void onRefresh() {
-        //새로고침시 이벤트 구현
-        InitView();
-        first_pos = 0;
-        try{
-            //listItems.clear();
-            new LoadDataTask().execute(0,0,0);
-        }catch (Exception e){
-            e.printStackTrace();
+        if(util.isCheckNetworkState(getActivity())){
+            //새로고침시 이벤트 구현(네트워크 ON)
+            InitView();
+            first_pos = 0;
+            DeleteRealmDB();
+            Log.d("realm_test", "onRefreshed realm delete!!!!");
+            try{
+                //listItems.clear();
+                new LoadDataTask().execute(0,0,0);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }else{
+            Toast.makeText(getActivity(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
         }
         mSwipeRefresh.setRefreshing(false);
     }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        realmConfig = new RealmConfig();
+        mRealm = Realm.getInstance(realmConfig.TimeLine_Follow_DefaultRealmVersion(getActivity()));
+
+        /**
+         * 네트워크가 on일 땐 굳이 로컬에 데이터들을 저장할 필요가 없으므로 삭제해버림
+         * 단, 네트워크가 off일 경우에는 로컬 데이터로 보여줘야 하므로 삭제하지 않음
+         */
+        if(util.isCheckNetworkState(getActivity())){
+            DeleteRealmDB();
+            Log.d("realm_test", "oncreated realm delete!!!!");
+        }
 
     }
 
@@ -287,6 +321,32 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
 */
                         listItems.add(item);
+
+                        /**
+                         * 서버에서 받아오는 데이터를 Realm에도 저장을 시켜줌.
+                         */
+                        Realm_TimeLine_Follow data = new Realm_TimeLine_Follow();
+                        try{
+                            mRealm.beginTransaction();
+                            data.setNo(getNextKey());
+                            data.setUid(articledata.getArticle().get(i).getUid());
+                            data.setNick_name(articledata.getArticle().get(i).getNick_name());
+                            data.setProfile_img(articledata.getArticle().get(i).getProfile_img());
+                            data.setArticle_id(articledata.getArticle().get(i).getArticle_id());
+                            data.setArticle_photo_url(articledata.getArticle().get(i).getArticle_photo_url());
+                            data.setArticle_text(articledata.getArticle().get(i).getArticle_text());
+                            data.setArticle_like_state(articledata.getArticle().get(i).getArticle_like_state());
+                            data.setArticle_like_cnt(articledata.getArticle().get(i).getArticle_like_cnt());
+                            data.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
+                            data.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
+                            data.setArticle_created_at(articledata.getArticle().get(i).getArticle_created_at());
+                            Log.d("realm_data", data.getArticle_id());
+                        }catch (Exception e){
+
+                        }finally {
+                            mRealm.copyToRealmOrUpdate(data);
+                            mRealm.commitTransaction();
+                        }
                     }
                     adapter.notifyDataSetChanged();
 
@@ -589,5 +649,64 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         public int getItemCount() {
             return listItems.size();
         }
+    }
+
+    /**
+     * Realm에 쌓여있는 데이터들을 모두 delete해버림
+     * 일단 시기는 네트워크가 on일땐 onCreated / onRefreshed 일때만 삭제를 해줌.
+     * 네트워크가 OFF일땐 마지막으로 쌓여있던 데이터들을 보여줌. NetworkOff()사용
+     */
+    private void DeleteRealmDB(){
+        mRealm.beginTransaction();
+        RealmResults<Realm_TimeLine_Follow> articleList = mRealm.where(Realm_TimeLine_Follow.class).findAll();
+        articleList.deleteAllFromRealm();
+        mRealm.commitTransaction();
+    }
+
+    /**
+     * 네트워크가 OFF인 경우 realm에 저장된 데이터들로 보여줌
+     */
+    private void NetworkOff(){
+        listItems.clear();
+        RealmResults<Realm_TimeLine_Follow> dataList = mRealm.where(Realm_TimeLine_Follow.class).findAll();
+        for(int i=0;i<dataList.size();i++){
+            Log.d("realm_test","============================================================");
+            Log.d("realm_test", "all size : "+dataList.size());
+            Log.d("realm_test", "article_uid : "+dataList.get(i).getArticle_id());
+            Log.d("realm_test", "article_photo_url : "+dataList.get(i).getArticle_photo_url());
+            Log.d("realm_test", "article_text : "+dataList.get(i).getArticle_text());
+            Log.d("realm_test", "article_like_state : "+dataList.get(i).getArticle_like_state());
+            Log.d("realm_test", "article_like_cnt : "+dataList.get(i).getArticle_like_cnt());
+            Log.d("realm_test","============================================================");
+
+            Fragment_Timeline_item item = new Fragment_Timeline_item();
+            item.setUid(dataList.get(i).getUid());
+            item.setUser_nickname(dataList.get(i).getNick_name());
+            item.setUser_profile_img_path(dataList.get(i).getProfile_img());
+            item.setArticle_id(dataList.get(i).getArticle_id());
+            item.setArticle_img_path(dataList.get(i).getArticle_photo_url());
+            item.setArticle_contents(dataList.get(i).getArticle_text());
+            item.setArticle_like_state(dataList.get(i).getArticle_like_state());
+            item.setArticle_like_cnt(dataList.get(i).getArticle_like_cnt());
+            item.setArticle_comment_cnt(dataList.get(i).getArticle_comment_cnt());
+            item.setArticle_view_cnt(dataList.get(i).getArticle_view_cnt());
+            item.setCreated_at(dataList.get(i).getArticle_created_at());
+
+            listItems.add(item);
+        }
+
+        adapter.notifyDataSetChanged();
+    }
+    public int getNextKey()
+    {
+        int key;
+        try {
+            key = mRealm.where(Realm_TimeLine_Follow.class).max("no").intValue() + 1;
+        } catch(ArrayIndexOutOfBoundsException ex) {
+            key = 0;
+        }catch (NullPointerException n){
+            key = 0;
+        }
+        return key;
     }
 }
