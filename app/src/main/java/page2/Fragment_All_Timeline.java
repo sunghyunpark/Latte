@@ -113,21 +113,15 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setAdapter(adapter);
 
-        try{
-            new LoadDataTask().execute(0,0,0);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        LoadArticle(true, 0,0);
+
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(lLayout) {
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
                 Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
-                try{
-                    new LoadDataTask().execute(first_pos,last_pos,1);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                LoadArticle(false,first_pos,last_pos);
+
             }
         });
 
@@ -178,6 +172,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         public abstract void onLoadMore(int current_page);
     }
 
+    /*
     public class LoadDataTask extends AsyncTask<Integer, String, String> {
         @Override
         protected void onPreExecute(){
@@ -199,7 +194,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
         protected void onPostExecute(String result){
             adapter.notifyDataSetChanged();
         }
-    }
+    }*/
     //서버에서 article 정보들을 받아옴
     private void LoadArticle(boolean refresh_flag, final int first_id, final int last_id){
         if(refresh_flag){

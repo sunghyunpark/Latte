@@ -89,17 +89,14 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         super.onResume();
         /**
          * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
-         * 네트워크 체크를 하여 네트워크가 off일 때 NetworkOff를 호출하여 realm에 저장된 데이터로 보여줌
+         * 네트워크 체크를 하여 네트워크가 off일 때 Network Off를 호출하여 realm에 저장된 데이터로 보여줌
          */
         if(util.isCheckNetworkState(getActivity())){
             if(detail_pos>=0){
                 LoadDetailBack(detail_article_id);
             }else{
-                try{
-                    new LoadDataTask().execute(first_pos,last_pos,1);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                LoadArticle(false,first_pos,last_pos);
+
             }
         }else{
             Toast.makeText(getActivity(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -115,12 +112,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             first_pos = 0;
             DeleteRealmDB();
             Log.d("realm_test", "onRefreshed realm delete!!!!");
-            try{
-                //listItems.clear();
-                new LoadDataTask().execute(0,0,0);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            LoadArticle(true,0,0);
+
         }else{
             Toast.makeText(getActivity(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
         }
@@ -185,11 +178,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             public void onLoadMore(int current_page) {
                 // do something...
                 Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
-                try{
-                    new LoadDataTask().execute(first_pos,last_pos,1);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                LoadArticle(false,first_pos,last_pos);
+
             }
         });
 
@@ -243,6 +233,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         public abstract void onLoadMore(int current_page);
     }
 
+    /*
     public class LoadDataTask extends AsyncTask<Integer, String, String>{
         @Override
         protected void onPreExecute(){
@@ -264,7 +255,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         protected void onPostExecute(String result){
             adapter.notifyDataSetChanged();
         }
-    }
+    }*/
 
     /**
      * @param refresh_flag -> 최초 진입인지 refresh인지 판별

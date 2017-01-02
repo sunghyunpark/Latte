@@ -87,11 +87,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         if(detail_pos>=0){
             LoadDetailBack(detail_article_id);
         }else{
-            try{
-                new LoadDataTask().execute(first_pos,last_pos,1);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            LoadArticle(false,first_pos,last_pos);
+
         }
     }
     //리프레쉬
@@ -100,12 +97,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         //새로고침시 이벤트 구현
         InitView();
         first_pos = 0;
-        try{
-            //listItems.clear();
-            new LoadDataTask().execute(0,0,0);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        LoadArticle(true,0,0);
+
         mSwipeRefresh.setRefreshing(false);
     }
     @Override
@@ -142,11 +135,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
             public void onLoadMore(int current_page) {
                 // do something...
                 Toast.makeText(getApplicationContext(),"불러오는중...", Toast.LENGTH_SHORT).show();
-                try{
-                    new LoadDataTask().execute(first_pos,last_pos,1);
-                }catch (Exception e){
-                    e.printStackTrace();
-                }
+                LoadArticle(false,first_pos,last_pos);
+
             }
 
         });
