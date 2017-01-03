@@ -181,9 +181,10 @@ public class Upload_Page2 extends Activity {
 
                     case R.id.upload_btn:
 
-                        if(SystemClock.elapsedRealtime() - mLastClickTime < 1000){
+                        if(SystemClock.elapsedRealtime() - mLastClickTime < 300){
                             break;
                         }
+                        mLastClickTime = SystemClock.elapsedRealtime();
                         String board_str = upload_edit_box.getText().toString();
                         board_str = board_str.trim();
                         if(board_str.equals("")){

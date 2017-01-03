@@ -90,12 +90,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         //새로고침시 이벤트 구현
         InitView();
         first_pos = 0;
-        try{
-            //listItems.clear();
-            new LoadDataTask().execute(0,0,0);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        LoadArticleComment(true,0,0);
         mSwipeRefresh.setRefreshing(false);
     }
 
@@ -114,12 +109,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         user_profile_path = user.get("profile_img");
 
         InitView();
-        try{
-            //listItems.clear();
-            new LoadDataTask().execute(0,0,0);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        LoadArticleComment(true,0,0);
     }
 
     private void InitView(){
@@ -173,28 +163,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         send_comment_btn.setBackgroundResource(R.mipmap.comment_not_click_btn_img);
         send_comment_btn.setOnTouchListener(myOnTouchListener);
     }
-    public class LoadDataTask extends AsyncTask<Integer, String, String> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
 
-        @Override
-        protected String doInBackground(Integer... position){
-
-            boolean refresh_flag = false;
-            //0이면 처음 진입하거나 refersh를 한경우
-            if(position[2] == 0){
-                refresh_flag = true;
-            }
-            LoadArticleComment(refresh_flag,position[0],position[1]);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            adapter.notifyDataSetChanged();
-        }
-    }
     /**
      * 댓글 내용 받아오기
      * @param refresh_flag -> 최초 진입인지 refresh인지 판별
@@ -242,7 +211,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                     empty_view.setVisibility(View.GONE);
                 } else {
                     empty_view.setVisibility(View.VISIBLE);
-                    Toast.makeText(getApplicationContext(),comment_data.getError_msg(), Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),comment_data.getError_msg(), Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -268,11 +237,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                 CommonErrorResponse error = response.body();
                 if (!error.isError()) {
                     Toast.makeText(getApplicationContext(),"댓글 전송 성공", Toast.LENGTH_SHORT).show();
-                    try{
-                        new LoadDataTask().execute(0,0,0);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+                    LoadArticleComment(true,0,0);
                 } else {
                     Toast.makeText(getApplicationContext(),"댓글 전송 실패", Toast.LENGTH_SHORT).show();
                 }

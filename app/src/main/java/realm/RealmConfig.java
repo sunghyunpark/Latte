@@ -18,7 +18,7 @@ public class RealmConfig{
 
         Realm.init(context);    //realm 초기화
         RealmConfiguration config = new RealmConfiguration.Builder()
-                .name("Timelene_Follow")
+                .name("Timeline_Follow")
                 .schemaVersion(0)
                 .deleteRealmIfMigrationNeeded()
                 .build();
