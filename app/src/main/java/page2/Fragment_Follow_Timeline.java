@@ -34,6 +34,7 @@ import java.util.concurrent.ExecutionException;
 
 import app_controller.App_Config;
 import common.Common;
+import common.Send_Report_Dialog;
 import common.Util;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -521,7 +522,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        startActivity(new Intent(getActivity(), Send_Report_Dialog.class));
+                        getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                     }
                 });
 

@@ -1,0 +1,86 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="270dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/common_dialog_shape"
+    >
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="90dp">
+        <TextView
+            android:id="@+id/send_report_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="신고"
+            android:textSize="22dp"
+            android:textColor="#000000"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="18dp"/>
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/send_report_title"
+            android:text="신고 사유를 선택함과 동시에 신고가 완료됩니다."
+            android:gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
+            android:paddingRight="15dp"
+            android:paddingLeft="15dp"
+            android:layout_marginTop="8dp"
+            android:textColor="#E91E63"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/send_report_1"
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/send_report_dialog_btn"
+        android:text="불쾌한 리뷰"
+        android:layout_marginTop="15dp"
+        android:onClick="buttonPressed"
+        android:textColor="#000000"/>
+    <Button
+        android:id="@+id/send_report_2"
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/send_report_dialog_btn"
+        android:text="불법 광고나 홍보"
+        android:layout_marginTop="10dp"
+        android:onClick="buttonPressed"
+        android:textColor="#000000"/>
+    <Button
+        android:id="@+id/send_report_3"
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/send_report_dialog_btn"
+        android:text="폭력적이거나 음란한 리뷰"
+        android:layout_marginTop="10dp"
+        android:onClick="buttonPressed"
+        android:textColor="#000000"/>
+    <Button
+        android:id="@+id/send_report_4"
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/send_report_dialog_btn"
+        android:text="타인을 사칭하는 리뷰"
+        android:layout_marginTop="10dp"
+        android:onClick="buttonPressed"
+        android:textColor="#000000"/>
+    <Button
+        android:id="@+id/send_report_5"
+        android:layout_width="230dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/send_report_dialog_btn"
+        android:text="기타"
+        android:layout_marginTop="10dp"
+        android:onClick="buttonPressed"
+        android:layout_marginBottom="10dp"
+        android:textColor="#000000"/>
+
+</LinearLayout>
