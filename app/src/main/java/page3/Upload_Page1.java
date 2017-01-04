@@ -95,6 +95,7 @@ public class Upload_Page1 extends Activity {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        if(mCurrentImg_bitmap!=null)
         mCurrentImg_bitmap.recycle();
     }
 
@@ -505,6 +506,7 @@ public class Upload_Page1 extends Activity {
                 //권한이 없는 경우
                 else {
                     Toast.makeText(this, "퍼미션을 허용해야 이용할 수 있습니다.", Toast.LENGTH_SHORT).show();
+                    finish();
                 }
                 break;
 
