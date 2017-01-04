@@ -367,7 +367,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
     //review 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private static final int TYPE_ITEM_USER_ATTICLE = 0;
+        private static final int TYPE_ITEM_USER_ARTICLE = 0;
+        private static final int TYPE_ITEM_HEADER = 1;
         List<Fragment_Timeline_item> listItems;
         private int displaySize = getDisplaySize();
 
@@ -376,10 +377,13 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         }
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            if (viewType == TYPE_ITEM_USER_ATTICLE) {
+            if (viewType == TYPE_ITEM_USER_ARTICLE) {
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_follow_timeline, parent, false);
                 return new Fragment_Follow_Timeline_VHitem(v);
-            }
+            }/*else if(viewType == TYPE_ITEM_HEADER){
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_follow_timeline_header, parent, false);
+                return new Fragment_Follow_Timeline_Header(v);
+            }*/
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
 
@@ -582,9 +586,18 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 VHitem.created_at.setText(util.formatTimeString(to));
             }
         }
+        private boolean isPositionHeader(int position) {
+            return position == 0;
+        }
         @Override
         public int getItemViewType(int position) {
-            return TYPE_ITEM_USER_ATTICLE;
+            /*
+            if(isPositionHeader(position)){
+                return TYPE_ITEM_HEADER;
+            }else{
+                return TYPE_ITEM_USER_ARTICLE;
+            }*/
+            return TYPE_ITEM_USER_ARTICLE;
         }
         //increasing getItemcount to 1. This will be the row of header.
         @Override

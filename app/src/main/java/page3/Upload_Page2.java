@@ -117,7 +117,7 @@ public class Upload_Page2 extends Activity {
         Glide.with(getApplicationContext())
                 .load(util.GetProfile_Url(login_method, user_profile_path))
                 .transform(new Util.CircleTransform(getApplicationContext()))
-                .error(null)
+                .error(R.drawable.profile_basic_img)
                 .into(user_profile_img);
         //업로드 이미지
         final ImageView upload_img = (ImageView)findViewById(R.id.upload_img);
