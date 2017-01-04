@@ -157,8 +157,8 @@ public class Upload_Page1 extends Activity {
             }
 
         } else {
-            fetchAllImages();
-            CurrentPicture(0);
+            fetchAllImages();    //단말기 갤러리에 있는 사진들 정보를 가져옴
+            CurrentPicture(0);    //현재 선택되어있는 사진을 보여주고 비트맵으로 추출.
             setPalette();
         }
     }
