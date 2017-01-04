@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -294,6 +295,7 @@ public class Article_Detail_Activity extends Activity {
                     //article_thumb
                     if(!articledata.isGrid_error()){
                         int size = articledata.getGrid_article().size();
+                        recyclerView_thumb.setLayoutParams(ThumbSetHeight(getApplicationContext(),size));
                         for(int i=0;i<size;i++){
                             Fragment_Timeline_item item = new Fragment_Timeline_item();
                             item.setArticle_id(articledata.getGrid_article().get(i).getArticle_id());
@@ -561,6 +563,28 @@ public class Article_Detail_Activity extends Activity {
         h = display.getHeight();
 
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(w/3, w/3);
+        return params;
+    }
+
+    /**
+     * 게시자의 다른게시글 리사이클러뷰의 높이 지정
+     * @param context
+     * @param size
+     * @return
+     */
+    private LinearLayout.LayoutParams ThumbSetHeight(Context context, int size){
+        int w;
+        int h;
+        Display display;
+        display = ((WindowManager)context.getSystemService(context.WINDOW_SERVICE)).getDefaultDisplay();
+        w = display.getWidth();
+
+        if(size%3 == 0){
+            h = (size/3)*(w/3);
+        }else{
+            h = (size/3+1)*(w/3);
+        }
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(w,h);
         return params;
     }
 
