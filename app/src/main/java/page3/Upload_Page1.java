@@ -44,10 +44,12 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
 import app_controller.App_Config;
+import app_controller.SQLiteHandler;
 import common.Util;
 
 /**
@@ -62,6 +64,8 @@ public class Upload_Page1 extends Activity {
 
     private static final App_Config Local_path = new App_Config();
     private static final String LocalPath = Local_path.getLocalPath();
+
+    private SQLiteHandler db;    //SQLite
 
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_EXTERNAL_STORAGE = 10;
@@ -101,11 +105,15 @@ public class Upload_Page1 extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         upload_page1 = this;
+        db = new SQLiteHandler(this);
+        HashMap<String, String> user = db.getUserDetails();
 
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
         login_method = intent.getExtras().getString("login_method");
-        user_profile_path = intent.getExtras().getString("user_profile_path");
+        user_profile_path = user.get("profile_img");
+
+        Toast.makeText(getApplicationContext(),user_profile_path+"",Toast.LENGTH_SHORT).show();
 
         InitView();
 
@@ -157,8 +165,8 @@ public class Upload_Page1 extends Activity {
             }
 
         } else {
-            fetchAllImages();    //단말기 갤러리에 있는 사진들 정보를 가져옴
-            CurrentPicture(0);    //현재 선택되어있는 사진을 보여주고 비트맵으로 추출.
+            fetchAllImages();    //단말기 내의 모든 사진들을 불러옴
+            CurrentPicture(0);    //현재 선택된 사진
             setPalette();
         }
     }
@@ -219,11 +227,9 @@ public class Upload_Page1 extends Activity {
     }
 
     /**
-     * 업로드 이미지에 적용된 이미지를 비트맵으로 추출
-     * @param id -> 업로드 이미지 id 값
-     * @return -> 업로드 이미지 비트맵
+     * 선택된 사진의 비트맵의 TYPE CenterCrop/FitCenter인지에 따라 비트맵을 로컬에 저장
      */
-    private Bitmap getBitmapUploadImg(int id){
+    private String getBitmapUploadImg_Path(){
         /**
          * 선택한 사진이 세로/가로인지 판별 후 다르게 분기처리해야할듯함..
          * 기존에는 rotate degree로 가로/세로를 판별했었는데
@@ -238,18 +244,103 @@ public class Upload_Page1 extends Activity {
             size = mCurrentImg_bitmap.getHeight();
         }
 
+        Bitmap resize_before;
+
         if(upload_img.getScaleType() != ImageView.ScaleType.FIT_CENTER){
-            Bitmap result = util.cropCenterBitmap(mCurrentImg_bitmap,size,size);
-            return result;
+            //CenterCrop
+            resize_before = util.cropCenterBitmap(mCurrentImg_bitmap,size,size);
         }else{
-            //축소인 경우(원본비율)
+            //FitCenter
             double aspectRatio = (double) mCurrentImg_bitmap.getHeight() / (double) mCurrentImg_bitmap.getWidth();
             int targetHeight = (int) (size * aspectRatio);
 
-            Bitmap result = Bitmap.createScaledBitmap(mCurrentImg_bitmap, size, targetHeight, false);
+            resize_before = Bitmap.createScaledBitmap(mCurrentImg_bitmap, size, targetHeight, false);
 
-            return result;
         }
+
+        /**
+         * 일단 resize_before비트맵을 로컬에 저장한다
+         */
+        File folder_path = new File(LocalPath);
+        if(!folder_path.exists()){
+            folder_path.mkdir();
+        }
+
+        String resize_before_path = LocalPath+"resize_before.jpg";
+        //로컬에 저장
+        OutputStream outStream = null;
+        File file = new File(resize_before_path);
+
+        try{
+            outStream = new FileOutputStream(file);
+            resize_before.compress(Bitmap.CompressFormat.JPEG,100,outStream);
+            outStream.flush();
+            outStream.close();
+        }catch(FileNotFoundException e){
+
+        }catch(IOException e){
+
+        }
+
+        /**
+         * 저장된 resize_before비트맵의 가로/세로 길이를 가지고 크기에 맞게 리사이징 작업
+         */
+        //1080px이 최대길이, 가로/세로 중에 더 긴 길이를 기준으로 리사이징
+        float size_check = 0;
+        if( resize_before.getHeight() >= resize_before.getWidth() ) {
+            size_check = resize_before.getHeight();
+        } else if( resize_before.getHeight() < resize_before.getWidth() ) {
+            size_check = resize_before.getWidth();
+        }
+
+        //1080px 최대길이를 넘는 이미지는 리사이징, compress 둘다 함
+        if( size_check > 1080){
+
+            String file_name = "resize_after.jpg";
+
+            BitmapFactory.Options options = new BitmapFactory.Options();
+
+            //리사이징 과정에서 단말기 메모리 오류 방지
+            if( size_check > 4320 ){
+                options.inSampleSize = 4;
+            } else if( size_check > 3240 ){
+                options.inSampleSize = 3;
+            } else if( size_check > 2160 ){
+                options.inSampleSize = 2;
+            } else {
+                options.inSampleSize = 1;
+            }
+            Bitmap resized_bitmap = BitmapFactory.decodeFile(resize_before_path, options);
+
+            File fileCacheItem = new File(LocalPath + file_name);
+            OutputStream out = null;
+
+            try {
+                float per = 1080/size_check/options.inSampleSize;
+
+                float height=resized_bitmap.getHeight();
+                float width=resized_bitmap.getWidth();
+                fileCacheItem.createNewFile();
+                out = new FileOutputStream(fileCacheItem);
+                //resized_bitmap = Bitmap.createScaledBitmap(resized_bitmap, (int)(height*per), (int)(width*per), true);
+                resized_bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    out.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return LocalPath + file_name;
+
+        } else {
+
+            return resize_before_path;
+
+        }
+
     }
 
     private void setPalette() {
@@ -301,38 +392,6 @@ public class Upload_Page1 extends Activity {
         Collections.reverse(listItems);
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setAdapter(adapter);
-    }
-
-    /**
-     * 업로드 이미지를 리사이징한 뒤 로컬에 저장 후 해당 경로 반환
-     * 추후 공유하기 부분이 완성되면 해당 경로의 파일을 삭제하도록 해야함
-     * @return
-     */
-    private String getUploadImagePath(){
-
-        File folder_path = new File(LocalPath);
-        if(!folder_path.exists()){
-            folder_path.mkdir();
-        }
-
-        String path = LocalPath+"upload_img.jpg";
-
-        //로컬에 저장
-        OutputStream outStream = null;
-        File file = new File(path);
-        Bitmap bitmap = getBitmapUploadImg(R.id.upload_img);
-
-        try{
-            outStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,100,outStream);
-            outStream.flush();
-            outStream.close();
-        }catch(FileNotFoundException e){
-
-        }catch(IOException e){
-
-        }
-        return path;
     }
 
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -468,7 +527,7 @@ public class Upload_Page1 extends Activity {
                         break;
                     case R.id.next_btn:
                         Intent intent = new Intent(getApplicationContext(), Upload_Page2.class);
-                        intent.putExtra("ImagePath", getUploadImagePath());
+                        intent.putExtra("ImagePath", getBitmapUploadImg_Path());
                         intent.putExtra("login_method", login_method);
                         intent.putExtra("user_uid", uid);
                         intent.putExtra("user_profile_path", user_profile_path);

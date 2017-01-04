@@ -116,7 +116,6 @@ public class Upload_Page2 extends Activity {
         Glide.clear(user_profile_img);
         Glide.with(getApplicationContext())
                 .load(util.GetProfile_Url(login_method, user_profile_path))
-                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .transform(new Util.CircleTransform(getApplicationContext()))
                 .error(null)
                 .into(user_profile_img);

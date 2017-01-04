@@ -1,14 +1,9 @@
 package common;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
 
 import app_controller.App_Config;
 import app_controller.SQLiteHandler;
@@ -41,9 +36,8 @@ public class Image_Uploader {
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        //final File file = new File(img_path);
-        final String local_path = ResizeBitmap(img_path);
-        final File file = new File(local_path);
+
+        final File file = new File(img_path);
 
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
 
@@ -65,14 +59,7 @@ public class Image_Uploader {
                         mSQLite.updateUser(uid, response.body().getFile_path());
                         //서버에 업로드 후 로컬에 남아있는 이미지 파일 삭제
 
-                        File path = new File(img_path);
-                        if(path.exists()) {
-                            path.delete();
-                        }
-                        File path2 = new File(local_path);
-                        if(path2.exists()){
-                            path2.delete();
-                        }
+                        file.delete();
 
                     }else{
                         Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
@@ -103,8 +90,8 @@ public class Image_Uploader {
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
-        final String local_path = ResizeBitmap(img_path);
-        final File file = new File(local_path);
+
+        final File file = new File(img_path);
 
         final RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
         RequestBody Tag_body = RequestBody.create(MediaType.parse("multipart/form-data"), tag);
@@ -121,17 +108,10 @@ public class Image_Uploader {
 
                     if(!response.body().isError()){
                         Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
-                        /**
-                         * 이미지 업로드 성공했으니 로컬에 저장되어있던 이미지는 삭제.
-                         */
-                        //이미지 파일 업로드 후 로컬에 남아있는 이미지 삭제해주기
-                        File path = new File(img_path);
+                        file.delete();
+                        File path = new File(LocalPath+"resize_before.jpg");
                         if(path.exists()) {
                             path.delete();
-                        }
-                        File path2 = new File(local_path);
-                        if(path2.exists()){
-                            path2.delete();
                         }
                     }else{
                         Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
@@ -149,57 +129,6 @@ public class Image_Uploader {
                 t.printStackTrace();
             }
         });
-    }
-
-    /**
-     * 파일 용량을 줄이기 위해 리사이징작업을 함.
-     * 기준 크기보다 작은 이미지의 경우 리사이징을 안함
-     * @param img_path -> 로컬주소
-     * @return
-     */
-
-    public String ResizeBitmap(String img_path) {
-
-        Bitmap resize_before = BitmapFactory.decodeFile(img_path);
-        if(resize_before.getHeight() < 1920 || resize_before.getWidth() < 1080){
-            return img_path;
-        }else{
-            String file_name = "upload_img2.jpg";
-            File file = new File(LocalPath);
-
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 4;
-            Bitmap bitmap = BitmapFactory.decodeFile(img_path, options);
-
-            // If no folders
-            if (!file.exists()) {
-                file.mkdirs();
-                // Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show();
-            }
-            File fileCacheItem = new File(LocalPath + file_name);
-            OutputStream out = null;
-
-            try {
-
-                //int height=bitmap.getHeight();
-                //int width=bitmap.getWidth();
-                fileCacheItem.createNewFile();
-                out = new FileOutputStream(fileCacheItem);
-                //160 부분을 자신이 원하는 크기로 변경할 수 있습니다.
-                //bitmap = Bitmap.createScaledBitmap(bitmap, 160, height/(width/160), true);
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                try {
-                    out.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return LocalPath + file_name;
-        }
-
     }
 
 }
