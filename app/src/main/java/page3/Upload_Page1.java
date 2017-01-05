@@ -240,8 +240,10 @@ public class Upload_Page1 extends Activity {
         int size;
 
         if(mCurrentImg_bitmap.getHeight()>mCurrentImg_bitmap.getWidth()){
+            //세로
             size = mCurrentImg_bitmap.getWidth();
         }else{
+            //가로
             size = mCurrentImg_bitmap.getHeight();
         }
 
@@ -252,11 +254,11 @@ public class Upload_Page1 extends Activity {
             resize_before = util.cropCenterBitmap(mCurrentImg_bitmap,size,size);
         }else{
             //FitCenter
-            double aspectRatio = (double) mCurrentImg_bitmap.getHeight() / (double) mCurrentImg_bitmap.getWidth();
-            int targetHeight = (int) (size * aspectRatio);
+            //double aspectRatio = (double) mCurrentImg_bitmap.getHeight() / (double) mCurrentImg_bitmap.getWidth();
+            //int targetHeight = (int) (size * aspectRatio);
 
-            resize_before = Bitmap.createScaledBitmap(mCurrentImg_bitmap, size, targetHeight, false);
-
+            //resize_before = Bitmap.createScaledBitmap(mCurrentImg_bitmap, size, targetHeight, false);
+            resize_before = Bitmap.createScaledBitmap(mCurrentImg_bitmap, mCurrentImg_bitmap.getWidth(), mCurrentImg_bitmap.getHeight(), false);
         }
 
         /**
@@ -274,7 +276,7 @@ public class Upload_Page1 extends Activity {
 
         try{
             outStream = new FileOutputStream(file);
-            resize_before.compress(Bitmap.CompressFormat.JPEG,100,outStream);
+            resize_before.compress(Bitmap.CompressFormat.JPEG,50,outStream);
             outStream.flush();
             outStream.close();
         }catch(FileNotFoundException e){
