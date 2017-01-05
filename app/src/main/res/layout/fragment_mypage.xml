@@ -1,13 +1,177 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--나 일때의 레이아웃-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#ffffff"
     tools:context="page1.Fragment_Ranking">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="mypage page" />
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+        <ImageView
+            android:id="@+id/back_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentLeft="true"
+            android:src="@mipmap/ic_launcher"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"/>
+        <TextView
+            android:id="@+id/my_nickname_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="17dp"
+            android:textSize="17sp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000" />
 
-</FrameLayout>
+        <ImageView
+            android:id="@+id/setting_btn"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/ic_launcher"/>
+    </RelativeLayout>
+    <!--구분선-->
+    <LinearLayout
+        android:id="@+id/divider_lay"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:layout_below="@+id/title_bar"
+        android:background="#ffe0e0e0"></LinearLayout>
+
+    <!--상단 정보 레이아웃-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal">
+        <!--프로필 사진 레이아웃-->
+        <RelativeLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="20dp">
+            <ImageView
+                android:id="@+id/user_profile_img"
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                />
+        </RelativeLayout>
+        <!--정보 레이아웃 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <!--게시글, 팔로워, 팔로잉 정보 레이아웃-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/article_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#99000000"
+                        android:textStyle="bold"
+                        android:text="1200"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="게시글"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+
+                    <TextView
+                        android:id="@+id/follower_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#99000000"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:text="3500"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="팔로워"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center_vertical"
+                    android:layout_weight="1">
+                    <TextView
+                        android:id="@+id/following_count_txt"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#99000000"
+                        android:textStyle="bold"
+                        android:layout_gravity="center_horizontal"
+                        android:text="1643"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:text="팔로잉"/>
+                </LinearLayout>
+            </LinearLayout>
+            <!--프로필 수정 버튼-->
+            <Button
+                android:id="@+id/edit_profile_btn"
+                android:layout_width="150dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="25dp"
+                android:text="프로필 수정"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!--이름, 소개 글 레이아웃-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/my_name_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="sunghyunpark"/>
+
+        <TextView
+            android:id="@+id/introduce_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:layout_marginLeft="10dp"
+            android:text="hello world"/>
+
+    </LinearLayout>
+</LinearLayout>
