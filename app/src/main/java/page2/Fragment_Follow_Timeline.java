@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +21,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -75,6 +78,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private int first_pos=0;
     private int last_pos=0;
     private static final int LOAD_DATA_COUNT = 5;
+    //new article btn
+    private ViewGroup new_article_btn;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     private int detail_pos = -1;    //디테일뷰 클릭했을 때의 position
@@ -120,6 +125,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             DeleteRealmDB();
             Log.d("realm_test", "onRefreshed realm delete!!!!");
             LoadArticle(true,0,0);
+            new_article_btn.setVisibility(View.GONE);    //new article btn 숨기기
 
         }else{
             Toast.makeText(getActivity(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
@@ -179,6 +185,26 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         //adapter.notifyDataSetChanged();
+        new_article_btn = (ViewGroup)v.findViewById(R.id.new_article_btn);
+        new_article_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Handler hd = new Handler();
+                hd.postDelayed(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        recyclerView.smoothScrollToPosition(0);
+                        InitView();
+                        first_pos = 0;
+                        DeleteRealmDB();
+                        Log.d("realm_test", "onRefreshed realm delete!!!!");
+                        LoadArticle(true,0,0);
+                        new_article_btn.setVisibility(View.GONE);    //new article btn 숨기기
+                    }
+                }, 500);
+            }
+        });
 
         recyclerView.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
@@ -190,7 +216,32 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             }
         });
 
+        recyclerView.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
 
+            @Override
+            public void onShow() {
+                showViews();
+            }
+        });
+
+
+    }
+
+    /**
+     * 새로운 아티클이 있을 때 new 버튼을 보여주고 hide/show 효과
+     */
+
+    private void hideViews() {
+        new_article_btn.animate().translationY(-new_article_btn.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+
+    }
+
+    private void showViews() {
+        new_article_btn.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
 
@@ -287,6 +338,10 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     /**
                      * 받아온 리스트 초기화
                      */
+                if(articledata.isRefresh_result()){
+                    //새로운 아티클이 있는 경우 new_article_btn 보여줌.
+                    new_article_btn.setVisibility(View.VISIBLE);
+                }
                     int size = articledata.getArticle().size();
                     if(first_pos == 0){
                         first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
