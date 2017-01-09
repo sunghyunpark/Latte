@@ -3,8 +3,7 @@
     android:layout_width="270dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/common_dialog_shape"
-    >
+    android:background="@drawable/common_dialog_shape">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="90dp">

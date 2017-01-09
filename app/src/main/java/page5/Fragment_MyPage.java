@@ -89,7 +89,6 @@ public class Fragment_MyPage extends Fragment{
         Glide.with(getActivity())
                 .load(Server_ip+user_profile_path)
                 .transform(new Util.CircleTransform(getActivity()))
-                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_profile_img);

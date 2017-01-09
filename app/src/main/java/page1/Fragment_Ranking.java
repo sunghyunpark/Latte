@@ -68,16 +68,6 @@ public class Fragment_Ranking extends Fragment {
             }
         });
 
-        Button profile_edit_btn = (Button)v.findViewById(R.id.profile_edit_btn);
-        profile_edit_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), User_Profile_Edit_Dialog.class);
-                intent.putExtra("from", "not_register");
-                intent.putExtra("user_email", user_email);
-                startActivity(intent);
-            }
-        });
         return v;
     }
     private void logoutUser() {
