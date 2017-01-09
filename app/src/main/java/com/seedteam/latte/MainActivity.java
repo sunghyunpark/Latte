@@ -51,6 +51,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private String user_profile_path;
     private String user_email;
 
+    //현재 페이지
+    private int current_page;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -99,10 +102,12 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentTransaction.replace(R.id.main_frame, new Fragment_Ranking());
         fragmentTransaction.commit();
         tab1.setImageResource(R.mipmap.ic_page1_selected);
+        current_page = 1;
     }
 
     @Override
     public void onClick(View view) {
+        boolean is_current_page = false;
         Fragment fragment = null;
         /**
          * 3번쨰 카메라 버튼 탭 시 하단 탭 메뉴에서 이전에 선택한 아이콘 유지하기 위해
@@ -120,18 +125,30 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         switch (view.getId()) {
             case R.id.tab_1 :
                 tab1.setImageResource(R.mipmap.ic_page1_selected);
-                fragment = new Fragment_Ranking();
-                bundle.putString("KEY_MSG", "replace");
-                bundle.putString("user_uid", uid);
-                bundle.putString("user_email", user_email);
-                fragment.setArguments(bundle);
+                if(current_page == 1){
+                    is_current_page = true;
+                }else{
+                    fragment = new Fragment_Ranking();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    bundle.putString("user_email", user_email);
+                    fragment.setArguments(bundle);
+                    current_page = 1;
+                    is_current_page = false;
+                }
                 break ;
             case R.id.tab_2 :
                 tab2.setImageResource(R.mipmap.ic_page2_selected);
-                fragment = new Fragment_Timeline();
-                bundle.putString("KEY_MSG", "replace");
-                bundle.putString("user_uid", uid);
-                fragment.setArguments(bundle);
+                if(current_page == 2){
+                    is_current_page = true;
+                }else{
+                    fragment = new Fragment_Timeline();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    fragment.setArguments(bundle);
+                    current_page = 2;
+                    is_current_page = false;
+                }
                 break ;
             case R.id.tab_3 :
                 Intent intent = new Intent(getApplicationContext(), Upload_Page1.class);
@@ -143,21 +160,33 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break ;
             case R.id.tab_4:
                 tab4.setImageResource(R.mipmap.ic_page4_selected);
-                fragment = new Fragment_Like();
-                bundle.putString("KEY_MSG", "replace");
-                bundle.putString("user_uid", uid);
-                fragment.setArguments(bundle);
+                if(current_page == 4){
+                    is_current_page = true;
+                }else{
+                    fragment = new Fragment_Like();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    fragment.setArguments(bundle);
+                    current_page = 4;
+                    is_current_page = false;
+                }
                 break;
             case R.id.tab_5:
                 tab5.setImageResource(R.mipmap.ic_page5_selected);
-                fragment = new Fragment_MyPage();
-                bundle.putString("KEY_MSG", "replace");
-                bundle.putString("user_uid", uid);
-                fragment.setArguments(bundle);
+                if(current_page == 5){
+                    is_current_page = true;
+                }else{
+                    fragment = new Fragment_MyPage();
+                    bundle.putString("KEY_MSG", "replace");
+                    bundle.putString("user_uid", uid);
+                    fragment.setArguments(bundle);
+                    current_page = 5;
+                    is_current_page = false;
+                }
                 break;
         }
         // 업로드 버튼이 아닌경우에만...
-        if(view.getId() != R.id.tab_3){
+        if((view.getId() != R.id.tab_3) && !is_current_page){
             android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.main_frame, fragment);
