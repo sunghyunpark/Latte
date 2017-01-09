@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -33,6 +34,8 @@ public class Email_Login_Page extends Activity {
     private SessionManager mSessionManager;
     private SQLiteHandler mSQLite;
 
+    EditText email_edit_box, pw_edit_box;
+
     Util util = new Util();
 
     @Override
@@ -53,43 +56,18 @@ public class Email_Login_Page extends Activity {
     private void InitView(){
         mSessionManager = new SessionManager(getApplicationContext());
 
-        final EditText email_edit_box = (EditText)findViewById(R.id.email_edit_box);    //email입력창
-        final EditText pw_edit_box = (EditText)findViewById(R.id.pw_edit_box);    //비밀번호
+        email_edit_box = (EditText)findViewById(R.id.email_edit_box);    //email입력창
+        pw_edit_box = (EditText)findViewById(R.id.pw_edit_box);    //비밀번호
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back_btn.setOnTouchListener(myOnTouchListener);
 
         Button login_btn = (Button)findViewById(R.id.login_btn);
-        login_btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                String email_str = email_edit_box.getText().toString();
-                String password_str = pw_edit_box.getText().toString();
-
-                if( email_str.equals("") || password_str.equals("") ){
-                    Toast.makeText(getApplicationContext(), "정보를 입력해주세요.",Toast.LENGTH_SHORT).show();
-                }else if( !email_str.contains("@") || !(email_str.contains(".com")||email_str.contains(".net")) ){
-                    Toast.makeText(getApplicationContext(), "올바른 이메일 형식이 아닙니다.",Toast.LENGTH_SHORT).show();
-                }else if( (password_str.length()<6) ){
-                    Toast.makeText(getApplicationContext(), "비밀번호가 너무 짧습니다.", Toast.LENGTH_SHORT).show();
-                }else{
-                    PostLoginUser(email_str, password_str);
-                }
-            }
-        });
+        login_btn.setOnTouchListener(myOnTouchListener);
 
         //계정이 없으신가요? 가입하기
         TextView link_to_register_txt = (TextView)findViewById(R.id.link_to_register_txt);
-        link_to_register_txt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        link_to_register_txt.setOnTouchListener(myOnTouchListener);
 
     }
 
@@ -134,5 +112,41 @@ public class Email_Login_Page extends Activity {
             }
         });
     }
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
 
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                    case R.id.login_btn:
+                        String email_str = email_edit_box.getText().toString();
+                        String password_str = pw_edit_box.getText().toString();
+
+                        if( email_str.equals("") || password_str.equals("") ){
+                            Toast.makeText(getApplicationContext(), "정보를 입력해주세요.",Toast.LENGTH_SHORT).show();
+                        }else if( !email_str.contains("@") || !(email_str.contains(".com")||email_str.contains(".net")) ){
+                            Toast.makeText(getApplicationContext(), "올바른 이메일 형식이 아닙니다.",Toast.LENGTH_SHORT).show();
+                        }else if( (password_str.length()<6) ){
+                            Toast.makeText(getApplicationContext(), "비밀번호가 너무 짧습니다.", Toast.LENGTH_SHORT).show();
+                        }else{
+                            PostLoginUser(email_str, password_str);
+                        }
+                        break;
+
+                    case R.id.link_to_register_txt:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

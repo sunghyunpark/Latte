@@ -7,11 +7,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
@@ -49,23 +51,11 @@ public class Login_Page extends FragmentActivity {
 
         //이메일 로그인 버튼
         Button login_email_btn = (Button)findViewById(R.id.login_email_btn);
-        login_email_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Email_Login_Page.class));
-                overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
-            }
-        });
+        login_email_btn.setOnTouchListener(myOnTouchListener);
 
         //이메일 회원가입 버튼
         Button register_email_btn = (Button)findViewById(R.id.register_email_btn);
-        register_email_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), Email_Register_Page.class));
-                overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
-            }
-        });
+        register_email_btn.setOnTouchListener(myOnTouchListener);
 
         mViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -150,5 +140,29 @@ public class Login_Page extends FragmentActivity {
 
         return super.onKeyDown(keyCode, event);
     }
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.login_email_btn:
+                        startActivity(new Intent(getApplicationContext(), Email_Login_Page.class));
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                        break;
+                    case R.id.register_email_btn:
+                        startActivity(new Intent(getApplicationContext(), Email_Register_Page.class));
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 
 }
