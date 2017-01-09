@@ -22,6 +22,7 @@ import app_controller.App_Config;
 import app_controller.SQLiteHandler;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * created by sunghyun 2017-01-05
@@ -88,7 +89,7 @@ public class Fragment_MyPage extends Fragment{
         ImageView user_profile_img = (ImageView)v.findViewById(R.id.user_profile_img);
         Glide.with(getActivity())
                 .load(Server_ip+user_profile_path)
-                .transform(new Util.CircleTransform(getActivity()))
+                .bitmapTransform(new CropCircleTransformation(getActivity()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_profile_img);

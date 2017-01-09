@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
 
 import app_controller.App_Config;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * created by sunghyun 2016-12-10
@@ -50,7 +51,8 @@ public class Cancel_Following_Dialog extends Activity {
         //프로필
         Glide.with(getApplicationContext())
                 .load(Server_ip+user_profile_img_path)
-                .transform(new Util.CircleTransform(getApplicationContext()))
+                //.transform(new Util.CircleTransform(getApplicationContext()))
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_prof);

@@ -46,6 +46,7 @@ import common.Cancel_Following_Dialog;
 import common.Common;
 import common.FollowBtnPushEvent;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleCommentResponse;
@@ -246,7 +247,7 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                 //user_profile
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getUser_profile_img_thumb())
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);

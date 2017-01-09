@@ -30,6 +30,7 @@ import common.BusProvider;
 import common.Register_ProfilePushEvent;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * created by sunghyun 2016-11-26
@@ -231,7 +232,7 @@ public class Register_Page2 extends Activity {
             Glide.clear(profile_img);
             Glide.with(getApplicationContext())
                     .load(new File(LocalPath,img_path))
-                    .transform(new Util.CircleTransform(getApplicationContext()))
+                    .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .error(null)
                     .into(profile_img);
@@ -239,7 +240,7 @@ public class Register_Page2 extends Activity {
             Glide.clear(profile_img);
             Glide.with(getApplicationContext())
                     .load(img_path)
-                    .transform(new Util.CircleTransform(getApplicationContext()))
+                    .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .error(null)
                     .into(profile_img);

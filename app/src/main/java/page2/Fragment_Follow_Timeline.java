@@ -41,6 +41,7 @@ import common.Send_Report_Dialog;
 import common.Util;
 import io.realm.Realm;
 import io.realm.RealmResults;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import realm.RealmConfig;
 import realm.Realm_TimeLine_Follow;
 import rest.ApiClient;
@@ -565,7 +566,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 //user_profile
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
-                        .transform(new Util.CircleTransform(getContext()))
+                        .bitmapTransform(new CropCircleTransformation(getActivity()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)

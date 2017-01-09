@@ -42,6 +42,7 @@ import common.Cancel_Following_Dialog;
 import common.Common;
 import common.FollowBtnPushEvent;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleDetailResponse;
@@ -187,7 +188,7 @@ public class Article_Detail_Activity extends Activity {
                     //작성자 프로필
                     Glide.with(getApplicationContext())
                             .load(Server_ip+articledata.getArticle().getProfile_img_thumb())
-                            .transform(new Util.CircleTransform(getApplicationContext()))
+                            .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                             .placeholder(R.drawable.profile_basic_img)
                             .error(null)
                             .into(article_user_profile_img);
@@ -377,7 +378,7 @@ public class Article_Detail_Activity extends Activity {
                 //user_profile
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)

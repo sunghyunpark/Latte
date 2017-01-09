@@ -40,6 +40,7 @@ import java.util.List;
 import app_controller.App_Config;
 import app_controller.SQLiteHandler;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleCommentResponse;
@@ -131,7 +132,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         Glide.with(getApplicationContext())
                 .load(Server_ip+user_profile_path)
-                .transform(new Util.CircleTransform(getApplicationContext()))
+                .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_profile_img);
@@ -351,7 +352,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                 //user_profile
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)

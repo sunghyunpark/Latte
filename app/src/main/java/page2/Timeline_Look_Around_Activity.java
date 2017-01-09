@@ -37,6 +37,7 @@ import java.util.List;
 import app_controller.App_Config;
 import common.Common;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleDetailBack;
@@ -463,7 +464,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 //user_profile
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)

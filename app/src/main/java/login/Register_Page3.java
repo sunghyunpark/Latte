@@ -25,6 +25,7 @@ import app_controller.SQLiteHandler;
 import app_controller.SessionManager;
 import common.Image_Uploader;
 import common.Util;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.UserResponse;
@@ -128,14 +129,14 @@ public class Register_Page3 extends Activity {
             if(login_method.equals("email")){
                 Glide.with(getApplicationContext())
                         .load(new File(LocalPath,img_path))
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .signature(new StringSignature(UUID.randomUUID().toString()))
                         .error(null)
                         .into(profile_img);
             }else if(login_method.equals("facebook")){
                 Glide.with(getApplicationContext())
                         .load(img_path)
-                        .transform(new Util.CircleTransform(getApplicationContext()))
+                        .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .signature(new StringSignature(UUID.randomUUID().toString()))
                         .error(null)
                         .into(profile_img);
