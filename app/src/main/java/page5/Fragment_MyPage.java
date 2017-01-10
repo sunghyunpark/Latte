@@ -22,6 +22,7 @@ import app_controller.App_Config;
 import app_controller.SQLiteHandler;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
@@ -40,12 +41,15 @@ public class Fragment_MyPage extends Fragment{
     private String user_name;
     private String user_nick_name;
     private String user_profile_path;
+    //상단 프로필 레이아웃 백그라운드
+    private ImageView background_img;
     //사용자 정보(게시글수, 팔로잉 수, 팔로워 수)
     private TextView article_count_txt, following_count_txt, follower_count_txt;
     //사용자 이름, 소개글
     private TextView my_name_txt, introduce_txt, my_nickname_txt;
 
     View v;
+    Util util = new Util();
 
     @Override
     public void onResume(){
@@ -86,10 +90,21 @@ public class Fragment_MyPage extends Fragment{
 
     }
     private void SetProfile(){
+        //백그라운드 이미지
+        background_img = (ImageView)v.findViewById(R.id.background_img);
+        Glide.with(getActivity())
+                .load(Server_ip+"test_img/test_img.jpg")
+                //.transform(new Util.BlurTransformation(getActivity()))
+                .bitmapTransform(new BlurTransformation(getActivity(), 18))
+                .error(null)
+                .into(background_img);
+        //유저 프로필
         ImageView user_profile_img = (ImageView)v.findViewById(R.id.user_profile_img);
         Glide.with(getActivity())
                 .load(Server_ip+user_profile_path)
+                //.transform(new Util.CircleTransform(getActivity()))
                 .bitmapTransform(new CropCircleTransformation(getActivity()))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_profile_img);
