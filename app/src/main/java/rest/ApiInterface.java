@@ -189,4 +189,19 @@ public interface ApiInterface {
     Call<CommonErrorResponse> PostFollow(@Field("tag") String tag, @Field("uid") String uid,
                                              @Field("following_uid") String following_uid,
                                              @Field("follow_state") String follow_state);
+
+    /**
+     * 개인공간
+     * @param tag -> myplace
+     * @param myplace_uid -> 개인공간 주인 uid
+     * @param request_uid -> 진입하고자하는 유저 uid
+     * @param bottom_article -> 마지막 아티클
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("myplace/myplace.php")
+    Call<PersonalPlaceResponse> GetPersonalPlace(@Field("tag") String tag,
+                                                 @Field("myplace_uid") String myplace_uid,
+                                                 @Field("request_uid") String request_uid,
+                                                 @Field("bottom_article") int bottom_article);
 }
