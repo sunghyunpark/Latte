@@ -13,6 +13,7 @@ import com.seedteam.latte.R;
  * 좋아요화면에서 내 게시글 화면 부분
  */
 public class Fragment_My_Article_Like extends Fragment {
+
     //사용자 정보
     private String uid;
 
