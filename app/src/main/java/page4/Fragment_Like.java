@@ -168,13 +168,13 @@ public class Fragment_Like extends Fragment {
             Bundle bundle = new Bundle();
             switch (position) {
                 case 0:
-                    fragment = new Fragment_Follow_Timeline();
+                    fragment = new Fragment_Follow_Like();
                     bundle.putString("KEY_MSG", "replace");
                     bundle.putString("user_uid", uid);
                     fragment.setArguments(bundle);
                     break;
                 case 1:
-                    fragment = new Fragment_All_Timeline();
+                    fragment = new Fragment_My_Article_Like();
                     bundle.putString("KEY_MSG", "replace");
                     bundle.putString("user_uid", uid);
                     fragment.setArguments(bundle);

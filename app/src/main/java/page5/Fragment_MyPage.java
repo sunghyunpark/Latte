@@ -311,12 +311,12 @@ public class Fragment_MyPage extends Fragment{
             public void onResponse(Call<PersonalPlaceResponse> call, Response<PersonalPlaceResponse> response) {
 
                 PersonalPlaceResponse articledata = response.body();
-                int size = 0;
+
                 if (!articledata.isArticle_error()) {
                     /**
                      * 받아온 리스트 초기화
                      */
-                    size = articledata.getArticle().size();
+                    int size = articledata.getArticle().size();
                     if(first_pos == 0){
                         first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
                     }
@@ -356,6 +356,7 @@ public class Fragment_MyPage extends Fragment{
 
 
                 } else {
+
                     Toast.makeText(getActivity(),"불러올 데이터가 없음.", Toast.LENGTH_SHORT).show();
                 }
                 article_count_txt.setText(articledata.getPlaceinfo().getArticle_count());    //게시글 수
