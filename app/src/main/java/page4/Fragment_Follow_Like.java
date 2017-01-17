@@ -181,6 +181,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         }
                         listItems.add(item);
                     }
+                    adapter.notifyDataSetChanged();
 
                 } else {
 
@@ -277,7 +278,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(currentItem.getUserA_profile_img())
+                        .load(Server_ip+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -292,7 +293,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(currentItem.getUserA_profile_img())
+                        .load(Server_ip+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
