@@ -1,12 +1,18 @@
 package page4;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class Fragment_Follow_Like_item {
 
     private String itemType;    //아이템 타입
     private String userA;    //앞에 있는 유저(ex. OOO님이~)
-    private String userB;    //뒤에 있는 유저(ex. OOO님의~, OOO님을~)
+    private String userA_uid;
+    private ArrayList<HashMap<String, String>> userB;
+    //private ArrayList<String> userB;    //뒤에 있는 유저(ex. OOO님의~, OOO님을~)
+    //private ArrayList<String> userB_uid;
     private String userA_profile_img;    //앞에 있는 유저 프로필
-    private String content_img1, content_img2, content_img3, content_img4;    //이미지1,2,3,4
+    private ArrayList<String> content_img;    //이미지
     private String comment_text;    //댓글일 경우 댓글 내용
 
     public String getItemType() {
@@ -25,11 +31,20 @@ public class Fragment_Follow_Like_item {
         this.userA = userA;
     }
 
-    public String getUserB() {
+
+    public String getUserA_uid() {
+        return userA_uid;
+    }
+
+    public void setUserA_uid(String userA_uid) {
+        this.userA_uid = userA_uid;
+    }
+
+    public ArrayList<HashMap<String, String>> getUserB() {
         return userB;
     }
 
-    public void setUserB(String userB) {
+    public void setUserB(ArrayList<HashMap<String, String>> userB) {
         this.userB = userB;
     }
 
@@ -41,36 +56,12 @@ public class Fragment_Follow_Like_item {
         this.userA_profile_img = userA_profile_img;
     }
 
-    public String getContent_img1() {
-        return content_img1;
+    public ArrayList<String> getContent_img() {
+        return content_img;
     }
 
-    public void setContent_img1(String content_img1) {
-        this.content_img1 = content_img1;
-    }
-
-    public String getContent_img2() {
-        return content_img2;
-    }
-
-    public void setContent_img2(String content_img2) {
-        this.content_img2 = content_img2;
-    }
-
-    public String getContent_img3() {
-        return content_img3;
-    }
-
-    public void setContent_img3(String content_img3) {
-        this.content_img3 = content_img3;
-    }
-
-    public String getContent_img4() {
-        return content_img4;
-    }
-
-    public void setContent_img4(String content_img4) {
-        this.content_img4 = content_img4;
+    public void setContent_img(ArrayList<String> content_img) {
+        this.content_img = content_img;
     }
 
     public String getComment_text() {

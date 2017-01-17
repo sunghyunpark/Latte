@@ -204,4 +204,17 @@ public interface ApiInterface {
                                                  @Field("myplace_uid") String myplace_uid,
                                                  @Field("request_uid") String request_uid,
                                                  @Field("bottom_article") int bottom_article);
+
+    /**
+     * 좋아요 화면
+     * @param tag -> 팔로잉탭(like_following) / 내 게시물탭(like_mine)
+     * @param uid
+     * @param bottom_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("like/like.php")
+    Call<LikeFollowingResponse> GetLikePage(@Field("tag") String tag,
+                                            @Field("uid") String uid,
+                                            @Field("bottom_item") int bottom_id);
 }
