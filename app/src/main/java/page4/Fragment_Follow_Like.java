@@ -1,10 +1,17 @@
 package page4;
 
+import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -91,6 +98,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
+        //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
 
         LoadData(uid);
@@ -183,7 +191,6 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
-
                 } else {
 
                 }
@@ -248,6 +255,72 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             return num;
         }
 
+        private SpannableStringBuilder getContents(int position){
+            String type = getItem(position).getItemType();
+            String contents_str = "";
+            String userb_str = getItem(position).getUserB().get(0).get("userB_nickName");
+            Resources res = getResources();
+
+            int color_black = Color.BLACK;
+            int color_gray = Color.GRAY;
+            int color_sky = getResources().getColor(R.color.PrimaryColor);
+
+            if(type.equals("like")){
+                contents_str = String.format(res.getString(R.string.like_following_like), getItem(position).getUserA(),userb_str, getItem(position).getCreated_at());
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
+                //user A
+                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //user B
+                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //시간
+                builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUserA().length()+3+userb_str.length()+13,
+                        getItem(position).getUserA().length()+3+userb_str.length()+13 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                return builder;
+
+            }else if(type.equals("follow")){
+                contents_str = String.format(res.getString(R.string.like_following_follow), getItem(position).getUserA(), userb_str, getItem(position).getCreated_at());
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
+                //user A
+                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //user B
+                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //팔로우 단어
+                builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+3+userb_str.length()+2, getItem(position).getUserA().length()+3+userb_str.length()+6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3+userb_str.length()+2, getItem(position).getUserA().length()+3+userb_str.length()+6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                // 시간
+                builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+3+userb_str.length()+16,
+                        getItem(position).getUserA().length()+3+userb_str.length()+16 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                return builder;
+            }else if(type.equals("comment")){
+                contents_str = String.format(res.getString(R.string.like_following_comment), getItem(position).getUserA(), userb_str, getItem(position).getComment_text(),getItem(position).getCreated_at());
+
+                SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
+                //user A
+                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //user B
+                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //댓글 내용
+                builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+3+userb_str.length()+17, getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3+userb_str.length()+17, getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                //시간
+                builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
+                        getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                return builder;
+            }
+            return null;
+
+        }
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -264,9 +337,11 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .error(null)
                         .into(VHitem.profile_img);
                 //Toast.makeText(getActivity(),currentItem.getUserB().get(0).get("userB_nickName"),Toast.LENGTH_SHORT).show();
-                String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진을 좋아합니다.");
+                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
+                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진을 좋아합니다. "+currentItem.getCreated_at());
 
+                VHitem.content_txt.setText("");
+                VHitem.content_txt.append(getContents(position));
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
                         .placeholder(R.drawable.profile_basic_img)
@@ -284,9 +359,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.profile_img);
-                String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님을 팔로우하기 시작했습니다.");
-
+                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
+                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님을 팔로우하기 시작했습니다. "+currentItem.getCreated_at());
+                VHitem.content_txt.setText("");
+                VHitem.content_txt.append(getContents(position));
 
             }else if(holder instanceof VHItem_FL_MY_Following_Comment_Other_Article){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
@@ -300,10 +376,12 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .error(null)
                         .into(VHitem.profile_img);
 
-                String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진에 댓글을 남겼습니다: ");
+                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
+                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진에 댓글을 남겼습니다: ");
 
-                VHitem.comment_txt.setText(currentItem.getComment_text());
+                VHitem.content_txt.setText("");
+                VHitem.content_txt.append(getContents(position));
+                //VHitem.comment_txt.setText(currentItem.getComment_text()+" "+currentItem.getCreated_at());
 
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))

@@ -10,4 +10,9 @@
     <string name="link_to_search_id_pw">로그인 정보를 잊으셨나요? 아이디 비밀번호 찾기</string>
     <string name="link_to_register">계정이 없으신가요? 가입하기</string>
     <string name="register_agree_txt">가입하면 약관 및 개인정보취급방침에 동의하게 됩니다.</string>
+
+    <!--좋아요 팔로잉 부분-->
+    <string name="like_following_like">%1$s님이 %2$s님의 사진을 좋아합니다. %3$s</string>
+    <string name="like_following_follow">%1$s님이 %2$s님을 팔로우하기 시작했습니다. %3$s</string>
+    <string name="like_following_comment">%1$s님이 %2$s님의 사진에 댓글을 남겼습니다: \n %3$s %4$s </string>
 </resources>

@@ -40,7 +40,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
-            android:src="@mipmap/ic_launcher"/>
+            android:src="@mipmap/my_page_setting_btn"/>
     </RelativeLayout>
     <!--구분선-->
     <LinearLayout
@@ -69,6 +69,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:scaleType="centerCrop"/>
+                <ImageView
+                    android:id="@+id/more_background_img_btn"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/my_page_more_background_btn_img"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"/>
                 <!--프로필 사진 레이아웃-->
                 <RelativeLayout
                     android:id="@+id/profile_layout"
@@ -244,9 +252,12 @@
                         <!--프로필 수정 버튼-->
                         <Button
                             android:id="@+id/edit_profile_btn"
-                            android:layout_width="150dp"
-                            android:layout_height="40dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="35dp"
                             android:layout_marginRight="20dp"
+                            android:background="@drawable/my_page_profile_edit_btn_shape"
+                            android:layout_marginTop="5dp"
+                            android:textColor="#ffffff"
                             android:text="프로필 수정"/>
                     </LinearLayout>
                 </LinearLayout>
