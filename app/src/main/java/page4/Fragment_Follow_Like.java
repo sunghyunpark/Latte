@@ -119,6 +119,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         item.setUserA(like_item.getLikes_item().get(i).getFollowing_user_nickName());
                         item.setUserA_uid(like_item.getLikes_item().get(i).getFollowing_user_uid());
                         item.setUserA_profile_img(like_item.getLikes_item().get(i).getFollowing_user_profile_img_thumb());
+                        item.setCreated_at(like_item.getLikes_item().get(i).getCreated_at());
 
                         //각 타입에 맞게 분기처리 like/follow/comment
                         if(like_item.getLikes_item().get(i).getCategory().equals("like")){

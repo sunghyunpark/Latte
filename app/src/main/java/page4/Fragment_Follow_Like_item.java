@@ -14,6 +14,7 @@ public class Fragment_Follow_Like_item {
     private String userA_profile_img;    //앞에 있는 유저 프로필
     private ArrayList<String> content_img;    //이미지
     private String comment_text;    //댓글일 경우 댓글 내용
+    private String created_at;    //시각
 
     public String getItemType() {
         return itemType;
@@ -70,5 +71,13 @@ public class Fragment_Follow_Like_item {
 
     public void setComment_text(String comment_text) {
         this.comment_text = comment_text;
+    }
+
+    public String getCreated_at() {
+        return created_at;
+    }
+
+    public void setCreated_at(String created_at) {
+        this.created_at = created_at;
     }
 }
