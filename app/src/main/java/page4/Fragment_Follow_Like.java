@@ -1,5 +1,6 @@
 package page4;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -16,6 +17,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -27,6 +29,7 @@ import java.util.List;
 
 import app_controller.App_Config;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import page2.Article_Detail_Activity;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.LikeFollowingResponse;
@@ -59,6 +62,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
     public void onRefresh() {
         //새로고침시 이벤트 구현
         mSwipeRefresh.setRefreshing(false);
+        InitView();
     }
 
     @Override
@@ -119,7 +123,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                     int size = like_item.getLikes_item().size();
                     for(int i=0;i<size;i++){
                         Fragment_Follow_Like_item item = new Fragment_Follow_Like_item();
-                        ArrayList<String> contents_img = new ArrayList<String>();
+                        ArrayList<String> contents_imgList = new ArrayList<String>();
+                        ArrayList<String> article_idList = new ArrayList<String>();
                         ArrayList<HashMap<String, String>> UserArray = new ArrayList<HashMap<String, String>>();
                         HashMap<String, String> User = new HashMap<String, String>();
 
@@ -135,10 +140,12 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                              * like의 경우 단일과 묶음이 존재함
                              * 그래서 단일일때와 묶음일때를 다르게 insert시킴
                              */
-                            if(like_item.getLikes_item().get(i).getContents().size()>1){
+                            if(like_item.getLikes_item().get(i).getContents().size()<2){
                                 //단일
-                                contents_img.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
-                                item.setContent_img(contents_img);
+                                article_idList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_id());    //단일 사진 id
+                                item.setArticle_id(article_idList);
+                                contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
+                                item.setContent_img(contents_imgList);
                                 User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(0).getNick_name());
                                 User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(0).getUid());
                                 UserArray.add(User);
@@ -148,10 +155,13 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                                 //item.setUserB_uid(like_item.getLikes_item().get(i).getContents().get(0).getUid());
                             }else{
                                 //묶음
+                                item.setItemType("like_list");
                                 int like_all_size = like_item.getLikes_item().get(i).getContents().size();
                                 for(int j=0;j<like_all_size;j++){
-                                    contents_img.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_thumb_url());    //묶음 사진
-                                    item.setContent_img(contents_img);
+                                    article_idList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_id());
+                                    item.setArticle_id(article_idList);
+                                    contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_thumb_url());    //묶음 사진
+                                    item.setContent_img(contents_imgList);
                                     User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(j).getNick_name());
                                     User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(j).getUid());
                                     UserArray.add(User);
@@ -179,8 +189,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                                 item.setUserB(UserArray);
                             }
                         }else if(like_item.getLikes_item().get(i).getCategory().equals("comment")){
-                            contents_img.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
-                            item.setContent_img(contents_img);
+                            article_idList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_id());    //단일 사진 id
+                            item.setArticle_id(article_idList);
+                            contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
+                            item.setContent_img(contents_imgList);
                             User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(0).getNick_name());
                             User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(0).getUid());
                             UserArray.add(User);
@@ -216,6 +228,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         private static final int TYPE_ITEM_MY_FOLLOWING_LIKE_OTHER_ARTICLE = 0;
         private static final int TYPE_ITEM_MY_FOLLOWING_FOLLOW_OTHER_USER = 1;
         private static final int TYPE_ITEM_MY_FOLLOWING_COMMENT_OTHER_ARTICLE = 2;
+        private static final int TYPE_ITEM_MY_FOLLOWING_LIKELIST_OTHER_ARTICLE = 3;
         List<Fragment_Follow_Like_item> listItems;
 
         public RecyclerAdapter(List<Fragment_Follow_Like_item> listItems) {
@@ -233,6 +246,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             }else if(viewType == TYPE_ITEM_MY_FOLLOWING_COMMENT_OTHER_ARTICLE){
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_comment_other_article, parent, false);
                 return new VHItem_FL_MY_Following_Comment_Other_Article(v);
+            }else if(viewType == TYPE_ITEM_MY_FOLLOWING_LIKELIST_OTHER_ARTICLE){
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_likelist_other_article, parent, false);
+                return new VHItem_FL_MY_Following_LikeList_Other_Article(v);
             }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
@@ -251,6 +267,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 num = 1;
             }else if(type.equals("comment")){
                 num = 2;
+            }else if(type.equals("like_list")){
+                num = 3;
             }
             return num;
         }
@@ -266,6 +284,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             int color_sky = getResources().getColor(R.color.PrimaryColor);
 
             if(type.equals("like")){
+                //단일
                 contents_str = String.format(res.getString(R.string.like_following_like), getItem(position).getUserA(),userb_str, getItem(position).getCreated_at());
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
@@ -317,6 +336,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 return builder;
+            }else if(type.equals("like_list")){
+
             }
             return null;
 
@@ -336,9 +357,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.profile_img);
-                //Toast.makeText(getActivity(),currentItem.getUserB().get(0).get("userB_nickName"),Toast.LENGTH_SHORT).show();
-                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진을 좋아합니다. "+currentItem.getCreated_at());
+
 
                 VHitem.content_txt.setText("");
                 VHitem.content_txt.append(getContents(position));
@@ -347,6 +366,13 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.content_pic);
+
+                VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                    }
+                });
 
             }else if(holder instanceof VHItem_FL_MY_Following_Follow_Other_User){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
@@ -359,8 +385,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.profile_img);
-                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님을 팔로우하기 시작했습니다. "+currentItem.getCreated_at());
+
                 VHitem.content_txt.setText("");
                 VHitem.content_txt.append(getContents(position));
 
@@ -376,19 +401,70 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .error(null)
                         .into(VHitem.profile_img);
 
-                //String nick_name = currentItem.getUserB().get(0).get("userB_nickName");
-                //VHitem.content_txt.setText(currentItem.getUserA()+"님이 "+nick_name+"님의 사진에 댓글을 남겼습니다: ");
 
                 VHitem.content_txt.setText("");
                 VHitem.content_txt.append(getContents(position));
-                //VHitem.comment_txt.setText(currentItem.getComment_text()+" "+currentItem.getCreated_at());
 
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.content_pic);
+                VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                    }
+                });
+            }else if(holder instanceof VHItem_FL_MY_Following_LikeList_Other_Article){
+                final Fragment_Follow_Like_item currentItem = getItem(position);
+                final VHItem_FL_MY_Following_LikeList_Other_Article VHitem = (VHItem_FL_MY_Following_LikeList_Other_Article)holder;
+
+                //user_profile
+                Glide.with(getActivity())
+                        .load(Server_ip+currentItem.getUserA_profile_img())
+                        .bitmapTransform(new CropCircleTransformation(getActivity()))
+                        .placeholder(R.drawable.profile_basic_img)
+                        .error(null)
+                        .into(VHitem.profile_img);
+
+                int size = getListCount(position);
+                ArrayList<ImageView> ImgList = new ArrayList<ImageView>();
+                VHitem.content_txt.setText(currentItem.getUserA()+"님이 게시물 "+size+"개를 좋아합니다.");
+                ImgList.add(VHitem.content_pic1);
+                ImgList.add(VHitem.content_pic2);
+                ImgList.add(VHitem.content_pic3);
+                ImgList.add(VHitem.content_pic4);
+                ImgList.add(VHitem.content_pic5);
+                ImgList.add(VHitem.content_pic6);
+                ImgList.add(VHitem.content_pic7);
+                ImgList.add(VHitem.content_pic8);
+
+                for(int i=0;i<size;i++){
+                    if(i==5){
+                        VHitem.bottom_list.setVisibility(View.VISIBLE);
+                    }
+                    Glide.with(getActivity())
+                            .load(Server_ip+currentItem.getContent_img().get(i))
+                            .placeholder(R.drawable.profile_basic_img)
+                            .error(null)
+                            .into(ImgList.get(i));
+                }
+
             }
+        }
+        private int getListCount(int position){
+            int cnt = 0;
+            cnt = getItem(position).getContent_img().size();
+
+            return cnt;
+        }
+        private void goToDetailView(String uid, String article_id){
+            Intent intent = new Intent(getActivity(), Article_Detail_Activity.class);
+            intent.putExtra("user_uid", uid);    // 내 uid
+            intent.putExtra("article_id", article_id);    //아티클 id
+            startActivity(intent);
+            getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
         }
         @Override
         public int getItemViewType(int position) {
@@ -399,6 +475,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 return TYPE_ITEM_MY_FOLLOWING_FOLLOW_OTHER_USER;
             }else if(SortItem(position) == 2){
                 return TYPE_ITEM_MY_FOLLOWING_COMMENT_OTHER_ARTICLE;
+            }else if(SortItem(position) == 3){
+                return TYPE_ITEM_MY_FOLLOWING_LIKELIST_OTHER_ARTICLE;
             }else{
                 return TYPE_ITEM_MY_FOLLOWING_LIKE_OTHER_ARTICLE;
             }
@@ -408,5 +486,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         public int getItemCount() {
             return listItems.size();
         }
+
+
     }
 }

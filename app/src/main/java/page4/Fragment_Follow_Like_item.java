@@ -12,9 +12,11 @@ public class Fragment_Follow_Like_item {
     //private ArrayList<String> userB;    //뒤에 있는 유저(ex. OOO님의~, OOO님을~)
     //private ArrayList<String> userB_uid;
     private String userA_profile_img;    //앞에 있는 유저 프로필
+    private ArrayList<String> article_id;    //해당 아이템의 아티클 id
     private ArrayList<String> content_img;    //이미지
     private String comment_text;    //댓글일 경우 댓글 내용
-    private String created_at;    //시각
+
+    private String created_at;
 
     public String getItemType() {
         return itemType;
@@ -55,6 +57,14 @@ public class Fragment_Follow_Like_item {
 
     public void setUserA_profile_img(String userA_profile_img) {
         this.userA_profile_img = userA_profile_img;
+    }
+
+    public ArrayList<String> getArticle_id() {
+        return article_id;
+    }
+
+    public void setArticle_id(ArrayList<String> article_id) {
+        this.article_id = article_id;
     }
 
     public ArrayList<String> getContent_img() {

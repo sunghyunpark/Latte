@@ -14,7 +14,7 @@
             android:id="@+id/profile_img"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_centerVertical="true"
+            android:layout_marginTop="10dp"
             android:layout_marginLeft="13dp"/>
 
         <RelativeLayout
