@@ -224,6 +224,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
          * 좋아요 A : 친구(팔로잉한 사람)가 다른사람의 게시물을 좋아요 클릭한 경우
          * 좋아요 B : 친구(팔로잉한 사람)가 다른사람을 팔로우 한 경우 표시
          * 댓글 : 친구(팔로잉한 사람)가 다른사람 게시물에 댓글을 남김(댓글표시/최대2줄)
+         * 사진 묶음 : 친구(팔로잉한 사람)가 여러 게시글들을 좋아요하여 이미지들이 묶음으로 노출됨(2~8)
          */
         private static final int TYPE_ITEM_MY_FOLLOWING_LIKE_OTHER_ARTICLE = 0;
         private static final int TYPE_ITEM_MY_FOLLOWING_FOLLOW_OTHER_USER = 1;
@@ -337,7 +338,18 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 return builder;
             }else if(type.equals("like_list")){
+                contents_str = String.format(res.getString(R.string.like_following_likelist), getItem(position).getUserA(), getItem(position).getContent_img().size(),getItem(position).getCreated_at());
 
+                SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
+                //user A
+                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                String cnt_str = String.valueOf(getItem(position).getContent_img().size());
+                //시간
+                builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+15+cnt_str.length(),
+                        getItem(position).getUserA().length()+15+cnt_str.length() + getItem(position).getCreated_at().length()+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                return builder;
             }
             return null;
 
@@ -429,30 +441,298 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .into(VHitem.profile_img);
 
                 int size = getListCount(position);
-                ArrayList<ImageView> ImgList = new ArrayList<ImageView>();
-                VHitem.content_txt.setText(currentItem.getUserA()+"님이 게시물 "+size+"개를 좋아합니다.");
-                ImgList.add(VHitem.content_pic1);
-                ImgList.add(VHitem.content_pic2);
-                ImgList.add(VHitem.content_pic3);
-                ImgList.add(VHitem.content_pic4);
-                ImgList.add(VHitem.content_pic5);
-                ImgList.add(VHitem.content_pic6);
-                ImgList.add(VHitem.content_pic7);
-                ImgList.add(VHitem.content_pic8);
 
+                VHitem.content_txt.setText("");
+                VHitem.content_txt.append(getContents(position));
+
+                VHitem.content_pic1.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                    }
+                });
+                VHitem.content_pic2.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(1));
+                    }
+                });
+                VHitem.content_pic3.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(2));
+                    }
+                });
+                VHitem.content_pic4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(3));
+                    }
+                });
+                VHitem.content_pic5.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(4));
+                    }
+                });
+                VHitem.content_pic6.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(5));
+                    }
+                });
+                VHitem.content_pic7.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(6));
+                    }
+                });
+                VHitem.content_pic8.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        goToDetailView(uid, currentItem.getArticle_id().get(7));
+                    }
+                });
+
+
+                /**
+                 * 각 아이템마다 묶여있는 이미지 뷰 갯수가 다름.
+                 * 그래서 디폴트로 모두 GONE상태로 두고 보여지는 갯수만 VISIBLE상태로 변경하여 노출시킴
+                 */
                 for(int i=0;i<size;i++){
-                    if(i==5){
+                    if(i==0){
+                        VHitem.content_pic2.setVisibility(View.GONE);
+                        VHitem.content_pic3.setVisibility(View.GONE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==1){
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.GONE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==2){
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==3){
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==4){
                         VHitem.bottom_list.setVisibility(View.VISIBLE);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==5){
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.VISIBLE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==6){
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.VISIBLE);
+                        VHitem.content_pic7.setVisibility(View.VISIBLE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==7){
+                        VHitem.content_pic8.setVisibility(View.VISIBLE);
                     }
                     Glide.with(getActivity())
                             .load(Server_ip+currentItem.getContent_img().get(i))
                             .placeholder(R.drawable.profile_basic_img)
                             .error(null)
-                            .into(ImgList.get(i));
+                            .into(getList(position,VHitem).get(i));
                 }
+
+                /*
+                for(int i=0;i<getListCount(position);i++){
+                    if(i==0){
+                        Glide.clear(VHitem.content_pic1);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic1);
+                        VHitem.content_pic2.setVisibility(View.GONE);
+                        VHitem.content_pic3.setVisibility(View.GONE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }
+                    if(i==1){
+                        Glide.clear(VHitem.content_pic2);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic2);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.GONE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==2){
+                        Glide.clear(VHitem.content_pic3);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic3);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.GONE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==3){
+                        Glide.clear(VHitem.content_pic4);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic4);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.GONE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==4){
+                        VHitem.bottom_list.setVisibility(View.VISIBLE);
+                        Glide.clear(VHitem.content_pic5);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic5);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.GONE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==5){
+                        Glide.clear(VHitem.content_pic6);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic6);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.VISIBLE);
+                        VHitem.content_pic7.setVisibility(View.GONE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==6){
+                        Glide.clear(VHitem.content_pic7);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic7);
+                        VHitem.content_pic2.setVisibility(View.VISIBLE);
+                        VHitem.content_pic3.setVisibility(View.VISIBLE);
+                        VHitem.content_pic4.setVisibility(View.VISIBLE);
+                        VHitem.content_pic5.setVisibility(View.VISIBLE);
+                        VHitem.content_pic6.setVisibility(View.VISIBLE);
+                        VHitem.content_pic7.setVisibility(View.VISIBLE);
+                        VHitem.content_pic8.setVisibility(View.GONE);
+                    }if(i==7){
+                        Glide.clear(VHitem.content_pic8);
+                        Glide.with(getActivity())
+                                .load(Server_ip+getImgList(position).get(i))
+                                .placeholder(R.drawable.profile_basic_img)
+                                .error(null)
+                                .into(VHitem.content_pic8);
+                        VHitem.content_pic8.setVisibility(View.VISIBLE);
+                    }
+                }*/
+
+
 
             }
         }
+
+        private ArrayList<String> getImgList(int position){
+            ArrayList<String> ImgList = new ArrayList<String>();
+            int size = getItem(position).getContent_img().size();
+            for(int i=0;i<size;i++){
+                ImgList.add(getItem(position).getContent_img().get(i));
+            }
+            return ImgList;
+
+        }
+
+        /**
+         * 이미지뷰를 리스트에 add시킴 -> 글라이드로 한번에 보여주기위해
+         * @param position
+         * @param VHitem
+         * @return
+         */
+        private ArrayList<ImageView> getList(int position, VHItem_FL_MY_Following_LikeList_Other_Article VHitem){
+            ArrayList<ImageView> ImgList = new ArrayList<ImageView>();
+            int cnt = getListCount(position);
+            for(int i=0;i<cnt;i++){
+                if(i==0){
+                    ImgList.add(VHitem.content_pic1);
+                }else if(i==1){
+                    ImgList.add(VHitem.content_pic2);
+                }else if(i==2){
+                    ImgList.add(VHitem.content_pic3);
+                }else if(i==3){
+                    ImgList.add(VHitem.content_pic4);
+                }else if(i==4){
+                    ImgList.add(VHitem.content_pic5);
+                }else if(i==5){
+                    ImgList.add(VHitem.content_pic6);
+                }else if(i==6){
+                    ImgList.add(VHitem.content_pic7);
+                }else if(i==7){
+                    ImgList.add(VHitem.content_pic8);
+                }
+            }
+            return ImgList;
+        }
+
         private int getListCount(int position){
             int cnt = 0;
             cnt = getItem(position).getContent_img().size();

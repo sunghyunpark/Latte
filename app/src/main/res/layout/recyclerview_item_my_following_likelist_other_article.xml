@@ -56,30 +56,26 @@
                     android:id="@+id/content_pic1"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop"/>
                 <ImageView
                     android:id="@+id/content_pic2"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:scaleType="centerCrop"
                     android:layout_marginLeft="2dp"
-                    android:layout_marginRight="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_marginRight="1dp"/>
                 <ImageView
                     android:id="@+id/content_pic3"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:scaleType="centerCrop"
                     android:layout_marginLeft="1dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_weight="1"/>
+                    android:layout_marginRight="2dp"/>
                 <ImageView
                     android:id="@+id/content_pic4"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop"/>
 
             </LinearLayout>
             <LinearLayout
@@ -95,30 +91,26 @@
                     android:id="@+id/content_pic5"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop"/>
                 <ImageView
                     android:id="@+id/content_pic6"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginLeft="2dp"
                     android:layout_marginRight="1dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop" />
                 <ImageView
                     android:id="@+id/content_pic7"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_marginLeft="1dp"
                     android:layout_marginRight="2dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop" />
                 <ImageView
                     android:id="@+id/content_pic8"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
-                    android:scaleType="centerCrop"
-                    android:layout_weight="1"/>
+                    android:scaleType="centerCrop" />
 
             </LinearLayout>
 

@@ -15,4 +15,5 @@
     <string name="like_following_like">%1$s님이 %2$s님의 사진을 좋아합니다. %3$s</string>
     <string name="like_following_follow">%1$s님이 %2$s님을 팔로우하기 시작했습니다. %3$s</string>
     <string name="like_following_comment">%1$s님이 %2$s님의 사진에 댓글을 남겼습니다: \n %3$s %4$s </string>
+    <string name="like_following_likelist">%1$s님이 게시물 %2$d개를 좋아합니다. %3$s</string>
 </resources>
