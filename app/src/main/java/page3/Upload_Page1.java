@@ -276,7 +276,7 @@ public class Upload_Page1 extends Activity {
 
         try{
             outStream = new FileOutputStream(file);
-            resize_before.compress(Bitmap.CompressFormat.JPEG,50,outStream);
+            resize_before.compress(Bitmap.CompressFormat.JPEG,80,outStream);
             outStream.flush();
             outStream.close();
         }catch(FileNotFoundException e){
@@ -326,7 +326,7 @@ public class Upload_Page1 extends Activity {
                 fileCacheItem.createNewFile();
                 out = new FileOutputStream(fileCacheItem);
                 //resized_bitmap = Bitmap.createScaledBitmap(resized_bitmap, (int)(height*per), (int)(width*per), true);
-                resized_bitmap.compress(Bitmap.CompressFormat.JPEG, 50, out);
+                resized_bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
