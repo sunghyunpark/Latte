@@ -390,7 +390,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.append(getContents(position));
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
-                        .placeholder(R.drawable.profile_basic_img)
+                        //.placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.content_pic);
 
@@ -434,7 +434,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
-                        .placeholder(R.drawable.profile_basic_img)
+                        //.placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.content_pic);
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
@@ -584,7 +584,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                     }
                     Glide.with(getActivity())
                             .load(Server_ip+currentItem.getContent_img().get(i))
-                            .placeholder(R.drawable.profile_basic_img)
+                            //.placeholder(R.drawable.profile_basic_img)
                             .error(null)
                             .into(getList(position,VHitem).get(i));
                 }
