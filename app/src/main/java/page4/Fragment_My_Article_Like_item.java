@@ -3,22 +3,19 @@ package page4;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-/*
-    좋아요 탭에서 팔로잉 탭
+/**
+ * 좋아요 탭에서 내 게시글 탭
  */
-public class Fragment_Follow_Like_item {
+public class Fragment_My_Article_Like_item {
 
     private String itemType;    //아이템 타입
     private String userA;    //앞에 있는 유저(ex. OOO님이~)
     private String userA_uid;
-    private ArrayList<HashMap<String, String>> userB;
-    //private ArrayList<String> userB;    //뒤에 있는 유저(ex. OOO님의~, OOO님을~)
-    //private ArrayList<String> userB_uid;
     private String userA_profile_img;    //앞에 있는 유저 프로필
     private ArrayList<String> article_id;    //해당 아이템의 아티클 id
     private ArrayList<String> content_img;    //이미지
     private String comment_text;    //댓글일 경우 댓글 내용
-
+    private String follow_state;    //팔로우 상태
     private String created_at;
 
     public String getItemType() {
@@ -44,14 +41,6 @@ public class Fragment_Follow_Like_item {
 
     public void setUserA_uid(String userA_uid) {
         this.userA_uid = userA_uid;
-    }
-
-    public ArrayList<HashMap<String, String>> getUserB() {
-        return userB;
-    }
-
-    public void setUserB(ArrayList<HashMap<String, String>> userB) {
-        this.userB = userB;
     }
 
     public String getUserA_profile_img() {
@@ -92,5 +81,13 @@ public class Fragment_Follow_Like_item {
 
     public void setCreated_at(String created_at) {
         this.created_at = created_at;
+    }
+
+    public String getFollow_state() {
+        return follow_state;
+    }
+
+    public void setFollow_state(String follow_state) {
+        this.follow_state = follow_state;
     }
 }

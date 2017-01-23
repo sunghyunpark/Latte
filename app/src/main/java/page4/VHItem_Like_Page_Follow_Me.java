@@ -7,7 +7,7 @@ import android.widget.TextView;
 
 import com.seedteam.latte.R;
 
-class VHItem_FL_MY_Following_Comment_Other_Article extends RecyclerView.ViewHolder{
+class VHItem_Like_Page_Follow_Me extends RecyclerView.ViewHolder{
 
     ImageView profile_img;
     TextView content_txt;
@@ -15,7 +15,7 @@ class VHItem_FL_MY_Following_Comment_Other_Article extends RecyclerView.ViewHold
     ImageView content_pic;
 
 
-    public VHItem_FL_MY_Following_Comment_Other_Article(View itemView) {
+    public VHItem_Like_Page_Follow_Me(View itemView) {
         super(itemView);
         this.profile_img = (ImageView)itemView.findViewById(R.id.profile_img);
         this.content_txt = (TextView)itemView.findViewById(R.id.content_txt);

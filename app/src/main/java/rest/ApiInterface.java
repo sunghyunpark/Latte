@@ -214,7 +214,7 @@ public interface ApiInterface {
      */
     @FormUrlEncoded
     @POST("like/like.php")
-    Call<LikeFollowingResponse> GetLikePage(@Field("tag") String tag,
-                                            @Field("uid") String uid,
-                                            @Field("bottom_item") int bottom_id);
+    Call<LikePageResponse> GetLikePage(@Field("tag") String tag,
+                                       @Field("uid") String uid,
+                                       @Field("bottom_item") int bottom_id);
 }

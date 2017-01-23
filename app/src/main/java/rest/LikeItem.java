@@ -13,6 +13,7 @@ public class LikeItem {
     private String following_user_uid;    //UserA의 uid
     private String following_user_nickName;    //UserA의 닉네임
     private String following_user_profile_img_thumb;    //UserA의 프로필
+    private String follow_state;    //팔로우 상태
     private String created_at;    //아이템 생성날짜
 
     private ArrayList<LikeItemContents> contents;    //묶음
@@ -63,5 +64,13 @@ public class LikeItem {
 
     public void setContents(ArrayList<LikeItemContents> contents) {
         this.contents = contents;
+    }
+
+    public String getFollow_state() {
+        return follow_state;
+    }
+
+    public void setFollow_state(String follow_state) {
+        this.follow_state = follow_state;
     }
 }

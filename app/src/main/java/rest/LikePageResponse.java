@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * 좋아요 화면에서 한개의 라인
  *
  */
-public class LikeFollowingResponse {
+public class LikePageResponse {
 
     private ArrayList<LikeItem> likes_item;
     private String bottom_item;

@@ -14,6 +14,12 @@
     <!--좋아요 팔로잉 부분-->
     <string name="like_following_like">%1$s님이 %2$s님의 사진을 좋아합니다. %3$s</string>
     <string name="like_following_follow">%1$s님이 %2$s님을 팔로우하기 시작했습니다. %3$s</string>
-    <string name="like_following_comment">%1$s님이 %2$s님의 사진에 댓글을 남겼습니다: \n %3$s %4$s </string>
+    <string name="like_following_comment">%1$s님이 %2$s님의 사진에 댓글을 남겼습니다: \n%3$s %4$s </string>
     <string name="like_following_likelist">%1$s님이 게시물 %2$d개를 좋아합니다. %3$s</string>
+
+    <!--좋아요 내 게시물 부분-->
+    <string name="like_my_article_like">%1$s님이 회원님의 사진을 좋아합니다. %2$s</string>
+    <string name="like_my_article_follow">%1$s님이 회원님을 팔로우하기 시작했습니다. %2$s</string>
+    <string name="like_my_article_comment">%1$s님이 회원님의 사진에 댓글을 남겼습니다: \n%2$s %3$s</string>
+    <string name="like_my_article_likelist">%1$s님이 회원님의 게시물 %2$d개를 좋아합니다. %3$s</string>
 </resources>

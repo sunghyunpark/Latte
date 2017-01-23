@@ -32,7 +32,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import page2.Article_Detail_Activity;
 import rest.ApiClient;
 import rest.ApiInterface;
-import rest.LikeFollowingResponse;
+import rest.LikePageResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -113,12 +113,12 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
 
-        Call<LikeFollowingResponse> call = apiService.GetLikePage("like_following", uid, 0);
-        call.enqueue(new Callback<LikeFollowingResponse>() {
+        Call<LikePageResponse> call = apiService.GetLikePage("like_following", uid, 0);
+        call.enqueue(new Callback<LikePageResponse>() {
             @Override
-            public void onResponse(Call<LikeFollowingResponse> call, Response<LikeFollowingResponse> response) {
+            public void onResponse(Call<LikePageResponse> call, Response<LikePageResponse> response) {
 
-                LikeFollowingResponse like_item = response.body();
+                LikePageResponse like_item = response.body();
                 if (!like_item.isError()) {
                     int size = like_item.getLikes_item().size();
                     for(int i=0;i<size;i++){
@@ -210,7 +210,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             }
 
             @Override
-            public void onFailure(Call<LikeFollowingResponse> call, Throwable t) {
+            public void onFailure(Call<LikePageResponse> call, Throwable t) {
                 // Log error here since request failed
                 Log.e("tag", t.toString());
                 Toast.makeText(getActivity(), "retrofit error", Toast.LENGTH_SHORT).show();
@@ -239,17 +239,17 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_ITEM_MY_FOLLOWING_LIKE_OTHER_ARTICLE) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_like_other_article, parent, false);
-                return new VHItem_FL_MY_Following_Like_Other_Article(v);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_like_page_like_article, parent, false);
+                return new VHItem_Like_Page_Like_Article(v);
             }else if(viewType == TYPE_ITEM_MY_FOLLOWING_FOLLOW_OTHER_USER){
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_follow_other_user, parent, false);
-                return new VHItem_FL_MY_Following_Follow_Other_User(v);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_like_page_follow_other_user, parent, false);
+                return new VHItem_Like_Page_Follow_Other_User(v);
             }else if(viewType == TYPE_ITEM_MY_FOLLOWING_COMMENT_OTHER_ARTICLE){
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_comment_other_article, parent, false);
-                return new VHItem_FL_MY_Following_Comment_Other_Article(v);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_like_page_comment_article, parent, false);
+                return new VHItem_Like_Page_Comment_Article(v);
             }else if(viewType == TYPE_ITEM_MY_FOLLOWING_LIKELIST_OTHER_ARTICLE){
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_my_following_likelist_other_article, parent, false);
-                return new VHItem_FL_MY_Following_LikeList_Other_Article(v);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_like_page_likelist_article, parent, false);
+                return new VHItem_Like_Page_LikeList_Article(v);
             }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
@@ -272,6 +272,20 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 num = 3;
             }
             return num;
+        }
+        //말줄임 처리
+        private String ellipsis(String text, int length){
+            String ellipsisString = "...";
+            String outputString = text;
+            outputString = outputString.replace("\n"," ");    //줄바꿈이 있을 경우 띄어쓰기로 변경
+
+            if(text.length()>0 && length>0){
+                if(text.length() > length){
+                    outputString = text.substring(0, length);
+                    outputString += ellipsisString;
+                }
+            }
+            return outputString;
         }
 
         private SpannableStringBuilder getContents(int position){
@@ -318,7 +332,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         getItem(position).getUserA().length()+3+userb_str.length()+16 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 return builder;
             }else if(type.equals("comment")){
-                contents_str = String.format(res.getString(R.string.like_following_comment), getItem(position).getUserA(), userb_str, getItem(position).getComment_text(),getItem(position).getCreated_at());
+                String comment = ellipsis(getItem(position).getComment_text(),50);
+                contents_str = String.format(res.getString(R.string.like_following_comment), getItem(position).getUserA(), userb_str, comment,getItem(position).getCreated_at());
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
@@ -328,13 +343,13 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //댓글 내용
-                builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+3+userb_str.length()+17, getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
+                builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+2+userb_str.length()+18, getItem(position).getUserA().length()+2+userb_str.length()+18+comment.length()+3,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3+userb_str.length()+17, getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
+                builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+2+userb_str.length()+18, getItem(position).getUserA().length()+2+userb_str.length()+18+comment.length()+3,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //시간
-                builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3,
-                        getItem(position).getUserA().length()+3+userb_str.length()+17+getItem(position).getComment_text().length()+3 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+2+userb_str.length()+17+comment.length()+3,
+                        getItem(position).getUserA().length()+3+userb_str.length()+17+comment.length()+2 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 return builder;
             }else if(type.equals("like_list")){
@@ -358,9 +373,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
-            if (holder instanceof VHItem_FL_MY_Following_Like_Other_Article) {
+            if (holder instanceof VHItem_Like_Page_Like_Article) {
                 final Fragment_Follow_Like_item currentItem = getItem(position);
-                final VHItem_FL_MY_Following_Like_Other_Article VHitem = (VHItem_FL_MY_Following_Like_Other_Article)holder;
+                final VHItem_Like_Page_Like_Article VHitem = (VHItem_Like_Page_Like_Article)holder;
 
                 //user_profile
                 Glide.with(getActivity())
@@ -386,9 +401,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                     }
                 });
 
-            }else if(holder instanceof VHItem_FL_MY_Following_Follow_Other_User){
+            }else if(holder instanceof VHItem_Like_Page_Follow_Other_User){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
-                final VHItem_FL_MY_Following_Follow_Other_User VHitem = (VHItem_FL_MY_Following_Follow_Other_User)holder;
+                final VHItem_Like_Page_Follow_Other_User VHitem = (VHItem_Like_Page_Follow_Other_User)holder;
 
                 //user_profile
                 Glide.with(getActivity())
@@ -401,9 +416,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setText("");
                 VHitem.content_txt.append(getContents(position));
 
-            }else if(holder instanceof VHItem_FL_MY_Following_Comment_Other_Article){
+            }else if(holder instanceof VHItem_Like_Page_Comment_Article){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
-                final VHItem_FL_MY_Following_Comment_Other_Article VHitem = (VHItem_FL_MY_Following_Comment_Other_Article)holder;
+                final VHItem_Like_Page_Comment_Article VHitem = (VHItem_Like_Page_Comment_Article)holder;
 
                 //user_profile
                 Glide.with(getActivity())
@@ -428,9 +443,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         goToDetailView(uid, currentItem.getArticle_id().get(0));
                     }
                 });
-            }else if(holder instanceof VHItem_FL_MY_Following_LikeList_Other_Article){
+            }else if(holder instanceof VHItem_Like_Page_LikeList_Article){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
-                final VHItem_FL_MY_Following_LikeList_Other_Article VHitem = (VHItem_FL_MY_Following_LikeList_Other_Article)holder;
+                final VHItem_Like_Page_LikeList_Article VHitem = (VHItem_Like_Page_LikeList_Article)holder;
 
                 //user_profile
                 Glide.with(getActivity())
@@ -708,7 +723,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
          * @param VHitem
          * @return
          */
-        private ArrayList<ImageView> getList(int position, VHItem_FL_MY_Following_LikeList_Other_Article VHitem){
+        private ArrayList<ImageView> getList(int position, VHItem_Like_Page_LikeList_Article VHitem){
             ArrayList<ImageView> ImgList = new ArrayList<ImageView>();
             int cnt = getListCount(position);
             for(int i=0;i<cnt;i++){
