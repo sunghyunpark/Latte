@@ -3,6 +3,7 @@ package article;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -183,6 +185,7 @@ public class Article_Detail_Activity extends Activity {
             public void onResponse(Call<ArticleDetailResponse> call, Response<ArticleDetailResponse> response) {
 
                 ArticleDetailResponse articledata = response.body();
+                Resources res = getResources();
                 if (!articledata.isError()) {
 
                     //작성자 프로필
@@ -206,7 +209,7 @@ public class Article_Detail_Activity extends Activity {
                     InitLikeBtn(articledata.getArticle().getArticle_like_state());
 
                     //아티클 좋아요 txt
-                    article_like_cnt_txt.setText("좋아요 "+articledata.getArticle().getArticle_like_cnt()+"개");
+                    article_like_cnt_txt.setText(String.format(res.getString(R.string.article_like_cnt),articledata.getArticle().getArticle_like_cnt()));
                     like_cnt = Integer.parseInt(articledata.getArticle().getArticle_like_cnt());
                     article_like_cnt_txt.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -220,7 +223,7 @@ public class Article_Detail_Activity extends Activity {
                     });
 
                     //아티클 조회수
-                    article_view_cnt_txt.setText("조회 "+articledata.getArticle().getArticle_view_cnt());
+                    article_view_cnt_txt.setText(String.format(res.getString(R.string.article_view_cnt), articledata.getArticle().getArticle_view_cnt()));
 
                     //아티클 설명글
 
@@ -232,11 +235,11 @@ public class Article_Detail_Activity extends Activity {
                     builder.setSpan(new StyleSpan(Typeface.BOLD), 0, articledata.getArticle().getNick_name().length(),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                    article_contents_txt.setText("");
-                    article_contents_txt.append(builder);
+                    article_contents_txt.setText(builder);
+                    article_contents_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                     //아티클 댓글 수
-                    article_all_comment_txt.setText("댓글 "+articledata.getArticle().getArticle_comment_cnt()+" 모두 보기");
+                    article_all_comment_txt.setText(String.format(res.getString(R.string.article_comment_cnt), articledata.getArticle().getArticle_comment_cnt()));
                     article_comment_btn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

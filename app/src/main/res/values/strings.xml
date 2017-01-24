@@ -22,4 +22,9 @@
     <string name="like_my_article_follow">%1$s님이 회원님을 팔로우하기 시작했습니다. %2$s</string>
     <string name="like_my_article_comment">%1$s님이 회원님의 사진에 댓글을 남겼습니다: \n%2$s %3$s</string>
     <string name="like_my_article_likelist">%1$s님이 회원님의 게시물 %2$d개를 좋아합니다. %3$s</string>
+
+    <!--아티클 정보-->
+    <string name="article_view_cnt">조회 %1$s</string>
+    <string name="article_comment_cnt">댓글 %1$s 모두 보기</string>
+    <string name="article_like_cnt">좋아요 %1$s개</string>
 </resources>
