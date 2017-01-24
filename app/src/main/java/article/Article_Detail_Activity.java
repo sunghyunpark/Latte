@@ -199,7 +199,6 @@ public class Article_Detail_Activity extends Activity {
                     //아티클 사진
                     Glide.with(getApplicationContext())
                             .load(Server_ip+articledata.getArticle().getArticle_photo_url())
-                            .placeholder(R.mipmap.ic_launcher)
                             .error(null)
                             .into(article_photo_img);
 
@@ -558,7 +557,6 @@ public class Article_Detail_Activity extends Activity {
                 Glide.clear(VHitem.article_img);
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getArticle_img_thumb_path())
-                        .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .into(VHitem.article_img);
 
