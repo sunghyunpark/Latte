@@ -347,6 +347,20 @@ public class Article_Detail_Activity extends Activity {
             return listItems.get(position);
         }
 
+        //말줄임 처리
+        private String ellipsis(String text, int length){
+            String ellipsisString = "...";
+            String outputString = text;
+            outputString = outputString.replace("\n"," ");    //줄바꿈이 있을 경우 띄어쓰기로 변경
+
+            if(text.length()>0 && length>0){
+                if(text.length() > length){
+                    outputString = text.substring(0, length);
+                    outputString += ellipsisString;
+                }
+            }
+            return outputString;
+        }
 
         private SpannableStringBuilder getComment(int position){
             Date to = null;
@@ -357,7 +371,8 @@ public class Article_Detail_Activity extends Activity {
                 p.printStackTrace();
             }
 
-            String comment_str = getItem(position).getUser_nick_name()+"  "+getItem(position).getComment()+"  "+util.formatTimeString(to);
+            String comment = ellipsis(getItem(position).getComment(),50);
+            String comment_str = getItem(position).getUser_nick_name()+"  "+comment+"  "+util.formatTimeString(to);
             int color_black = Color.BLACK;
             int color_gray = Color.GRAY;
             SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
