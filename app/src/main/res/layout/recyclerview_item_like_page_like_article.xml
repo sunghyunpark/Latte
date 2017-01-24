@@ -2,8 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="3dp"
-    android:paddingBottom="3dp"
+    android:layout_marginTop="3dp"
     android:orientation="vertical"
     android:background="#ffffff">
 
@@ -15,14 +14,13 @@
             android:id="@+id/profile_img"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginLeft="13dp"/>
+            android:layout_marginLeft="10dp"/>
 
         <RelativeLayout
             android:id="@+id/content_text_layout"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingRight="70dp"
+            android:paddingRight="60dp"
             android:layout_toRightOf="@+id/profile_img"
             android:layout_marginLeft="10dp"
             android:layout_alignTop="@+id/profile_img">
