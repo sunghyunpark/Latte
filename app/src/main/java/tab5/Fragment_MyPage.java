@@ -551,7 +551,6 @@ public class Fragment_MyPage extends Fragment{
                 //article_img
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
-                        .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
@@ -706,7 +705,6 @@ public class Fragment_MyPage extends Fragment{
                 Glide.clear(VHitem.article_img);
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getArticle_img_path())
-                        .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .into(VHitem.article_img);
 
