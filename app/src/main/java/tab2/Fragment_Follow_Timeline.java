@@ -1,6 +1,7 @@
 package tab2;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -472,6 +473,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
         List<Fragment_Timeline_item> listItems;
+        private Resources res = getResources();
         private int displaySize = getDisplaySize();
 
         public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
@@ -640,12 +642,12 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                             VHitem.like_btn.setBackgroundResource(R.mipmap.article_like_btn_img);    //article_like_btn_img
                         }
                         //좋아요 갯수
-                        VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
+                        VHitem.like_cnt_txt.setText(String.format(res.getString(R.string.article_like_cnt),currentItem.getArticle_like_cnt()));
                     }
                 });
 
                 //좋아요 갯수
-                VHitem.like_cnt_txt.setText("좋아요 "+currentItem.getArticle_like_cnt()+"개");
+                VHitem.like_cnt_txt.setText(String.format(res.getString(R.string.article_like_cnt),currentItem.getArticle_like_cnt()));
                 VHitem.like_cnt_txt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -658,14 +660,14 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 });
 
                 //조회수
-                VHitem.view_cnt_txt.setText("조회 "+currentItem.getArticle_view_cnt());
+                VHitem.view_cnt_txt.setText(String.format(res.getString(R.string.article_view_cnt), currentItem.getArticle_view_cnt()));
 
                 //설명글
                 VHitem.article_contents_txt.setText("");
                 VHitem.article_contents_txt.append(getContents(position));
 
                 //댓글 갯수
-                VHitem.go_all_comment_txt.setText("댓글 "+currentItem.getArticle_comment_cnt()+" 모두 보기");
+                VHitem.go_all_comment_txt.setText(String.format(res.getString(R.string.article_comment_cnt), currentItem.getArticle_comment_cnt()));
                 VHitem.go_all_comment_txt.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
