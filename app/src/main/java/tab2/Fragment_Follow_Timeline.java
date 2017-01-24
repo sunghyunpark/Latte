@@ -598,7 +598,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 //article_img
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
-                        .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
