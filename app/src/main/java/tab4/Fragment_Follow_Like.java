@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -288,6 +291,23 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             return outputString;
         }
 
+        private class SpanClick extends ClickableSpan {
+            String clicked;    // 클릭할 단어
+
+            public SpanClick(String string){
+                super();
+                clicked = string;
+            }
+
+            public void onClick(View tv){
+                Toast.makeText(getActivity(),clicked, Toast.LENGTH_SHORT).show();
+            }
+
+            public void updateDrawState(TextPaint ds){
+                ds.setUnderlineText(false);
+            }
+        }
+
         private SpannableStringBuilder getContents(int position){
             String type = getItem(position).getItemType();
             String contents_str = "";
@@ -304,10 +324,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //user B
-                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(userb_str), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //시간
                 builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUserA().length()+3+userb_str.length()+13,
@@ -319,10 +339,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //user B
-                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(userb_str), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //팔로우 단어
                 builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+3+userb_str.length()+2, getItem(position).getUserA().length()+3+userb_str.length()+6, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -337,12 +357,14 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //user B
-                builder.setSpan(new ForegroundColorSpan(color_black), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(userb_str), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+3, getItem(position).getUserA().length()+3+userb_str.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 //댓글 내용
+                builder.setSpan(new SpanClick(comment), getItem(position).getUserA().length()+2+userb_str.length()+18, getItem(position).getUserA().length()+2+userb_str.length()+18+comment.length()+3,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+2+userb_str.length()+18, getItem(position).getUserA().length()+2+userb_str.length()+18+comment.length()+3,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+2+userb_str.length()+18, getItem(position).getUserA().length()+2+userb_str.length()+18+comment.length()+3,
@@ -357,7 +379,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 String cnt_str = String.valueOf(getItem(position).getContent_img().size());
@@ -386,8 +408,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .into(VHitem.profile_img);
 
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
+
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
                         .error(null)
@@ -412,8 +435,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .error(null)
                         .into(VHitem.profile_img);
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
             }else if(holder instanceof VHItem_Like_Page_Comment_Article){
                 final Fragment_Follow_Like_item currentItem = getItem(position);
@@ -428,8 +451,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         .into(VHitem.profile_img);
 
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
@@ -455,8 +478,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 int size = getListCount(position);
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 VHitem.content_pic1.setOnClickListener(new View.OnClickListener() {
                     @Override

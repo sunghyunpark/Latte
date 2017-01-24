@@ -11,6 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
+import android.text.TextPaint;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -258,6 +261,24 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
             }
             return outputString;
         }
+
+        private class SpanClick extends ClickableSpan {
+            String clicked;    // 클릭할 단어
+
+            public SpanClick(String string){
+                super();
+                clicked = string;
+            }
+
+            public void onClick(View tv){
+                Toast.makeText(getActivity(),clicked, Toast.LENGTH_SHORT).show();
+            }
+
+            public void updateDrawState(TextPaint ds){
+                ds.setUnderlineText(false);
+            }
+        }
+
         private SpannableStringBuilder getContents(int position){
             String type = getItem(position).getItemType();
             String contents_str = "";
@@ -273,7 +294,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUserA().length()+18,
@@ -285,7 +306,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+8, getItem(position).getUserA().length()+11, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -300,10 +321,12 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 //댓글 내용
+                builder.setSpan(new SpanClick(comment), getItem(position).getUserA().length()+22, getItem(position).getUserA().length()+22+comment.length()+2,
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new ForegroundColorSpan(color_sky), getItem(position).getUserA().length()+22, getItem(position).getUserA().length()+22+comment.length()+2,
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), getItem(position).getUserA().length()+22, getItem(position).getUserA().length()+22+comment.length()+2,
@@ -318,7 +341,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
-                builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                 String cnt_str = String.valueOf(getItem(position).getContent_img().size());
@@ -347,8 +370,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                         .into(VHitem.profile_img);
 
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
                         .error(null)
@@ -373,8 +396,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                         .error(null)
                         .into(VHitem.profile_img);
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
             }else if(holder instanceof VHItem_Like_Page_Comment_Article){
                 final Fragment_My_Article_Like_item currentItem = getItem(position);
@@ -389,8 +412,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                         .into(VHitem.profile_img);
 
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
                         .load(Server_ip+currentItem.getContent_img().get(0))
@@ -416,8 +439,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 int size = getListCount(position);
 
-                VHitem.content_txt.setText("");
-                VHitem.content_txt.append(getContents(position));
+                VHitem.content_txt.setText(getContents(position));
+                VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 VHitem.content_pic1.setOnClickListener(new View.OnClickListener() {
                     @Override

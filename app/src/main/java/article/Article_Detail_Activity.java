@@ -378,8 +378,8 @@ public class Article_Detail_Activity extends Activity {
             SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
             builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUser_nick_name().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUser_nick_name().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUser_nick_name().length()+getItem(position).getComment().length()+3,
-                    getItem(position).getUser_nick_name().length()+getItem(position).getComment().length()+util.formatTimeString(to).length()+4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(color_gray), getItem(position).getUser_nick_name().length()+comment.length()+3,
+                    getItem(position).getUser_nick_name().length()+comment.length()+util.formatTimeString(to).length()+4, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
             return builder;
         }

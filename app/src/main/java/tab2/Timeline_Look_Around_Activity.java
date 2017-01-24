@@ -486,7 +486,6 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 //article_img
                 Glide.with(getApplicationContext())
                         .load(Server_ip+currentItem.getArticle_img_path())
-                        .placeholder(R.mipmap.ic_launcher)
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
