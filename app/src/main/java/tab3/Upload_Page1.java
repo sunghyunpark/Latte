@@ -269,14 +269,14 @@ public class Upload_Page1 extends Activity {
             folder_path.mkdir();
         }
 
-        String resize_before_path = LocalPath+"resize_before.jpg";
+        String resize_before_path = LocalPath+"resize_before.png";
         //로컬에 저장
         OutputStream outStream = null;
         File file = new File(resize_before_path);
 
         try{
             outStream = new FileOutputStream(file);
-            resize_before.compress(Bitmap.CompressFormat.JPEG,80,outStream);
+            resize_before.compress(Bitmap.CompressFormat.PNG,100,outStream);
             outStream.flush();
             outStream.close();
         }catch(FileNotFoundException e){
@@ -299,7 +299,7 @@ public class Upload_Page1 extends Activity {
         //1080px 최대길이를 넘는 이미지는 리사이징, compress 둘다 함
         if( size_check > 1080){
 
-            String file_name = "resize_after.jpg";
+            String file_name = "resize_after.png";
 
             BitmapFactory.Options options = new BitmapFactory.Options();
 
@@ -326,7 +326,7 @@ public class Upload_Page1 extends Activity {
                 fileCacheItem.createNewFile();
                 out = new FileOutputStream(fileCacheItem);
                 //resized_bitmap = Bitmap.createScaledBitmap(resized_bitmap, (int)(height*per), (int)(width*per), true);
-                resized_bitmap.compress(Bitmap.CompressFormat.JPEG, 80, out);
+                resized_bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
