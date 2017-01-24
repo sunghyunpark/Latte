@@ -5,8 +5,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
-import app_controller.App_Config;
-import app_controller.SQLiteHandler;
+import app_config.App_Config;
+import app_config.SQLiteHandler;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

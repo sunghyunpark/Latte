@@ -24,10 +24,10 @@ import com.squareup.otto.Subscribe;
 import java.io.File;
 import java.util.UUID;
 
-import app_controller.App_Config;
-import common.BusProvider;
+import app_config.App_Config;
+import pushevent.BusProvider;
 
-import common.Register_ProfilePushEvent;
+import pushevent.Register_ProfilePushEvent;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;

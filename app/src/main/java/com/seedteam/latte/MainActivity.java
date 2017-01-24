@@ -10,14 +10,14 @@ import android.widget.Toast;
 
 import java.util.HashMap;
 
-import app_controller.SQLiteHandler;
-import app_controller.SessionManager;
+import app_config.SQLiteHandler;
+import app_config.SessionManager;
 import login.Login_Page;
-import page1.Fragment_Ranking;
-import page2.Fragment_Timeline;
-import page3.Upload_Page1;
-import page4.Fragment_Like;
-import page5.Fragment_MyPage;
+import tab1.Fragment_Ranking;
+import tab2.Fragment_Timeline;
+import tab3.Upload_Page1;
+import tab4.Fragment_Like;
+import tab5.Fragment_MyPage;
 
 /**
  * created by sunghyun 2016-11-26

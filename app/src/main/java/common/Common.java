@@ -5,7 +5,7 @@ import android.content.Context;
 import android.util.Log;
 import android.widget.Toast;
 
-import app_controller.App_Config;
+import app_config.App_Config;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.CommonErrorResponse;

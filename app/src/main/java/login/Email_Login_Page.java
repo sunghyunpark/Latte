@@ -16,8 +16,8 @@ import android.widget.Toast;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
-import app_controller.SQLiteHandler;
-import app_controller.SessionManager;
+import app_config.SQLiteHandler;
+import app_config.SessionManager;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;

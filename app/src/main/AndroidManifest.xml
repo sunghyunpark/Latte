@@ -60,17 +60,17 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="page3.Upload_Page1"
+            android:name="tab3.Upload_Page1"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
         </activity>
         <activity
-            android:name="page3.Upload_Page2"
+            android:name="tab3.Upload_Page2"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="page2.Article_Detail_Activity"
+            android:name="article.Article_Detail_Activity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
@@ -80,17 +80,17 @@
             android:theme="@style/CustomDialog" >
         </activity>
         <activity
-            android:name="page2.Timeline_Look_Around_Activity"
+            android:name="tab2.Timeline_Look_Around_Activity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="page2.Article_Comment_Activity"
+            android:name="article.Article_Comment_Activity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name="page2.Article_Like_Activity"
+            android:name="article.Article_Like_Activity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>

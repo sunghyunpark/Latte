@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
-import app_controller.App_Config;
+import app_config.App_Config;
 
 public class Util {
 

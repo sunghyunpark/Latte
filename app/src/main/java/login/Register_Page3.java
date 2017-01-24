@@ -20,9 +20,9 @@ import com.seedteam.latte.R;
 import java.io.File;
 import java.util.UUID;
 
-import app_controller.App_Config;
-import app_controller.SQLiteHandler;
-import app_controller.SessionManager;
+import app_config.App_Config;
+import app_config.SQLiteHandler;
+import app_config.SessionManager;
 import common.Image_Uploader;
 import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;

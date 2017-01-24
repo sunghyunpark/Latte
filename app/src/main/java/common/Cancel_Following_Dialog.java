@@ -11,8 +11,10 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
 
-import app_controller.App_Config;
+import app_config.App_Config;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import pushevent.BusProvider;
+import pushevent.FollowBtnPushEvent;
 
 /**
  * created by sunghyun 2016-12-10

@@ -10,19 +10,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
-import app_controller.SQLiteHandler;
-import app_controller.SessionManager;
 import common.Util;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.IsUserResponse;
-import rest.UserResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -4,23 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
-import android.view.Display;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -29,9 +20,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-import app_controller.App_Config;
-import app_controller.SQLiteHandler;
-import login.Register_Page3;
+import app_config.App_Config;
+import app_config.SQLiteHandler;
+import pushevent.BusProvider;
+import pushevent.Register_ProfilePushEvent;
 
 public class User_Profile_Edit_Dialog extends Activity {
 

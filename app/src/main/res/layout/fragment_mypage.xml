@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#ffffff"
-    tools:context="page1.Fragment_Ranking">
+    tools:context="tab1.Fragment_Ranking">
 
     <RelativeLayout
         android:id="@+id/title_bar"

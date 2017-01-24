@@ -24,8 +24,6 @@ public class Send_Report_Dialog extends Activity {
 
     }
 
-
-
     //button event
     public void buttonPressed(View v) {
         switch ((v.getId())){
