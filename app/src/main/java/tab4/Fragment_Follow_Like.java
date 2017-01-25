@@ -125,6 +125,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!like_item.isError()) {
+                    empty_layout.setVisibility(View.GONE);
                     int size = like_item.getLikes_item().size();
                     for(int i=0;i<size;i++){
                         Fragment_Follow_Like_item item = new Fragment_Follow_Like_item();

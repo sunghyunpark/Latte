@@ -212,7 +212,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
-                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
                 LoadArticle(false,first_pos,last_pos);
 
             }
@@ -339,9 +339,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!articledata.isError()) {
-                    /**
-                     * 받아온 리스트 초기화
-                     */
+                    empty_layout.setVisibility(View.GONE);
                 if(articledata.isRefresh_result()){
                     //새로운 아티클이 있는 경우 new_article_btn 보여줌.
                     new_article_btn.setVisibility(View.VISIBLE);

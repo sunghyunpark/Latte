@@ -123,6 +123,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!like_item.isError()) {
+                    empty_layout.setVisibility(View.GONE);
                     int size = like_item.getLikes_item().size();
                     for (int i = 0; i < size; i++) {
                         Fragment_My_Article_Like_item item = new Fragment_My_Article_Like_item();
