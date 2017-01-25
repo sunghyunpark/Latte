@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -335,6 +336,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
 
                 TimelineResponse articledata = response.body();
+                ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
+
                 if (!articledata.isError()) {
                     /**
                      * 받아온 리스트 초기화
@@ -405,7 +408,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     adapter.notifyDataSetChanged();
 
                 } else {
-                    Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
+                    //비어있는 경우
+                    empty_layout.setVisibility(View.VISIBLE);
                 }
 
             }

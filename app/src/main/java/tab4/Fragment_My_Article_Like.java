@@ -120,6 +120,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
             public void onResponse(Call<LikePageResponse> call, Response<LikePageResponse> response) {
 
                 LikePageResponse like_item = response.body();
+                ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
+
                 if (!like_item.isError()) {
                     int size = like_item.getLikes_item().size();
                     for (int i = 0; i < size; i++) {
@@ -178,6 +180,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                     }
                     adapter.notifyDataSetChanged();
                 } else {
+                    //비어있는 경우
+                    empty_layout.setVisibility(View.VISIBLE);
 
                 }
 

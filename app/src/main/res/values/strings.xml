@@ -30,4 +30,13 @@
 
     <!--팔로우 취소 다이얼로그-->
     <string name="cancel_follow_dialog">%1$s님을 팔로우 취소하시겠습니까?</string>
+
+    <!--타임라인(팔로잉) 비어있는 경우-->
+    <string name="timeline_following_empty">게시글이 없습니다.\n팔로잉을 통해 다양한 사람들의 게시글을 구경해보세요.</string>
+    <!--좋아요(팔로잉) 비어있는 경우-->
+    <string name="like_following_empty">팔로잉한 사람이 없습니다.\n팔로잉을 통해 다양한 사람들의 소식을 받아보세요.</string>
+    <!--좋아요(내 게시물) 비어있는 경우-->
+    <string name="like_my_article_empty">등록한 내 게시물이 없습니다.\n첫 게시물을 등록해보세요.</string>
+
+
 </resources>

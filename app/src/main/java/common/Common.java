@@ -20,10 +20,6 @@ import retrofit2.Response;
 
 public class Common {
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
-
-
     /**
      * article에서 좋아요
      * @param context
