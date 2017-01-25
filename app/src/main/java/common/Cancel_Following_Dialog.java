@@ -2,6 +2,7 @@ package common;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -47,6 +48,7 @@ public class Cancel_Following_Dialog extends Activity {
     //init dialog views
     private void InitView(String user_profile_img_path, String user_nickname){
 
+        Resources res = getResources();
         ImageView user_prof = (ImageView)findViewById(R.id.user_profile_img);
         TextView dialog_txt = (TextView)findViewById(R.id.dialog_txt);
 
@@ -59,7 +61,7 @@ public class Cancel_Following_Dialog extends Activity {
                 .error(null)
                 .into(user_prof);
 
-        dialog_txt.setText(user_nickname+"님을 팔로우 취소하시겠습니까?");
+        dialog_txt.setText(String.format(res.getString(R.string.cancel_follow_dialog),user_nickname));
 
     }
 

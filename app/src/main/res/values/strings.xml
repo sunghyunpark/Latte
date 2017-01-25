@@ -27,4 +27,7 @@
     <string name="article_view_cnt">조회 %1$s</string>
     <string name="article_comment_cnt">댓글 %1$s 모두 보기</string>
     <string name="article_like_cnt">좋아요 %1$s개</string>
+
+    <!--팔로우 취소 다이얼로그-->
+    <string name="cancel_follow_dialog">%1$s님을 팔로우 취소하시겠습니까?</string>
 </resources>
