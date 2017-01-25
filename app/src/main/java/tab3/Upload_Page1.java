@@ -131,6 +131,7 @@ public class Upload_Page1 extends Activity {
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
         lLayout = new GridLayoutManager(Upload_Page1.this,4);
         recyclerView.setLayoutManager(lLayout);
+        recyclerView.setNestedScrollingEnabled(false);
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
         back_btn.setOnTouchListener(myOnTouchListener);
