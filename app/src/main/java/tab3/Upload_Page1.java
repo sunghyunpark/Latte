@@ -450,7 +450,7 @@ public class Upload_Page1 extends Activity {
                         //.load(Server_ip+"test_img/test1.jpg")
                         .load(new File(currentItem.getUpload_picture()))
                         //.thumbnail(0.3f)
-                        .signature(new StringSignature(UUID.randomUUID().toString()))
+                        //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .error(null)
                         .into(VHitem.upload_picture);
