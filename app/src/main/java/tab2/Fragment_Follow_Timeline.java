@@ -407,6 +407,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 } else {
                     //비어있는 경우
+                    if(listItems.size()==0)
                     empty_layout.setVisibility(View.VISIBLE);
                 }
 

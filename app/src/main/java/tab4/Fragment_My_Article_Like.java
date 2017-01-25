@@ -182,6 +182,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                     adapter.notifyDataSetChanged();
                 } else {
                     //비어있는 경우
+                    if(listItems.size()==0)
                     empty_layout.setVisibility(View.VISIBLE);
 
                 }

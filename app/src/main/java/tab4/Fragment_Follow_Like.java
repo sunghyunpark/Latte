@@ -211,6 +211,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                     adapter.notifyDataSetChanged();
                 } else {
                     //비어있는 경우
+                    if(listItems.size()==0)
                     empty_layout.setVisibility(View.VISIBLE);
 
                 }
