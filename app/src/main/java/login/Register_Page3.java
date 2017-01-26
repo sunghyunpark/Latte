@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
@@ -164,10 +165,12 @@ public class Register_Page3 extends Activity {
                     String local_profile_path = "";
                     //Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
                     mSessionManager.setLogin(true);//로그인 성공 시 세션 유지
+                    // Get token
+                    String token = FirebaseInstanceId.getInstance().getToken();
                     //내장 디비에 insert
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
                             userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
-                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at());
+                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at(), token);
                     if(!profile_img_path.equals("")){
                         /**
                          * email -> 단말기 내부 이미지 저장경로

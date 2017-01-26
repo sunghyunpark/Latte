@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
@@ -49,6 +52,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private String uid;
     private String user_profile_path;
     private String user_email;
+    private String fcm_token;
 
     //현재 페이지
     private int current_page;
@@ -74,7 +78,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             uid = user.get("uid");
             user_profile_path = user.get("profile_img");
             user_email = user.get("email");
-            Toast.makeText(getApplicationContext(),user_email+uid+user_profile_path+"",Toast.LENGTH_SHORT).show();
+            fcm_token = user.get("fcm_token");
+            Toast.makeText(getApplicationContext(),fcm_token,Toast.LENGTH_SHORT).show();
+
             //최초 UI 초기화
             InitUI();
         }

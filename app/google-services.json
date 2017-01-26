@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "996457361174",
+    "firebase_url": "https://latte-baa1d.firebaseio.com",
+    "project_id": "latte-baa1d",
+    "storage_bucket": "latte-baa1d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:996457361174:android:a6ad7341522e8e73",
+        "android_client_info": {
+          "package_name": "com.seedteam.latte"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "996457361174-mi0e6qvjt73sakjo2kfsjc0i2tljr1lh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyClOAo9KvXIQoekmp_i_UIC7YW2WoM4IAE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
@@ -93,10 +94,12 @@ public class Email_Login_Page extends Activity {
                 }else{
                     //로그인 성공
                     mSessionManager.setLogin(true);    //로그인 성공 시 세션 유지
+                    // Get token
+                    String token = FirebaseInstanceId.getInstance().getToken();
                     //내장 디비에 insert
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
                             userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
-                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at());
+                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at(), token);
                     //로그인 성공 후 메인화면으로 이동
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

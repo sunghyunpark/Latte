@@ -18,7 +18,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = db_name.getDATABASE_NAME();
@@ -39,6 +39,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_PHONE_NUMBER = "phone_number";
     private static final String KEY_PROFILE_IMG = "profile_img";
     private static final String KEY_CREATED_AT = "created_at";
+    private static final String KEY_FCM_TOKEN = "fcm_token";
 
 
 
@@ -62,7 +63,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_NICK_NAME + " TEXT,"
                 + KEY_PHONE_NUMBER + " TEXT,"
                 + KEY_PROFILE_IMG + " TEXT,"
-                + KEY_CREATED_AT + " TEXT)";
+                + KEY_CREATED_AT + " TEXT,"
+                + KEY_FCM_TOKEN + " TEXT)";
         db.execSQL(CREATE_LOGIN_TABLE);
 
         Log.d(TAG, "Database tables created");
@@ -97,7 +99,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * */
     public void addUser( String uid, String login_method, String fb_id, String kt_id, String name
             , String gender, String email, String nick_name
-            , String phone_number, String profile_img, String created_at) {
+            , String phone_number, String profile_img, String created_at, String fcm_token) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -113,6 +115,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_PHONE_NUMBER, phone_number);
         values.put(KEY_PROFILE_IMG, profile_img);
         values.put(KEY_CREATED_AT, created_at);
+        values.put(KEY_FCM_TOKEN, fcm_token);
 
         // Inserting Row
         long id = db.insert(TABLE_LOGIN, null, values);
@@ -145,6 +148,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("phone_number", cursor.getString(9));
             user.put("profile_img", cursor.getString(10));
             user.put("created_at", cursor.getString(11));
+            user.put("fcm_token", cursor.getString(12));
 
         }
         cursor.close();
