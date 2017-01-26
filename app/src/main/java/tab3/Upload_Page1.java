@@ -270,14 +270,14 @@ public class Upload_Page1 extends Activity {
             folder_path.mkdir();
         }
 
-        String resize_before_path = LocalPath+"resize_before.jpg";
+        String resize_before_path = LocalPath+"resize_before.png";
         //로컬에 저장
         OutputStream outStream = null;
         File file = new File(resize_before_path);
 
         try{
             outStream = new FileOutputStream(file);
-            resize_before.compress(Bitmap.CompressFormat.JPEG,80,outStream);
+            resize_before.compress(Bitmap.CompressFormat.PNG,100,outStream);
             outStream.flush();
             outStream.close();
         }catch(FileNotFoundException e){
@@ -340,7 +340,16 @@ public class Upload_Page1 extends Activity {
             return LocalPath + file_name;
 
         } else {
+            try{
+                outStream = new FileOutputStream(file);
+                resize_before.compress(Bitmap.CompressFormat.JPEG,80,outStream);
+                outStream.flush();
+                outStream.close();
+            }catch(FileNotFoundException e){
 
+            }catch(IOException e){
+
+            }
             return resize_before_path;
 
         }
