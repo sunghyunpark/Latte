@@ -110,7 +110,7 @@ public class Upload_Page2 extends Activity {
     /**
      * 업로드 화면에서 네트워크가 끊기거나 예외상황이 생길때 비동기적으로 처리하기 위해...
      */
-    public class UploadTask extends AsyncTask<String, String, String> {
+    private class UploadTask extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute(){

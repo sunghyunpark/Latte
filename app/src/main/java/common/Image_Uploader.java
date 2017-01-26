@@ -109,7 +109,7 @@ public class Image_Uploader {
                     if(!response.body().isError()){
                         Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
                         file.delete();
-                        File path = new File(LocalPath+"resize_before.png");
+                        File path = new File(LocalPath+"resize_before.jpg");
                         if(path.exists()) {
                             path.delete();
                         }
