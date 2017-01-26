@@ -19,7 +19,9 @@ import com.seedteam.latte.R;
 
 import app_config.SQLiteHandler;
 import app_config.SessionManager;
+import common.Common;
 import common.Util;
+import fcm.FirebaseInstanceIDService;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.UserResponse;
@@ -38,6 +40,8 @@ public class Email_Login_Page extends Activity {
     EditText email_edit_box, pw_edit_box;
 
     Util util = new Util();
+    Common common = new Common();
+    FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +104,8 @@ public class Email_Login_Page extends Activity {
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
                             userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
                             userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at(), token);
+                    //fcm 토큰 서버에 등록
+                    common.PostRegisterFCMToken(Email_Login_Page.this, userdata.getUser().getUid(), token, "Y");
                     //로그인 성공 후 메인화면으로 이동
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

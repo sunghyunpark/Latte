@@ -24,6 +24,7 @@ import java.util.UUID;
 import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.SessionManager;
+import common.Common;
 import common.Image_Uploader;
 import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
@@ -62,6 +63,7 @@ public class Register_Page3 extends Activity {
 
     Util util = new Util();
     Image_Uploader image_uploader = new Image_Uploader();
+    Common common = new Common();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -171,6 +173,8 @@ public class Register_Page3 extends Activity {
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
                             userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
                             userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at(), token);
+                    //fcm 토큰 서버에 등록
+                    common.PostRegisterFCMToken(Register_Page3.this, userdata.getUser().getUid(), token, "Y");
                     if(!profile_img_path.equals("")){
                         /**
                          * email -> 단말기 내부 이미지 저장경로

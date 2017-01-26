@@ -217,4 +217,20 @@ public interface ApiInterface {
     Call<LikePageResponse> GetLikePage(@Field("tag") String tag,
                                        @Field("uid") String uid,
                                        @Field("bottom_item") int bottom_id);
+
+    /**
+     * fcm 토큰 등록
+     * 로그인 / 로그아웃할때 사용
+     * @param tag -> token_register
+     * @param uid -> 사용자 uid
+     * @param token -> fcm token
+     * @param login_state -> 로그인일 경우(Y), 로그아웃일 경우(N)
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("fcm/fcm.php")
+    Call<CommonErrorResponse> PostRegisterFCMToken(@Field("tag") String tag,
+                                                @Field("uid") String uid,
+                                                @Field("token") String token,
+                                                @Field("login_state") String login_state);
 }
