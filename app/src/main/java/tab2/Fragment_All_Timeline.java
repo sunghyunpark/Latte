@@ -118,7 +118,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
-                //Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
                 LoadArticle(false,first_pos,last_pos);
 
             }
@@ -224,11 +224,11 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         item.setArticle_img_path(articledata.getArticle().get(i).getArticle_photo_url());
                         item.setArticle_contents(articledata.getArticle().get(i).getArticle_text());
                         item.setArticle_img_thumb_path(articledata.getArticle().get(i).getArticle_photo_thumb_url());
+                        item.setArticle_like_state(articledata.getArticle().get(i).getArticle_like_state());
                         item.setArticle_like_cnt(articledata.getArticle().get(i).getArticle_like_cnt());
                         item.setArticle_comment_cnt(articledata.getArticle().get(i).getArticle_comment_cnt());
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
                         item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
-                        /*
                         Log.d("article_data_all",articledata.getArticle().get(i).getUid());
                         Log.d("article_data_all",articledata.getArticle().get(i).getNick_name());
                         Log.d("article_data_all",articledata.getArticle().get(i).getProfile_img_thumb());
@@ -238,14 +238,13 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         Log.d("article_data_all",articledata.getArticle().get(i).getArticle_comment_cnt());
                         Log.d("article_data_all",articledata.getArticle().get(i).getArticle_view_cnt());
                         Log.d("article_data_all",articledata.getArticle().get(i).getArticle_created_at());
-                        */
                         listItems.add(item);
                     }
 
                     adapter.notifyDataSetChanged();
 
                 } else {
-                    //Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"에러 발생", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -263,9 +262,9 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
         private static final int TYPE_ITEM = 1;
 
-        List<Fragment_Timeline_item> listItems;
+        ArrayList<Fragment_Timeline_item> listItems;
 
-        public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
+        public RecyclerAdapter(ArrayList<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
         }
 
@@ -297,6 +296,8 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                     public void onClick(View view) {
                         Intent intent = new Intent(getActivity(),Timeline_Look_Around_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
+                        intent.putExtra("article_position", position);
+                        intent.putExtra("article_list", listItems);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }

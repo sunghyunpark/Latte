@@ -233,4 +233,9 @@ public interface ApiInterface {
                                                 @Field("uid") String uid,
                                                 @Field("token") String token,
                                                 @Field("login_state") String login_state);
+
+    @FormUrlEncoded
+    @POST("fcm/fcm.php")
+    Call<CommonErrorResponse> UploadArticleFCMToFollower(@Field("tag") String tag,
+                                                   @Field("uid") String uid);
 }

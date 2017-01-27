@@ -20,6 +20,14 @@ import retrofit2.Response;
 
 public class Common {
 
+    /**
+     * 로그인/회원가입 시 토큰을 서버 및 로컬 디비에 저장
+     * 로그아웃 시 로컬 디비 삭제 및 서버에 삭제 요청
+     * @param context
+     * @param uid
+     * @param token
+     * @param login_state
+     */
     public void PostRegisterFCMToken(final Context context, String uid, String token, String login_state){
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);

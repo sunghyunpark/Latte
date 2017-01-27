@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,8 @@ import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -49,6 +52,7 @@ import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab3.Upload_Page2;
 
 /**
  * created by sunghyun 2016-12-19
@@ -61,6 +65,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
     //사용자 정보
     private String uid;
+    //선택한 아티클 id
+    private int selected_article_pos;
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
@@ -85,15 +91,11 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
     @Override
     public void onResume(){
         super.onResume();
-
         /**
          * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
          */
         if(detail_pos>=0){
             LoadDetailBack(detail_article_id);
-        }else{
-            LoadArticle(false,first_pos,last_pos);
-
         }
     }
     //리프레쉬
@@ -111,8 +113,12 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         super.onCreate(savedInstanceState);
         setContentView(R.layout.timeline_look_around_activity);
 
+        listItems = new ArrayList<Fragment_Timeline_item>();
+
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
+        selected_article_pos = intent.getExtras().getInt("article_position");
+        listItems = (ArrayList<Fragment_Timeline_item>) getIntent().getSerializableExtra("article_list");
 
         InitView();
     }
@@ -128,12 +134,13 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
                 getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
 
-        listItems = new ArrayList<Fragment_Timeline_item>();
 
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
-        //adapter.notifyDataSetChanged();
+
+        recyclerView.scrollToPosition(selected_article_pos);
+        adapter.notifyDataSetChanged();
 
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
             @Override
@@ -224,29 +231,6 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         public abstract void onLoadMore(int current_page);
     }
 
-    public class LoadDataTask extends AsyncTask<Integer, String, String> {
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(Integer... position){
-
-            boolean refresh_flag = false;
-            //0이면 처음 진입하거나 refersh를 한경우
-            if(position[2] == 0){
-                refresh_flag = true;
-            }
-            LoadArticle(refresh_flag,position[0],position[1]);
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            adapter.notifyDataSetChanged();
-        }
-    }
-
     /**
      * @param refresh_flag -> 최초 진입인지 refresh인지 판별
      * @param first_id -> 처음 보이는 아티클 id
@@ -290,6 +274,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                         item.setArticle_view_cnt(articledata.getArticle().get(i).getArticle_view_cnt());
                         item.setCreated_at(articledata.getArticle().get(i).getArticle_created_at());
 
+
                         /*
                         Log.d("article_data",articledata.getArticle().get(i).getUid());
                         Log.d("article_data",articledata.getArticle().get(i).getNick_name());
@@ -304,6 +289,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
+
 
                 } else {
                     Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();

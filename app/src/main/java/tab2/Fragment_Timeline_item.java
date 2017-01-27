@@ -1,9 +1,13 @@
 package tab2;
 
-public class Fragment_Timeline_item {
+import java.io.Serializable;
+
+public class Fragment_Timeline_item implements Serializable {
 
     /**
      * timeline에서 follow랑 all이랑 받아오는 정보가 현재 같아서 공통으로 사용
+     * All 그리드 화면에서 둘러보기 화면으로 arraylist를 직렬화하여 넘겨주기 위해 Serializable을 사용
+     *
      * uid : 사용자 uid
      * user_nickname : 사용자 닉네임
      * user_profile_img_path : 사용자 프로필 경로
