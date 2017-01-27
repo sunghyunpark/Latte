@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,7 +82,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private int last_pos=0;
     private static final int LOAD_DATA_COUNT = 5;
     //new article btn
-    private ViewGroup new_article_btn;
+    private ImageView new_article_btn;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
     private int detail_pos = -1;    //디테일뷰 클릭했을 때의 position
@@ -147,7 +148,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
          */
         if(util.isCheckNetworkState(getActivity())){
             DeleteRealmDB();
-            Log.d("realm_test", "oncreated realm delete!!!!");
+            //Log.d("realm_test", "oncreated realm delete!!!!");
         }
 
     }
@@ -187,7 +188,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
         //adapter.notifyDataSetChanged();
-        new_article_btn = (ViewGroup)v.findViewById(R.id.new_article_btn);
+        new_article_btn = (ImageView) v.findViewById(R.id.new_article_btn);
         new_article_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -200,7 +201,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         InitView();
                         first_pos = 0;
                         DeleteRealmDB();
-                        Log.d("realm_test", "onRefreshed realm delete!!!!");
+                        //Log.d("realm_test", "onRefreshed realm delete!!!!");
                         LoadArticle(true,0,0);
                         new_article_btn.setVisibility(View.GONE);    //new article btn 숨기기
                     }
@@ -456,7 +457,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                     adapter.notifyDataSetChanged();
                     detail_pos = -1;
                 }else{
-                    Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
                 }
 
             }

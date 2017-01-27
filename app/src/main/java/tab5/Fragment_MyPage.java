@@ -230,7 +230,7 @@ public class Fragment_MyPage extends Fragment{
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
-                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
                 LoadArticle(false,first_pos,last_pos);
 
             }
@@ -284,7 +284,7 @@ public class Fragment_MyPage extends Fragment{
                     adapter_list.notifyDataSetChanged();
                     detail_pos = -1;
                 }else{
-                    Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -358,7 +358,7 @@ public class Fragment_MyPage extends Fragment{
 
                 } else {
 
-                    Toast.makeText(getActivity(),"불러올 데이터가 없음.", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getActivity(),"불러올 데이터가 없음.", Toast.LENGTH_SHORT).show();
                 }
                 article_count_txt.setText(articledata.getPlaceinfo().getArticle_count());    //게시글 수
                 follower_count_txt.setText(articledata.getPlaceinfo().getFollower_count());    //팔로워 수

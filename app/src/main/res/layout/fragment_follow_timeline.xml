@@ -46,6 +46,15 @@
                 android:text="추천 팔로잉"/>
         </RelativeLayout>
 
+        <ImageView
+            android:id="@+id/new_article_btn"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:visibility="gone"
+            android:src="@mipmap/new_article_btn_img"
+            android:layout_centerHorizontal="true"/>
+
+        <!--
         <RelativeLayout
             android:id="@+id/new_article_btn"
             android:layout_width="wrap_content"
@@ -64,6 +73,7 @@
                 android:layout_centerVertical="true"/>
 
         </RelativeLayout>
+        -->
     </RelativeLayout>
 
 </LinearLayout>
