@@ -117,7 +117,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
-        selected_article_pos = intent.getExtras().getInt("article_position");
+        selected_article_pos = intent.getExtras().getInt("article_position")+1;    //헤더 때문에 +1을 해줌
         listItems = (ArrayList<Fragment_Timeline_item>) getIntent().getSerializableExtra("article_list");
 
         InitView();
@@ -372,15 +372,15 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
             if (viewType == TYPE_ITEM_USER_ARTICLE) {
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_follow_timeline, parent, false);
                 return new Fragment_Follow_Timeline_VHitem(v);
-            }/*else if(viewType == TYPE_ITEM_HEADER){
+            }else if(viewType == TYPE_ITEM_HEADER){
                 View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_fragment_follow_timeline_header, parent, false);
                 return new Fragment_Follow_Timeline_Header(v);
-            }*/
+            }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
         }
 
         private Fragment_Timeline_item getItem(int position) {
-            return listItems.get(position);
+            return listItems.get(position-1);
         }
 
         /**
@@ -481,7 +481,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        detail_pos = position;
+                        detail_pos = position-1;    //detail_back 시 헤더때문에 기존 position-1을 해줘야함.
                         detail_article_id = currentItem.getArticle_id();
                         Intent intent = new Intent(Timeline_Look_Around_Activity.this, Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
@@ -582,18 +582,17 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         }
         @Override
         public int getItemViewType(int position) {
-            /*
             if(isPositionHeader(position)){
                 return TYPE_ITEM_HEADER;
             }else{
                 return TYPE_ITEM_USER_ARTICLE;
-            }*/
-            return TYPE_ITEM_USER_ARTICLE;
+            }
+            //return TYPE_ITEM_USER_ARTICLE;
         }
         //increasing getItemcount to 1. This will be the row of header.
         @Override
         public int getItemCount() {
-            return listItems.size();
+            return listItems.size()+1;
         }
     }
 }
