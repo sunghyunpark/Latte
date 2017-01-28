@@ -298,6 +298,8 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_position", position);
                         intent.putExtra("article_list", listItems);
+                        intent.putExtra("first_pos", first_pos);
+                        intent.putExtra("last_pos", last_pos);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }

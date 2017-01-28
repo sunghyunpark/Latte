@@ -119,6 +119,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         uid = intent.getExtras().getString("user_uid");
         selected_article_pos = intent.getExtras().getInt("article_position")+1;    //헤더 때문에 +1을 해줌
         listItems = (ArrayList<Fragment_Timeline_item>) getIntent().getSerializableExtra("article_list");
+        first_pos = intent.getExtras().getInt("first_pos");
+        last_pos = intent.getExtras().getInt("last_pos");
 
         InitView();
     }
@@ -292,7 +294,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
 
                 } else {
-                    Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),"에러 발생", Toast.LENGTH_SHORT).show();
                 }
 
             }
