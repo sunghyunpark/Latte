@@ -85,8 +85,6 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
     ViewGroup title_bar_layout;
     FrameLayout recyclerViewFrameLayout;
-    int s;
-
 
     @Override
     public void onResume(){
