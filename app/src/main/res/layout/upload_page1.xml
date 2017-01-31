@@ -49,6 +49,14 @@
                         android:textColor="#000000" />
 
                     <Button
+                        android:id="@+id/crop_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        android:text="crop"/>
+
+                    <Button
                         android:id="@+id/next_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

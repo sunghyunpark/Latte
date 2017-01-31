@@ -444,6 +444,17 @@ public class Upload_Page1 extends Activity {
                 Button next_btn = (Button)findViewById(R.id.next_btn);
                 next_btn.setOnTouchListener(myOnTouchListener);
 
+                //crop btn
+                Button crop_btn = (Button)findViewById(R.id.crop_btn);
+                crop_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(),CropActivity.class);
+                        intent.putExtra("file_path", getBitmapUploadImg_Path());
+                        startActivity(intent);
+                    }
+                });
+
                 VHitem.upload_picture_layout.setLayoutParams(Set_HalfSize_Display(getApplicationContext()));
                 VHitem.upload_picture_layout.setOnClickListener(new View.OnClickListener() {
                     @Override
