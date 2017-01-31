@@ -402,7 +402,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         }
 
     }
-    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {

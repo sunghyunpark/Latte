@@ -3,6 +3,7 @@ package tab3;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,12 +24,16 @@ import android.view.Display;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.Toast;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
 import app_config.App_Config;
+import pushevent.BusProvider;
+import pushevent.Upload_ArticlePicPushEvent;
 
 
 public class CropActivity extends Activity {
@@ -49,7 +54,7 @@ public class CropActivity extends Activity {
 
         Display display;
         display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
-        crop_size = display.getWidth() - display.getWidth()/4;
+        crop_size = display.getWidth();
 
         Intent intent = getIntent();
         String file_path = intent.getExtras().getString("file_path");
@@ -59,26 +64,16 @@ public class CropActivity extends Activity {
         myCropView.setImageBitmap(selected_img_bit);
 
         top_menu_layout = (ViewGroup) findViewById(R.id.top_menu_layout);
-        ImageView crop_circle_img = (ImageView)findViewById(R.id.circle_img);
 
-        LayoutParams params = (LayoutParams) crop_circle_img.getLayoutParams();
-        params.width = crop_size;
-        params.height = crop_size;
-        crop_circle_img.setLayoutParams(params);
+        ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
+        back_btn.setOnTouchListener(myOnTouchListener);
 
         Button save_btn = (Button)findViewById(R.id.save_btb);
-        save_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                top_menu_layout.setVisibility(View.GONE);
-                makeMaskImage(myCropView, takeScreenshot());
-                finish();
-
-            }
-        });
+        save_btn.setOnTouchListener(myOnTouchListener);
 
 
     }
+
     public Bitmap takeScreenshot() {
         View rootView = findViewById(android.R.id.content).getRootView();
         rootView.setDrawingCacheEnabled(true);
@@ -89,6 +84,7 @@ public class CropActivity extends Activity {
 
         return snapshot;
     }
+
     public void makeMaskImage(CropView mImageView, Bitmap bit)
     {
 
@@ -112,10 +108,10 @@ public class CropActivity extends Activity {
             folder_path.mkdir();
         }
 
-        String resize_before_path = LocalPath+"cropImage.png";
+        String cropImage_path = LocalPath+"cropImage.png";
         //로컬에 저장
         OutputStream outStream = null;
-        File file = new File(resize_before_path);
+        File file = new File(cropImage_path);
 
         try{
             outStream = new FileOutputStream(file);
@@ -126,6 +122,34 @@ public class CropActivity extends Activity {
 
         }catch(IOException e){
 
+        }finally {
+            BusProvider.getInstance().post(new Upload_ArticlePicPushEvent(cropImage_path));
         }
+
     }
+
+    public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.save_btb:
+                        top_menu_layout.setVisibility(View.GONE);
+                        makeMaskImage(myCropView, takeScreenshot());
+                        finish();
+                        break;
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

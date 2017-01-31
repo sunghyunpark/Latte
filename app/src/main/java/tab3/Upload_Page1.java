@@ -36,6 +36,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -51,6 +52,9 @@ import java.util.UUID;
 import app_config.App_Config;
 import app_config.SQLiteHandler;
 import common.Util;
+import pushevent.BusProvider;
+import pushevent.Register_ProfilePushEvent;
+import pushevent.Upload_ArticlePicPushEvent;
 
 /**
  * created by sunghyun 2016-11-28
@@ -76,6 +80,10 @@ public class Upload_Page1 extends Activity {
     //업로드 프리뷰 이미지
     private ImageView upload_img;
     private ImageView change_picture_btn;
+    //업로드할 이미지 경로
+    private String upload_ariticlePic_path;
+    //crop을 한건지 안한건지
+    private boolean isCropImg;
 
     private ArrayList<Upload_Page1_item> listItems;
     private GridLayoutManager lLayout;
@@ -95,6 +103,7 @@ public class Upload_Page1 extends Activity {
     @Override
     public void onDestroy(){
         super.onDestroy();
+        BusProvider.getInstance().unregister(this);
         if(mCurrentImg_bitmap!=null)
         mCurrentImg_bitmap.recycle();
     }
@@ -114,7 +123,7 @@ public class Upload_Page1 extends Activity {
         login_method = intent.getExtras().getString("login_method");
         user_profile_path = user.get("profile_img");
 
-        Toast.makeText(getApplicationContext(),user_profile_path+"",Toast.LENGTH_SHORT).show();
+        BusProvider.getInstance().register(this);
 
         InitView();
 
@@ -192,6 +201,7 @@ public class Upload_Page1 extends Activity {
     }
 
     private void CurrentPicture(int position){
+        isCropImg = false;    //현재는 크롭한 이미지가 아님
         upload_img = (ImageView)findViewById(R.id.upload_img);
         SetImageViewSize();
 
@@ -536,6 +546,18 @@ public class Upload_Page1 extends Activity {
         }
     }
 
+    @Subscribe
+    public void FinishLoad(Upload_ArticlePicPushEvent mPushEvent) {
+
+        upload_ariticlePic_path = mPushEvent.getImg_path();
+        isCropImg = true;
+        Glide.with(getApplicationContext())
+                .load(new File(upload_ariticlePic_path))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .into(upload_img);
+
+
+    }
     public View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
 
         @Override
@@ -551,8 +573,11 @@ public class Upload_Page1 extends Activity {
                         finish();
                         break;
                     case R.id.next_btn:
+                        if(!isCropImg){
+                            upload_ariticlePic_path = getBitmapUploadImg_Path();
+                        }
                         Intent intent = new Intent(getApplicationContext(), Upload_Page2.class);
-                        intent.putExtra("ImagePath", getBitmapUploadImg_Path());
+                        intent.putExtra("ImagePath", upload_ariticlePic_path);
                         intent.putExtra("login_method", login_method);
                         intent.putExtra("user_uid", uid);
                         intent.putExtra("user_profile_path", user_profile_path);

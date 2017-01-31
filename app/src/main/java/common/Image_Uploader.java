@@ -113,6 +113,14 @@ public class Image_Uploader {
                         if(path.exists()) {
                             path.delete();
                         }
+                        File path_after = new File(LocalPath+"resize_after.jpg");
+                        if(path_after.exists()){
+                            path_after.delete();
+                        }
+                        File crop_path = new File(LocalPath+"cropImage.png");
+                        if(crop_path.exists()){
+                            crop_path.delete();
+                        }
                     }else{
                         Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
                     }

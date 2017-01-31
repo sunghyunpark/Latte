@@ -38,5 +38,8 @@
     <!--좋아요(내 게시물) 비어있는 경우-->
     <string name="like_my_article_empty">등록한 내 게시물이 없습니다.\n첫 게시물을 등록해보세요.</string>
 
+    <!--크롭 화면 하단 텍스트-->
+    <string name="cropview_txt">사진을 움직이거나 크기를 조절하세요.</string>
+
 
 </resources>
