@@ -312,11 +312,11 @@ public class Fragment_MyPage extends Fragment{
             public void onResponse(Call<PersonalPlaceResponse> call, Response<PersonalPlaceResponse> response) {
 
                 PersonalPlaceResponse articledata = response.body();
+                ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!articledata.isArticle_error()) {
-                    /**
-                     * 받아온 리스트 초기화
-                     */
+
+                    empty_layout.setVisibility(View.GONE);
                     int size = articledata.getArticle().size();
                     if(first_pos == 0){
                         first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
@@ -357,15 +357,16 @@ public class Fragment_MyPage extends Fragment{
 
 
                 } else {
-
-                    //Toast.makeText(getActivity(),"불러올 데이터가 없음.", Toast.LENGTH_SHORT).show();
+                    // 비어있는 경우
+                    if(listItems.size() == 0){
+                        empty_layout.setVisibility(View.VISIBLE);
+                    }
                 }
                 article_count_txt.setText(articledata.getPlaceinfo().getArticle_count());    //게시글 수
                 follower_count_txt.setText(articledata.getPlaceinfo().getFollower_count());    //팔로워 수
                 following_count_txt.setText(articledata.getPlaceinfo().getFollowing_count());    //팔로잉 수
 
             }
-
             @Override
             public void onFailure(Call<PersonalPlaceResponse> call, Throwable t) {
                 // Log error here since request failed
