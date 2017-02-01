@@ -12,7 +12,8 @@ public class LikeItemContents {
     private String article_id;
     private String article_photo_thumb_url;
     private String comment_text;
-    private boolean comtents_error;
+    private String follow_state;    //팔로우 상태
+    private boolean contents_error;
 
     public String getUid() {
         return uid;
@@ -54,11 +55,19 @@ public class LikeItemContents {
         this.comment_text = comment_text;
     }
 
-    public boolean isComtents_error() {
-        return comtents_error;
+    public String getFollow_state() {
+        return follow_state;
     }
 
-    public void setComtents_error(boolean comtents_error) {
-        this.comtents_error = comtents_error;
+    public void setFollow_state(String follow_state) {
+        this.follow_state = follow_state;
+    }
+
+    public boolean isContents_error() {
+        return contents_error;
+    }
+
+    public void setContents_error(boolean comtents_error) {
+        this.contents_error = comtents_error;
     }
 }

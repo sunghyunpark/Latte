@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="8dp"
+    android:layout_marginTop="3dp"
     android:orientation="vertical"
     android:background="#ffffff">
 
@@ -22,7 +22,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_toRightOf="@+id/profile_img"
-            android:layout_marginLeft="15dp"
+            android:layout_marginLeft="10dp"
             android:layout_centerVertical="true"
             android:layout_alignTop="@+id/profile_img">
 
@@ -30,7 +30,7 @@
                 android:id="@+id/content_txt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingRight="40dp"
+                android:paddingRight="65dp"
                 android:layout_centerVertical="true"
                 android:textColor="#000000"/>
 
@@ -40,7 +40,7 @@
                 android:layout_height="30dp"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="15dp"/>
+                android:layout_marginRight="10dp"/>
         </RelativeLayout>
     </RelativeLayout>
     <!--구분선-->
@@ -49,8 +49,8 @@
         android:layout_width="fill_parent"
         android:layout_height="0.5dp"
         android:orientation="horizontal"
-        android:layout_marginLeft="65dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop="3dp"
         android:layout_alignParentBottom="true"
         android:background="#ffe0e0e0"></LinearLayout>
 </LinearLayout>

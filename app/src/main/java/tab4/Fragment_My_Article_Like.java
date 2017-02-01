@@ -25,13 +25,19 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import app_config.App_Config;
+import article.Article_Like_Activity;
+import common.Cancel_Following_Dialog;
+import common.Common;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import article.Article_Detail_Activity;
+import pushevent.BusProvider;
+import pushevent.FollowBtnPushEvent;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.LikePageResponse;
@@ -49,6 +55,9 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     private static final String Server_ip = Server_url.get_SERVER_IP();
     //사용자 정보
     private String uid;
+    //팔로우 정보(otto)
+    private String follow_uid;    //otto pushevent
+    private String follow_state_from_pushevent;    //otto pushevent
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
@@ -59,7 +68,16 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     private SwipeRefreshLayout mSwipeRefresh;
 
     View v;
+    Common common = new Common();
 
+
+    @Override
+    public void onDestroy() {
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+
+    }
     @Override
     public void onRefresh() {
         //새로고침시 이벤트 구현
@@ -70,6 +88,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        BusProvider.getInstance().register(this);    //follow 버튼 탭 시 취소 다이얼로그로부터 받기 위해
     }
 
     @Override
@@ -149,7 +168,6 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                                 contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
                                 item.setContent_img(contents_imgList);
 
-
                             } else {
                                 //묶음
                                 item.setItemType("like_list");
@@ -159,13 +177,11 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                                     item.setArticle_id(article_idList);
                                     contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_thumb_url());    //묶음 사진
                                     item.setContent_img(contents_imgList);
-
-
                                 }
 
                             }
                         } else if (like_item.getLikes_item().get(i).getCategory().equals("follow")) {
-                            item.setFollow_state(like_item.getLikes_item().get(0).getFollow_state());
+                            item.setFollow_state(like_item.getLikes_item().get(i).getContents().get(0).getFollow_state());
 
 
                         } else if (like_item.getLikes_item().get(i).getCategory().equals("comment")) {
@@ -183,7 +199,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 } else {
                     //비어있는 경우
                     if(listItems.size()==0)
-                    empty_layout.setVisibility(View.VISIBLE);
+                        empty_layout.setVisibility(View.VISIBLE);
 
                 }
 
@@ -360,6 +376,38 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
         }
 
+        /**
+         * 해당 아이템이 현재 팔로우 상태인지 아닌지 판별
+         * @param position
+         * @return
+         */
+        private boolean CurrentFollowState(int position){
+            boolean state = true;
+            String state_str = getItem(position).getFollow_state();
+
+            if(state_str.equals("Y")){
+                state = true;
+            }else{
+                state = false;
+            }
+
+            return state;
+        }
+
+        private boolean ChangeFollowState(boolean state, int position, String uid, String follow_uid){
+
+            if(state){
+                state = false;
+                getItem(position).setFollow_state("N");
+                return state;
+            }else{
+                state = true;
+                getItem(position).setFollow_state("Y");
+                common.PostFollowBtn(getActivity(), uid, follow_uid, "Y");
+                return state;
+            }
+        }
+
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
 
@@ -404,6 +452,35 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                 VHitem.content_txt.setText(getContents(position));
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
+
+                if(CurrentFollowState(position)){
+                    //팔로우 상태일때
+                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                }else{
+                    VHitem.follow_btn.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
+                }
+
+                VHitem.follow_btn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        if(CurrentFollowState(position)){
+                            //follow -> cancel
+                            Intent intent  = new Intent(getActivity(), Cancel_Following_Dialog.class);
+                            intent.putExtra("follow_profile_img_path",currentItem.getUserA_profile_img());
+                            intent.putExtra("follow_nickname", currentItem.getUserA());
+                            intent.putExtra("follow_uid", currentItem.getUserA_uid());
+                            intent.putExtra("follow_position", position);
+                            startActivity(intent);
+                            getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
+
+                        }else{
+                            //cancel -> follow
+                            ChangeFollowState(false, position,uid,currentItem.getUserA_uid());
+                            VHitem.follow_btn.setBackgroundResource(R.mipmap.article_follow_state_btn_img);
+                        }
+
+                    }
+                });
 
             }else if(holder instanceof VHItem_Like_Page_Comment_Article){
                 final Fragment_My_Article_Like_item currentItem = getItem(position);
@@ -656,6 +733,21 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
         }
 
 
+    }
+
+    @Subscribe
+    public void FinishLoad(FollowBtnPushEvent mPushEvent) {
+
+        follow_uid = mPushEvent.getUid();
+        follow_state_from_pushevent = mPushEvent.getState();
+        int position = mPushEvent.getPosition();
+
+        if(follow_state_from_pushevent.equals("N")){
+            Toast.makeText(getActivity(),"팔로우취소됨", Toast.LENGTH_SHORT).show();
+            adapter.ChangeFollowState(true,position,uid,adapter.getItem(position).getUserA_uid());
+            common.PostFollowBtn(getActivity(), uid, follow_uid, "N");
+            adapter.notifyDataSetChanged();
+        }
     }
 }
 
