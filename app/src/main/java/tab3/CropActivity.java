@@ -23,9 +23,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.view.Display;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.RelativeLayout.LayoutParams;
-import android.widget.Toast;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -40,13 +37,16 @@ public class CropActivity extends Activity {
 
     private static final App_Config Local_path = new App_Config();
     private static final String LocalPath = Local_path.getLocalPath();
-    private int crop_size;
+
+    private int crop_size;    // 크롭 사이즈
+
     CropView myCropView;
     Bitmap selected_img_bit;
     ViewGroup top_menu_layout;
 
     Rect statusBar = new Rect();
     Util util = new Util();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +59,7 @@ public class CropActivity extends Activity {
         Intent intent = getIntent();
         String file_path = intent.getExtras().getString("file_path");
         selected_img_bit = BitmapFactory.decodeFile(file_path);
-        //RUNTIME
+
         myCropView = (CropView)findViewById(R.id.result_img);
         myCropView.setImageBitmap(selected_img_bit);
 

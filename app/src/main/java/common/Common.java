@@ -39,9 +39,9 @@ public class Common {
 
                 CommonErrorResponse tokenResponse = response.body();
                 if (!tokenResponse.isError()) {
-                    Toast.makeText(context,"token 성공", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"token ok", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context,"token 실패", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context,"token fail", Toast.LENGTH_SHORT).show();
                 }
 
             }
