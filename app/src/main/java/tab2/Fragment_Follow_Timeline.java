@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
+import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
 import java.text.ParseException;
@@ -238,18 +239,18 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
     /**
      * 새로운 아티클이 있을 때 new 버튼을 보여주고 hide/show 효과
+     * 스크롤 시 하단 탭 메뉴 hide/show 효과
      */
-
     private void hideViews() {
         new_article_btn.animate().translationY(-new_article_btn.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-
+        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
     }
 
     private void showViews() {
         new_article_btn.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
-
     public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
 
 

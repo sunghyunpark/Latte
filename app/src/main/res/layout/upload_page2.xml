@@ -39,7 +39,7 @@
             android:layout_marginRight="10dp"
             android:layout_centerVertical="true"
             android:background="@null"
-            android:textColor="#3babe1"
+            android:textColor="@color/AppBasicColor"
             android:textSize="17sp"
             android:text="공유하기"/>
     </RelativeLayout>

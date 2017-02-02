@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -47,6 +48,7 @@ import tab5.Fragment_MyPage;
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
     ImageView tab1, tab2, tab3, tab4, tab5;    //하단 탭 버튼들
+    public static ViewGroup bottom_tab_menu;
     private SessionManager session;    // session
     private SQLiteHandler db;    //SQLite
 
@@ -63,6 +65,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(android.R.style.Theme_Holo_Light_NoActionBar_TranslucentDecor);
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(getApplicationContext());
@@ -99,6 +102,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             window.setStatusBarColor(getResources().getColor(R.color.AppBasicColor));
         }
 
+        bottom_tab_menu = (ViewGroup)findViewById(R.id.bottom_tab_menu);
         /**
          * 최초 화면 진입 시 랜딩되는 화면 및 버튼 초기화
          */

@@ -14,10 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
 import java.util.ArrayList;
@@ -123,6 +126,26 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
             }
         });
+        recyclerView.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                showViews();
+            }
+        });
+
+
+    }
+    private void hideViews() {
+        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    private void showViews() {
+        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
     public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {

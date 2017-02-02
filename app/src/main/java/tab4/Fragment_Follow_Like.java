@@ -20,10 +20,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 
 import java.util.ArrayList;
@@ -39,6 +42,7 @@ import rest.LikePageResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab2.HidingScrollListener;
 
 /**
  * created by sunghyun 2017-01-16
@@ -107,8 +111,28 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         recyclerView.setLayoutManager(linearLayoutManager);
         //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         recyclerView.setAdapter(adapter);
+        recyclerView.addOnScrollListener(new HidingScrollListener() {
+            @Override
+            public void onHide() {
+                hideViews();
+            }
+
+            @Override
+            public void onShow() {
+                showViews();
+            }
+        });
 
         LoadData(uid);
+    }
+
+    private void hideViews() {
+        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+    }
+
+    private void showViews() {
+        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+
     }
 
     private void LoadData(String uid){
@@ -322,7 +346,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
             int color_black = Color.BLACK;
             int color_gray = Color.GRAY;
-            int color_sky = getResources().getColor(R.color.PrimaryColor);
+            int color_sky = getResources().getColor(R.color.AppBasicColor);
 
             if(type.equals("like")){
                 //단일
