@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -26,7 +27,8 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
     }
 
     private void sendPushNotification(String message) {
-        System.out.println("received message : " + message);
+        Resources res = getResources();
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
@@ -35,7 +37,7 @@ public class FirebaseMessagingService extends com.google.firebase.messaging.Fire
         Uri defaultSoundUri= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_launcher).setLargeIcon(BitmapFactory.decodeResource(getResources(),R.mipmap.ic_launcher) )
-                .setContentTitle("Push Title ")
+                .setContentTitle(String.format(res.getString(R.string.app_name)))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri).setLights(000000255,500,2000)

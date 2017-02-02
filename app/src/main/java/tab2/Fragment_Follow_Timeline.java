@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
 
 import java.text.ParseException;
@@ -34,6 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import app_config.App_Config;
 import article.Article_Comment_Activity;
@@ -572,7 +574,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
-                        //.signature(new StringSignature(UUID.randomUUID().toString()))
+                        .signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);
