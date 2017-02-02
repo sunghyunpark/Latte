@@ -187,10 +187,10 @@ public class Fragment_MyPage extends Fragment{
         //백그라운드 이미지
         background_img = (ImageView)v.findViewById(R.id.background_img);
         Glide.with(getActivity())
-                .load(Server_ip+"test_img/test_img.jpg")
+                .load(Server_ip+user_profile_path)
                 //.transform(new Util.BlurTransformation(getActivity()))
                 .signature(new StringSignature(UUID.randomUUID().toString()))
-                .bitmapTransform(new BlurTransformation(getActivity(), 18))
+                .bitmapTransform(new BlurTransformation(getActivity(), 2))
                 .error(null)
                 .into(background_img);
         //유저 프로필
@@ -201,7 +201,6 @@ public class Fragment_MyPage extends Fragment{
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
                 .into(user_profile_img);
-        Toast.makeText(getActivity(), user_profile_path,Toast.LENGTH_SHORT).show();
     }
 
     /**
