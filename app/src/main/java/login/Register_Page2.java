@@ -208,13 +208,13 @@ public class Register_Page2 extends Activity {
             male_select_btn.setBackgroundResource(R.drawable.gender_selected_btn);
             male_select_btn.setTextColor(Color.BLACK);
             female_select_btn.setBackgroundResource(R.drawable.login_btn_transparent);
-            female_select_btn.setTextColor(Color.TRANSPARENT);
+            female_select_btn.setTextColor(Color.WHITE);
             mGender = "남자";
         }else if(!male && female){
             female_select_btn.setBackgroundResource(R.drawable.gender_selected_btn);
             female_select_btn.setTextColor(Color.BLACK);
             male_select_btn.setBackgroundResource(R.drawable.login_btn_transparent);
-            male_select_btn.setTextColor(Color.TRANSPARENT);
+            male_select_btn.setTextColor(Color.WHITE);
             mGender = "여자";
         }
 
