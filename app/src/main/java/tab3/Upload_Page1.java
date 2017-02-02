@@ -106,6 +106,8 @@ public class Upload_Page1 extends Activity {
         BusProvider.getInstance().unregister(this);
         if(mCurrentImg_bitmap!=null)
         mCurrentImg_bitmap.recycle();
+
+        util.DeleteLocalImage();
     }
 
     @Override

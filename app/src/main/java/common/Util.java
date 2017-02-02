@@ -21,6 +21,7 @@ import android.view.WindowManager;
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 
+import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,6 +33,29 @@ public class Util {
 
     private static final App_Config Server_url = new App_Config();
     private static final String Server_ip = Server_url.get_SERVER_IP();
+
+    private static final App_Config Local_path = new App_Config();
+    private static final String LocalPath = Local_path.getLocalPath();
+
+    //로컬에 저장되어있는 이미지들 삭제
+    public void DeleteLocalImage(){
+        try{
+            File path = new File(LocalPath+"resize_before.png");
+            if(path.exists()) {
+                path.delete();
+            }
+            File path_after = new File(LocalPath+"resize_after.jpg");
+            if(path_after.exists()){
+                path_after.delete();
+            }
+            File crop_path = new File(LocalPath+"cropImage.png");
+            if(crop_path.exists()){
+                crop_path.delete();
+            }
+        }catch (Exception e){
+
+        }
+    }
 
     //이미지 경로 받아옴
     public String GetProfile_Url(String login_method, String profile_img_path){

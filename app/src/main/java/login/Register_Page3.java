@@ -1,8 +1,14 @@
 package login;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +40,7 @@ import rest.UserResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab3.Upload_Page1;
 
 /**
  * created by sunghyun 2016-11-26
@@ -42,7 +49,8 @@ public class Register_Page3 extends Activity {
 
     private static final App_Config Local_path = new App_Config();
     private static final String LocalPath = Local_path.getLocalPath();
-
+    //os6.0 permission
+    private static final int REQUEST_PERMISSIONS_READ_PHONE_STATE = 10;
     //사용자 정보
     private String mLogin_method = "";
     private String mFb_id="";
@@ -93,11 +101,45 @@ public class Register_Page3 extends Activity {
             }
         });
 
+
+        /**
+         * os 6.0 권한체크 및 요청
+         */
+        if (ContextCompat.checkSelfPermission(Register_Page3.this,
+                Manifest.permission.READ_PHONE_STATE) + ContextCompat
+                .checkSelfPermission(Register_Page3.this, Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.shouldShowRequestPermissionRationale
+                    (Register_Page3.this, Manifest.permission.READ_PHONE_STATE)) {
+
+                ActivityCompat.requestPermissions(Register_Page3.this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        REQUEST_PERMISSIONS_READ_PHONE_STATE);
+            } else {
+                ActivityCompat.requestPermissions(Register_Page3.this,
+                        new String[]{Manifest.permission.READ_PHONE_STATE},
+                        REQUEST_PERMISSIONS_READ_PHONE_STATE);
+
+            }
+
+        } else {
+            InitView();
+        }
+
+    }
+
+    private void InitView(){
         //프로필 사진 초기화
         SetProfile(mLogin_method, mProfile_img_path);
 
         final EditText nick_name_edit_box = (EditText)findViewById(R.id.nick_name_edit_box);
         final EditText phone_num_edit_box = (EditText)findViewById(R.id.phone_num_edit_box);
+        try {
+            TelephonyManager telManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
+            phone_num_edit_box.setText(telManager.getLine1Number());
+        }catch (NullPointerException e){
+            Toast.makeText(getApplicationContext(),"usim이 없는 단말", Toast.LENGTH_SHORT).show();
+        }
         Button register_next_btn = (Button)findViewById(R.id.register_next_btn);
         register_next_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,7 +158,6 @@ public class Register_Page3 extends Activity {
                 }
             }
         });
-
     }
 
 
@@ -210,6 +251,24 @@ public class Register_Page3 extends Activity {
                 Toast.makeText(getApplicationContext(), "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
             }
         });
+
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_PERMISSIONS_READ_PHONE_STATE:
+                //권한이 있는 경우
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    InitView();
+                }
+                //권한이 없는 경우
+                else {
+
+                }
+                break;
+
+        }
     }
 
 }

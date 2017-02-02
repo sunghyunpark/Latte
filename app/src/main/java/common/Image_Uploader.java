@@ -22,6 +22,7 @@ public class Image_Uploader {
     private static final App_Config Local_path = new App_Config();
     private static final String LocalPath = Local_path.getLocalPath();
     private SQLiteHandler mSQLite;
+    Util util = new Util();
 
     /**
      * 프로필 이미지업로더
@@ -109,18 +110,8 @@ public class Image_Uploader {
                     if(!response.body().isError()){
                         Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
                         file.delete();
-                        File path = new File(LocalPath+"resize_before.png");
-                        if(path.exists()) {
-                            path.delete();
-                        }
-                        File path_after = new File(LocalPath+"resize_after.jpg");
-                        if(path_after.exists()){
-                            path_after.delete();
-                        }
-                        File crop_path = new File(LocalPath+"cropImage.png");
-                        if(crop_path.exists()){
-                            crop_path.delete();
-                        }
+                        util.DeleteLocalImage();
+
                     }else{
                         Toast.makeText(context, "ImageUploader fail", Toast.LENGTH_SHORT).show();
                     }
