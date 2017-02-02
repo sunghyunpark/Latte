@@ -8,4 +8,6 @@
     <color name="PrimaryColor">#3babe1</color>
     <color name="GrayColor">#ffe0e0e0</color>
     <color name="BlackColor">#000000</color>
+
+    <color name="AppBasicColor">#4dd0e1</color>
 </resources>

@@ -12,16 +12,9 @@
         android:id="@+id/title_bar"
         android:layout_width="fill_parent"
         android:layout_height="45dp"
-        android:background="@color/white"
+        android:background="#ffffff"
         android:orientation="horizontal" >
-        <ImageView
-            android:id="@+id/back_btn"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_alignParentLeft="true"
-            android:src="@mipmap/ic_launcher"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"/>
+
         <TextView
             android:id="@+id/my_nickname_txt"
             android:layout_width="wrap_content"
@@ -29,9 +22,10 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="17dp"
+            android:textStyle="bold"
             android:textSize="17sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#000000" />
+            android:textColor="@color/AppBasicColor" />
 
         <ImageView
             android:id="@+id/setting_btn"
@@ -41,15 +35,8 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="10dp"
             android:src="@mipmap/my_page_setting_btn"/>
+
     </RelativeLayout>
-    <!--구분선-->
-    <LinearLayout
-        android:id="@+id/divider_lay"
-        android:layout_width="fill_parent"
-        android:layout_height="1dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/title_bar"
-        android:background="#ffe0e0e0"></LinearLayout>
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="fill_parent"

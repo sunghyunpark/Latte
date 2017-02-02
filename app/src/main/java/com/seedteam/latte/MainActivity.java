@@ -1,11 +1,14 @@
 package com.seedteam.latte;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -87,6 +90,15 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void InitUI(){
+
+        //lollipop이상인 경우에만 적용
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.AppBasicColor));
+        }
+
         /**
          * 최초 화면 진입 시 랜딩되는 화면 및 버튼 초기화
          */
