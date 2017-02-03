@@ -403,16 +403,27 @@ public class Article_Detail_Activity extends Activity {
 
                 VHitem.comment_txt.setText("");
                 VHitem.comment_txt.append(getComment(position));
-                //VHitem.comment_txt.setText(currentItem.getComment());
+                VHitem.comment_item_layout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = new Intent(getApplicationContext(), Article_Comment_Activity.class);
+                        intent.putExtra("user_uid", user_uid);
+                        intent.putExtra("article_id", article_id);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                    }
+                });
             }
         }
         public class Article_Comment_VHitem extends RecyclerView.ViewHolder{
 
+            ViewGroup comment_item_layout;
             ImageView user_profile_img;
             TextView comment_txt;
 
             public Article_Comment_VHitem(View itmeView){
                 super(itmeView);
+                comment_item_layout = (ViewGroup)itmeView.findViewById(R.id.comment_item_layout);
                 user_profile_img = (ImageView)itmeView.findViewById(R.id.user_profile_img);
                 comment_txt = (TextView)itmeView.findViewById(R.id.comment_txt);
             }
