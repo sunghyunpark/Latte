@@ -18,6 +18,7 @@ import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.Display;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -160,12 +161,7 @@ public class Article_Detail_Activity extends Activity {
 
 
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
-        back_btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
+        back_btn.setOnTouchListener(myOnTouchListener);
 
 
         LoadDetailData();
@@ -662,5 +658,28 @@ public class Article_Detail_Activity extends Activity {
             article_follow_state_img.setBackgroundResource(R.mipmap.article_not_follow_state_btn_img);
         }
     }
+
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            }else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 
 }

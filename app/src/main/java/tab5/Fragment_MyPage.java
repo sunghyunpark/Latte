@@ -747,6 +747,9 @@ public class Fragment_MyPage extends Fragment{
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 v.setPadding(15, 15, 15, 15);
                 v.setAlpha(0.55f);
+            }else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
                 v.setPadding(0, 0, 0, 0);
                 v.setAlpha(1.0f);
