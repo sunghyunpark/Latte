@@ -43,6 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/empty_txt"
                 android:layout_centerHorizontal="true"
+                android:textSize="14dp"
                 android:text="업로드"/>
         </RelativeLayout>
     </RelativeLayout>

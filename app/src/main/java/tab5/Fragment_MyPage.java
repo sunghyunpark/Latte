@@ -187,10 +187,10 @@ public class Fragment_MyPage extends Fragment{
         //백그라운드 이미지
         background_img = (ImageView)v.findViewById(R.id.background_img);
         Glide.with(getActivity())
-                .load(Server_ip+user_profile_path)
+                .load(Server_ip+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
                 .signature(new StringSignature(UUID.randomUUID().toString()))
-                .bitmapTransform(new BlurTransformation(getActivity(), 2))
+                .bitmapTransform(new BlurTransformation(getActivity(), 18))
                 .error(null)
                 .into(background_img);
         //유저 프로필

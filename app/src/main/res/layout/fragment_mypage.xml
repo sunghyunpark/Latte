@@ -315,7 +315,8 @@
                 <RelativeLayout
                     android:id="@+id/empty_layout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:visibility="gone">
 
                     <TextView
                         android:id="@+id/empty_txt"
@@ -333,6 +334,7 @@
                         android:layout_below="@id/empty_txt"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="60dp"
+                        android:textSize="14dp"
                         android:text="업로드"/>
                 </RelativeLayout>
                 <android.support.v7.widget.RecyclerView
