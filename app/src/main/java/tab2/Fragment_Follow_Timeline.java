@@ -129,7 +129,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             InitView();
             first_pos = 0;
             DeleteRealmDB();
-            Log.d("realm_test", "onRefreshed realm delete!!!!");
             LoadArticle(true,0,0);
             new_article_btn.setVisibility(View.GONE);    //new article btn 숨기기
 

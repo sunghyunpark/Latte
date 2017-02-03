@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setTheme(android.R.style.Theme_Holo_Light_NoActionBar_TranslucentDecor);
+        //setTheme(android.R.style.Theme_Holo_Light_NoActionBar_TranslucentDecor);
         setContentView(R.layout.activity_main);
 
         session = new SessionManager(getApplicationContext());

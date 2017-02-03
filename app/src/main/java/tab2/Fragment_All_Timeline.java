@@ -121,7 +121,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
             @Override
             public void onLoadMore(int current_page) {
                 // do something...
-                Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"불러오는중...", Toast.LENGTH_SHORT).show();
                 LoadArticle(false,first_pos,last_pos);
 
             }
