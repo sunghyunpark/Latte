@@ -574,7 +574,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 Glide.with(getContext())
                         .load(Server_ip+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
-                        .signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);
