@@ -119,8 +119,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);
-        mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor),
-                getResources().getColor(R.color.PrimaryColor), getResources().getColor(R.color.PrimaryColor));
+        mSwipeRefresh.setColorSchemeColors(getResources().getColor(R.color.AppBasicColor), getResources().getColor(R.color.AppBasicColor),
+                getResources().getColor(R.color.AppBasicColor), getResources().getColor(R.color.AppBasicColor));
 
         listItems = new ArrayList<Fragment_My_Article_Like_item>();
 
