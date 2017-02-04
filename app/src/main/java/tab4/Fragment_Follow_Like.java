@@ -150,12 +150,17 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 if (!like_item.isError()) {
                     empty_layout.setVisibility(View.GONE);
                     int size = like_item.getLikes_item().size();
+                    Fragment_Follow_Like_item item;
+                    ArrayList<String> contents_imgList;
+                    ArrayList<String> article_idList;
+                    ArrayList<HashMap<String, String>> UserArray;
+                    HashMap<String, String> User;
                     for(int i=0;i<size;i++){
-                        Fragment_Follow_Like_item item = new Fragment_Follow_Like_item();
-                        ArrayList<String> contents_imgList = new ArrayList<String>();
-                        ArrayList<String> article_idList = new ArrayList<String>();
-                        ArrayList<HashMap<String, String>> UserArray = new ArrayList<HashMap<String, String>>();
-                        HashMap<String, String> User = new HashMap<String, String>();
+                        item = new Fragment_Follow_Like_item();
+                        contents_imgList = new ArrayList<String>();
+                        article_idList = new ArrayList<String>();
+                        UserArray = new ArrayList<HashMap<String, String>>();
+                        User = new HashMap<String, String>();
 
                         item.setItemType(like_item.getLikes_item().get(i).getCategory());
                         item.setUserA(like_item.getLikes_item().get(i).getFollowing_user_nickName());
@@ -230,6 +235,11 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                         }
                         listItems.add(item);
+                        item = null;
+                        contents_imgList = null;
+                        article_idList = null;
+                        UserArray = null;
+                        User = null;
                     }
                     adapter.notifyDataSetChanged();
                 } else {

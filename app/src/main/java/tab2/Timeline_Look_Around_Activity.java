@@ -259,8 +259,9 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                     }
                     last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
 
+                    Fragment_Timeline_item item;
                     for(int i=0;i<size;i++){
-                        Fragment_Timeline_item item = new Fragment_Timeline_item();
+                        item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
@@ -286,6 +287,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                         Log.d("article_data",articledata.getArticle().get(i).getArticle_created_at());
 */
                         listItems.add(item);
+                        item = null;
                     }
                     adapter.notifyDataSetChanged();
 
@@ -320,8 +322,9 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
             public void onResponse(Call<ArticleDetailBack> call, Response<ArticleDetailBack> response) {
 
                 ArticleDetailBack articledata = response.body();
+                Fragment_Timeline_item item;
                 if(!articledata.isError()){
-                    Fragment_Timeline_item item = new Fragment_Timeline_item();
+                    item = new Fragment_Timeline_item();
                     item.setUid(articledata.getArticle().getUid());
                     item.setUser_nickname(articledata.getArticle().getNick_name());
                     item.setUser_profile_img_path(articledata.getArticle().getProfile_img());
@@ -338,6 +341,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                     listItems.set(detail_pos,item);    //해당 아티클의 최신정보를 받아온 뒤 배열에서 해당 아티클만 변경해줌
                     adapter.notifyDataSetChanged();
                     detail_pos = -1;
+                    item = null;
                 }else{
                     Toast.makeText(getApplicationContext(),"error 발생", Toast.LENGTH_SHORT).show();
                 }

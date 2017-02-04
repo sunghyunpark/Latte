@@ -167,10 +167,13 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 if (!like_item.isError()) {
                     empty_layout.setVisibility(View.GONE);
                     int size = like_item.getLikes_item().size();
+                    Fragment_My_Article_Like_item item;
+                    ArrayList<String> contents_imgList;
+                    ArrayList<String> article_idList;
                     for (int i = 0; i < size; i++) {
-                        Fragment_My_Article_Like_item item = new Fragment_My_Article_Like_item();
-                        ArrayList<String> contents_imgList = new ArrayList<String>();
-                        ArrayList<String> article_idList = new ArrayList<String>();
+                        item = new Fragment_My_Article_Like_item();
+                        contents_imgList = new ArrayList<String>();
+                        article_idList = new ArrayList<String>();
 
                         item.setItemType(like_item.getLikes_item().get(i).getCategory());
                         item.setUserA(like_item.getLikes_item().get(i).getFollowing_user_nickName());
@@ -217,6 +220,9 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
                         }
                         listItems.add(item);
+                        item = null;
+                        contents_imgList = null;
+                        article_idList = null;
                     }
                     adapter.notifyDataSetChanged();
                 } else {

@@ -261,9 +261,9 @@ public class Fragment_MyPage extends Fragment{
             public void onResponse(Call<ArticleDetailBack> call, Response<ArticleDetailBack> response) {
 
                 ArticleDetailBack articledata = response.body();
-
+                Fragment_Timeline_item item;
                 if(!articledata.isError()){
-                    Fragment_Timeline_item item = new Fragment_Timeline_item();
+                    item = new Fragment_Timeline_item();
                     item.setUid(articledata.getArticle().getUid());
                     item.setUser_nickname(articledata.getArticle().getNick_name());
                     item.setUser_profile_img_path(articledata.getArticle().getProfile_img());
@@ -281,6 +281,7 @@ public class Fragment_MyPage extends Fragment{
                     adapter_grid.notifyDataSetChanged();
                     adapter_list.notifyDataSetChanged();
                     detail_pos = -1;
+                    item = null;
                 }else{
                     //Toast.makeText(getActivity(),"error 발생", Toast.LENGTH_SHORT).show();
                 }
@@ -320,9 +321,9 @@ public class Fragment_MyPage extends Fragment{
                         first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
                     }
                     last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
-                    Log.d("mypage", size+"");
+                    Fragment_Timeline_item item;
                     for(int i=0;i<size;i++){
-                        Fragment_Timeline_item item = new Fragment_Timeline_item();
+                        item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
@@ -347,6 +348,7 @@ public class Fragment_MyPage extends Fragment{
                         Log.d("mypage",articledata.getArticle().get(i).getArticle_created_at());
                         */
                         listItems.add(item);
+                        item = null;
                     }
                     if(adapter_list!=null)
                         adapter_list.notifyDataSetChanged();

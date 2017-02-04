@@ -195,17 +195,17 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         first_pos = Integer.parseInt(comment_data.getComment().get(0).getComment_id());
                     }
                     last_pos = Integer.parseInt(comment_data.getComment().get(size-1).getComment_id());
-
+                    Article_Comment_item item;
                     for(int i=0;i<size;i++){
-                        Article_Comment_item item = new Article_Comment_item();
+                        item = new Article_Comment_item();
                         item.setUser_uid(comment_data.getComment().get(i).getUid());
                         item.setUser_nick_name(comment_data.getComment().get(i).getNick_name());
                         item.setUser_profile_img_path(comment_data.getComment().get(i).getProfile_img_thumb());
                         item.setComment(comment_data.getComment().get(i).getComment_text());
                         item.setComment_id(comment_data.getComment().get(i).getComment_id());
                         item.setCreated_at(comment_data.getComment().get(i).getComment_created_at());
-                        Log.d("comment##", comment_data.getComment().get(i).getComment_text());
                         listItems.add(item);
+                        item = null;
                     }
                     //역순으로 변경
                     Collections.reverse(listItems);

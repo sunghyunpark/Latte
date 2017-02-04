@@ -117,15 +117,16 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
                 if (!likeList_data.isError()) {
                    
                     int size = likeList_data.getUser().size();
-
+                    Article_Like_item item;
                     for(int i=0;i<size;i++){
-                        Article_Like_item item = new Article_Like_item();
+                        item = new Article_Like_item();
                         item.setUser_uid(likeList_data.getUser().get(i).getUid());
                         item.setUser_profile_img_thumb(likeList_data.getUser().get(i).getProfile_img_thumb());
                         item.setUser_nick_name(likeList_data.getUser().get(i).getNick_name());
                         item.setUser_name(likeList_data.getUser().get(i).getName());
                         item.setUser_follow_state(likeList_data.getUser().get(i).getUser_follow_state());
                         listItems.add(item);
+                        item = null;
                     }
                     adapter.notifyDataSetChanged();
                     empty_like_txt.setVisibility(View.GONE);

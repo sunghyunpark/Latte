@@ -237,8 +237,9 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
                     int size = articledata.getArticle().size();
                     last_pos = Integer.parseInt(articledata.getArticle().get(size-1).getArticle_id());
+                    Fragment_Timeline_item item;
                     for(int i=0;i<size;i++){
-                        Fragment_Timeline_item item = new Fragment_Timeline_item();
+                        item = new Fragment_Timeline_item();
                         item.setUid(articledata.getArticle().get(i).getUid());
                         item.setUser_nickname(articledata.getArticle().get(i).getNick_name());
                         item.setUser_profile_img_path(articledata.getArticle().get(i).getProfile_img());
@@ -261,6 +262,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
                         Log.d("article_data_all",articledata.getArticle().get(i).getArticle_view_cnt());
                         Log.d("article_data_all",articledata.getArticle().get(i).getArticle_created_at());
                         listItems.add(item);
+                        item = null;
                     }
 
                     adapter.notifyDataSetChanged();
