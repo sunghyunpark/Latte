@@ -37,8 +37,7 @@ import retrofit2.Response;
 
 public class Article_Like_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
+    private App_Config app_config = new App_Config();
     //사용자 정보
     private String uid;
     //해당 아티클 id
@@ -226,7 +225,7 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
 
                 //user_profile
                 Glide.with(getApplicationContext())
-                        .load(Server_ip+currentItem.getUser_profile_img_thumb())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_thumb())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)

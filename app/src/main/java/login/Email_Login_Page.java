@@ -41,7 +41,6 @@ public class Email_Login_Page extends Activity {
 
     Util util = new Util();
     Common common = new Common();
-    FirebaseInstanceIDService firebaseInstanceIDService = new FirebaseInstanceIDService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

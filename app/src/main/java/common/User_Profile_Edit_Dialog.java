@@ -27,8 +27,7 @@ import pushevent.Register_ProfilePushEvent;
 
 public class User_Profile_Edit_Dialog extends Activity {
 
-    private static final App_Config Local_path = new App_Config();
-    private static final String LocalPath = Local_path.getLocalPath();
+    private App_Config app_config = new App_Config();
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int REQUEST_IMAGE_ALBUM = 2;
@@ -69,7 +68,7 @@ public class User_Profile_Edit_Dialog extends Activity {
 
         mCurrentPhotoPath = null;
 
-        path = new File(LocalPath); // 꼭 매니페스트에 권한 추가->내부 저장소에 폴더만들기
+        path = new File(app_config.getLocalPath()); // 꼭 매니페스트에 권한 추가->내부 저장소에 폴더만들기
 
         if(!path.exists()) {
             path.mkdirs();
@@ -142,7 +141,7 @@ public class User_Profile_Edit_Dialog extends Activity {
                          */
 
                         OutputStream outStream = null;
-                        File file = new File(LocalPath,imageFileName);
+                        File file = new File(app_config.getLocalPath(),imageFileName);
                         try{
                             outStream = new FileOutputStream(file);
                             bitmap.compress(Bitmap.CompressFormat.JPEG,100,outStream);
@@ -159,7 +158,8 @@ public class User_Profile_Edit_Dialog extends Activity {
                             finish();
                         }else{
                             // 그외 not_register
-                            image_uploader.Upload_ProfileImage(User_Profile_Edit_Dialog.this, "profile", login_method, uid, imageFileName, LocalPath+imageFileName);
+                            image_uploader.Upload_ProfileImage(User_Profile_Edit_Dialog.this, "profile", login_method, uid,
+                                    imageFileName, app_config.getLocalPath()+imageFileName);
                             finish();
                         }
 
@@ -174,7 +174,7 @@ public class User_Profile_Edit_Dialog extends Activity {
     private File createImageFile() throws IOException {
         // Create an image file name
         String imageFileName = email + "_profile";
-        storageDir = new File(LocalPath);
+        storageDir = new File(app_config.getLocalPath());
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
                 ".jpg",         /* suffix */

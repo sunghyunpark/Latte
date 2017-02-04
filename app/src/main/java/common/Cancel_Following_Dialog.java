@@ -22,8 +22,7 @@ import pushevent.FollowBtnPushEvent;
  */
 public class Cancel_Following_Dialog extends Activity {
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
+    private App_Config app_config = new App_Config();
 
     //다이얼로그에 보여질 사용자 정보
     private String user_profile_img_path;
@@ -54,7 +53,7 @@ public class Cancel_Following_Dialog extends Activity {
 
         //프로필
         Glide.with(getApplicationContext())
-                .load(Server_ip+user_profile_img_path)
+                .load(app_config.get_SERVER_IP()+user_profile_img_path)
                 //.transform(new Util.CircleTransform(getApplicationContext()))
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)

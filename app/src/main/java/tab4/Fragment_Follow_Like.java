@@ -50,8 +50,7 @@ import tab2.HidingScrollListener;
  */
 public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
+    private App_Config app_config = new App_Config();
     //사용자 정보
     private String uid;
 
@@ -431,7 +430,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getUserA_profile_img())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -442,7 +441,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getContent_img().get(0))
+                        .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
 
@@ -459,7 +458,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getUserA_profile_img())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -474,7 +473,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getUserA_profile_img())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -485,7 +484,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getContent_img().get(0))
+                        .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
@@ -500,7 +499,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(Server_ip+currentItem.getUserA_profile_img())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -634,7 +633,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         VHitem.content_pic8.setVisibility(View.VISIBLE);
                     }
                     Glide.with(getActivity())
-                            .load(Server_ip+currentItem.getContent_img().get(i))
+                            .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(i))
                             .error(null)
                             .into(getList(position,VHitem).get(i));
                 }

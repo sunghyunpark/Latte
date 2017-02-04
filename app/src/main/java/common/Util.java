@@ -31,24 +31,20 @@ import app_config.App_Config;
 
 public class Util {
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
-
-    private static final App_Config Local_path = new App_Config();
-    private static final String LocalPath = Local_path.getLocalPath();
+    private App_Config app_config = new App_Config();
 
     //로컬에 저장되어있는 이미지들 삭제
     public void DeleteLocalImage(){
         try{
-            File path = new File(LocalPath+"resize_before.png");
+            File path = new File(app_config.getLocalPath()+"resize_before.png");
             if(path.exists()) {
                 path.delete();
             }
-            File path_after = new File(LocalPath+"resize_after.jpg");
+            File path_after = new File(app_config.getLocalPath()+"resize_after.jpg");
             if(path_after.exists()){
                 path_after.delete();
             }
-            File crop_path = new File(LocalPath+"cropImage.png");
+            File crop_path = new File(app_config.getLocalPath()+"cropImage.png");
             if(crop_path.exists()){
                 crop_path.delete();
             }
@@ -62,7 +58,7 @@ public class Util {
         String url = "";
 
         if(login_method.equals("email")){
-            url = Server_ip+profile_img_path;
+            url = app_config.get_SERVER_IP()+profile_img_path;
         }else if(login_method.equals("facebook")){
             url = profile_img_path;
         }

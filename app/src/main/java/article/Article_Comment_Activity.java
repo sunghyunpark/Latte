@@ -12,6 +12,7 @@ import android.text.Editable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.StyleSpan;
 import android.util.Log;
@@ -55,8 +56,7 @@ import retrofit2.Response;
  */
 public class Article_Comment_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener,TextWatcher {
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
+    private App_Config app_config = new App_Config();
     private SQLiteHandler db;    //SQLite
     //사용자 정보
     private String uid;    //로그인 user uid
@@ -131,7 +131,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         Glide.with(getApplicationContext())
-                .load(Server_ip+user_profile_path)
+                .load(app_config.get_SERVER_IP()+user_profile_path)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
@@ -352,16 +352,15 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
                 //user_profile
                 Glide.with(getApplicationContext())
-                        .load(Server_ip+currentItem.getUser_profile_img_path())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);
 
-                VHitem.comment_txt.setText("");//    빈값으로 초기화를 해줘야함 append특성상...
-                VHitem.comment_txt.append(getComment(position));
-
+                VHitem.comment_txt.setText(getComment(position));
+                VHitem.comment_txt.setMovementMethod(LinkMovementMethod.getInstance());
             }
         }
         public class Article_Comment_VHitem extends RecyclerView.ViewHolder{

@@ -19,8 +19,6 @@ import retrofit2.Response;
 
 public class Image_Uploader {
 
-    private static final App_Config Local_path = new App_Config();
-    private static final String LocalPath = Local_path.getLocalPath();
     private SQLiteHandler mSQLite;
     Util util = new Util();
 

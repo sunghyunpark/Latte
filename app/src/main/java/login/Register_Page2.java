@@ -37,8 +37,7 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
  */
 public class Register_Page2 extends Activity {
 
-    private static final App_Config Local_path = new App_Config();
-    private static final String LocalPath = Local_path.getLocalPath();
+    private App_Config app_config = new App_Config();
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_EXTERNAL_STORAGE = 10;
     // 남자, 여자 구분
@@ -231,7 +230,7 @@ public class Register_Page2 extends Activity {
         if(login_method.equals("email")){
             Glide.clear(profile_img);
             Glide.with(getApplicationContext())
-                    .load(new File(LocalPath,img_path))
+                    .load(new File(app_config.getLocalPath(),img_path))
                     .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                     .signature(new StringSignature(UUID.randomUUID().toString()))
                     .error(null)

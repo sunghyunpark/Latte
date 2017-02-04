@@ -68,8 +68,7 @@ import retrofit2.Response;
 
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private static final App_Config Server_url = new App_Config();
-    private static final String Server_ip = Server_url.get_SERVER_IP();
+    private App_Config app_config = new App_Config();
     private Realm mRealm;
     private RealmConfig realmConfig;
 
@@ -572,7 +571,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //user_profile
                 Glide.with(getContext())
-                        .load(Server_ip+currentItem.getUser_profile_img_path())
+                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -604,7 +603,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //article_img
                 Glide.with(getContext())
-                        .load(Server_ip+currentItem.getArticle_img_path())
+                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
