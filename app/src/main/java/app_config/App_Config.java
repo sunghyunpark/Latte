@@ -3,7 +3,7 @@ package app_config;
 public class App_Config {
 
     public static String SERVER_IP = "http://ustserver.cafe24.com/ust/";//server base url
-    public static String LOCAL_PATH = "storage/emulated/0/PoPo/";
+    public static String LOCAL_PATH = "storage/emulated/0/WePic/";
     public String DATABASE_NAME = "latte";
 
     public String get_SERVER_IP(){
