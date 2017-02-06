@@ -31,6 +31,9 @@ public class Fragment_Timeline extends Fragment {
     private ViewGroup all_underbar;
     private Button follow_btn;
     private Button all_btn;
+
+    public static ViewGroup title_bar;
+    public static ViewGroup contents_layout;
     View v;
 
     public Fragment_Timeline() {
@@ -69,6 +72,8 @@ public class Fragment_Timeline extends Fragment {
          * 상단 탭 메뉴 초기화
          */
 
+        title_bar = (ViewGroup)v.findViewById(R.id.title_bar);
+        contents_layout = (ViewGroup)v.findViewById(R.id.contents_layout);
         follow_underbar = (ViewGroup)v.findViewById(R.id.follow_underbar);
         all_underbar = (ViewGroup)v.findViewById(R.id.all_underbar);
 

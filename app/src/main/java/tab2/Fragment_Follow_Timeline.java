@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
@@ -57,6 +58,7 @@ import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab4.Fragment_Like;
 
 /**
  * created by sunghyun 2016-12-08
@@ -240,13 +242,15 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
      * 스크롤 시 하단 탭 메뉴 hide/show 효과
      */
     private void hideViews() {
-        new_article_btn.animate().translationY(-new_article_btn.getHeight()).setInterpolator(new AccelerateInterpolator(2));
-        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Timeline.title_bar.animate().translationY(-Fragment_Timeline.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Timeline.contents_layout.animate().translationY(-Fragment_Timeline.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
     }
 
     private void showViews() {
-        new_article_btn.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
-        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Timeline.title_bar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Timeline.contents_layout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
     public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {
@@ -342,10 +346,10 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 if (!articledata.isError()) {
                     empty_layout.setVisibility(View.GONE);
-                if(articledata.isRefresh_result()){
-                    //새로운 아티클이 있는 경우 new_article_btn 보여줌.
-                    new_article_btn.setVisibility(View.VISIBLE);
-                }
+                    if(articledata.isRefresh_result()){
+                        //새로운 아티클이 있는 경우 new_article_btn 보여줌.
+                        new_article_btn.setVisibility(View.VISIBLE);
+                    }
                     int size = articledata.getArticle().size();
                     if(first_pos == 0){
                         first_pos = Integer.parseInt(articledata.getArticle().get(0).getArticle_id());
@@ -411,7 +415,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 } else {
                     //비어있는 경우
                     if(listItems.size()==0)
-                    empty_layout.setVisibility(View.VISIBLE);
+                        empty_layout.setVisibility(View.VISIBLE);
                 }
 
             }
@@ -607,6 +611,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 //article_img
                 Glide.with(getContext())
                         .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
+                        .asBitmap()
+                        .format(DecodeFormat.PREFER_ARGB_8888)
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
@@ -619,7 +625,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Intent intent = new Intent(getActivity(), Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
-                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());    //article_photo_url
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());    //아티클 photo url
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }

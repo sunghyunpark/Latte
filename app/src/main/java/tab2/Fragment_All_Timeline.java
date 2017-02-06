@@ -33,6 +33,7 @@ import rest.TimelineResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab4.Fragment_Like;
 
 /**
  * created by sunghyun 2016-12-08
@@ -140,11 +141,15 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
     }
     private void hideViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Timeline.title_bar.animate().translationY(-Fragment_Timeline.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Timeline.contents_layout.animate().translationY(-Fragment_Timeline.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
     }
 
     private void showViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Timeline.title_bar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Timeline.contents_layout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
     public abstract class EndlessRecyclerOnScrollListener extends RecyclerView.OnScrollListener {

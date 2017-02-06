@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -92,6 +93,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
         }
 
         InitView();
+
         return v;
     }
 
@@ -126,11 +128,15 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
     }
 
     private void hideViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Like.title_bar.animate().translationY(-Fragment_Like.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Like.contents_layout.animate().translationY(-Fragment_Like.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
     }
 
     private void showViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Like.title_bar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Like.contents_layout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
 

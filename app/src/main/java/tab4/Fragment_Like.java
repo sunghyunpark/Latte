@@ -29,6 +29,9 @@ public class Fragment_Like extends Fragment {
     private ViewGroup my_article_underbar;
     private Button follow_btn;
     private Button my_article_btn;
+
+    public static ViewGroup title_bar;
+    public static ViewGroup contents_layout;
     View v;
 
     public Fragment_Like() {
@@ -65,6 +68,8 @@ public class Fragment_Like extends Fragment {
          * 상단 탭 메뉴 초기화
          */
 
+        title_bar = (ViewGroup)v.findViewById(R.id.title_bar);
+        contents_layout = (ViewGroup)v.findViewById(R.id.contents_layout);
         follow_underbar = (ViewGroup)v.findViewById(R.id.follow_underbar);
         my_article_underbar = (ViewGroup)v.findViewById(R.id.my_article_underbar);
 

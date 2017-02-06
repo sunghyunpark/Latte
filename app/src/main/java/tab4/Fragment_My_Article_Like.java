@@ -143,11 +143,15 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     }
 
     private void hideViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Like.title_bar.animate().translationY(-Fragment_Like.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        Fragment_Like.contents_layout.animate().translationY(-Fragment_Like.title_bar.getHeight()).setInterpolator(new AccelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(+MainActivity.bottom_tab_menu.getHeight()).setInterpolator(new AccelerateInterpolator(2));
     }
 
     private void showViews() {
-        MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Like.title_bar.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        Fragment_Like.contents_layout.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
+        //MainActivity.bottom_tab_menu.animate().translationY(0).setInterpolator(new DecelerateInterpolator(2));
 
     }
 
