@@ -29,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.seedteam.latte.R;
 import com.squareup.otto.Subscribe;
 
@@ -39,6 +40,7 @@ import java.util.Date;
 import java.util.List;
 
 import app_config.App_Config;
+import common.ImageViewer;
 import pushevent.BusProvider;
 import common.Cancel_Following_Dialog;
 import common.Common;
@@ -66,6 +68,7 @@ public class Article_Detail_Activity extends Activity {
     //게시글 정보
     private String user_uid;    //내 uid
     private String article_id;    //아티클 id
+    private String article_photo_url;    //article_photo_url
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
@@ -118,6 +121,7 @@ public class Article_Detail_Activity extends Activity {
         Intent intent = getIntent();
         user_uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
+        article_photo_url = intent.getExtras().getString("article_photo_url");
 
         BusProvider.getInstance().register(this);    //follow 버튼 탭 시 취소 다이얼로그로부터 받기 위해
 
@@ -162,6 +166,20 @@ public class Article_Detail_Activity extends Activity {
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
         back_btn.setOnTouchListener(myOnTouchListener);
 
+        //아티클 사진
+        Glide.with(getApplicationContext())
+                .load(app_config.get_SERVER_IP()+article_photo_url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .error(null)
+                .into(article_photo_img);
+        article_photo_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ImageViewer.class);
+                intent.putExtra("article_photo_url", article_photo_url);
+                startActivity(intent);
+            }
+        });
 
         LoadDetailData();
 
@@ -193,12 +211,6 @@ public class Article_Detail_Activity extends Activity {
 
                     //작성자 닉네임
                     article_user_nickname_txt.setText(articledata.getArticle().getNick_name());
-
-                    //아티클 사진
-                    Glide.with(getApplicationContext())
-                            .load(app_config.get_SERVER_IP()+articledata.getArticle().getArticle_photo_url())
-                            .error(null)
-                            .into(article_photo_img);
 
                     //좋아요 버튼 상태 초기화
                     InitLikeBtn(articledata.getArticle().getArticle_like_state());
@@ -557,6 +569,7 @@ public class Article_Detail_Activity extends Activity {
                         Intent intent = new Intent(getApplicationContext(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", user_uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());    //article_photo_url
                         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                         startActivity(intent);
                         overridePendingTransition(R.anim.anim_in, R.anim.anim_out);

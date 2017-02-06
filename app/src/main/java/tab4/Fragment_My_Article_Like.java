@@ -463,7 +463,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                        goToDetailView(uid, currentItem.getArticle_id().get(0), currentItem.getContent_img().get(0));
                     }
                 });
 
@@ -534,7 +534,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                        goToDetailView(uid, currentItem.getArticle_id().get(0), currentItem.getContent_img().get(0));
                     }
                 });
             }else if(holder instanceof VHItem_Like_Page_LikeList_Article){
@@ -557,49 +557,49 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                 VHitem.content_pic1.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(0));
+                        goToDetailView(uid, currentItem.getArticle_id().get(0), currentItem.getContent_img().get(0));
                     }
                 });
                 VHitem.content_pic2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(1));
+                        goToDetailView(uid, currentItem.getArticle_id().get(1), currentItem.getContent_img().get(1));
                     }
                 });
                 VHitem.content_pic3.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(2));
+                        goToDetailView(uid, currentItem.getArticle_id().get(2), currentItem.getContent_img().get(2));
                     }
                 });
                 VHitem.content_pic4.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(3));
+                        goToDetailView(uid, currentItem.getArticle_id().get(3), currentItem.getContent_img().get(3));
                     }
                 });
                 VHitem.content_pic5.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(4));
+                        goToDetailView(uid, currentItem.getArticle_id().get(4), currentItem.getContent_img().get(4));
                     }
                 });
                 VHitem.content_pic6.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(5));
+                        goToDetailView(uid, currentItem.getArticle_id().get(5), currentItem.getContent_img().get(5));
                     }
                 });
                 VHitem.content_pic7.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(6));
+                        goToDetailView(uid, currentItem.getArticle_id().get(6), currentItem.getContent_img().get(6));
                     }
                 });
                 VHitem.content_pic8.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        goToDetailView(uid, currentItem.getArticle_id().get(7));
+                        goToDetailView(uid, currentItem.getArticle_id().get(7), currentItem.getContent_img().get(7));
                     }
                 });
 
@@ -733,10 +733,11 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
             return cnt;
         }
-        private void goToDetailView(String uid, String article_id){
+        private void goToDetailView(String uid, String article_id, String article_photo_url){
             Intent intent = new Intent(getActivity(), Article_Detail_Activity.class);
             intent.putExtra("user_uid", uid);    // 내 uid
             intent.putExtra("article_id", article_id);    //아티클 id
+            intent.putExtra("article_photo_url", article_photo_url);
             startActivity(intent);
             getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
         }

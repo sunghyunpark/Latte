@@ -619,6 +619,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         Intent intent = new Intent(getActivity(), Article_Detail_Activity.class);
                         intent.putExtra("user_uid", uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());    //article_photo_url
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }

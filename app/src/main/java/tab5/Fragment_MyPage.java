@@ -566,6 +566,7 @@ public class Fragment_MyPage extends Fragment{
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", user_uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());    //article_photo_url
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
@@ -630,6 +631,7 @@ public class Fragment_MyPage extends Fragment{
                         Intent intent = new Intent(getActivity(), Article_Comment_Activity.class);
                         intent.putExtra("user_uid", user_uid);
                         intent.putExtra("article_id", currentItem.getArticle_id());
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
@@ -700,6 +702,7 @@ public class Fragment_MyPage extends Fragment{
                         Intent intent = new Intent(getActivity(),Article_Detail_Activity.class);
                         intent.putExtra("user_uid", user_uid);    // 내 uid
                         intent.putExtra("article_id", currentItem.getArticle_id());    //아티클 id
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
                     }
