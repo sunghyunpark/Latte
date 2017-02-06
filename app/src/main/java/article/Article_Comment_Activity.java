@@ -1,6 +1,7 @@
 package article;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -20,8 +21,11 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -128,6 +132,11 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         adapter = new RecyclerAdapter(listItems);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
+
+
+        //키보드 자동 노출
+        //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
 
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         Glide.with(getApplicationContext())
@@ -430,6 +439,8 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                         }
                         break;
                     case R.id.back_btn:
+                        //InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                        //imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
                         finish();
                         break;
                 }
