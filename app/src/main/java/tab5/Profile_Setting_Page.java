@@ -48,7 +48,7 @@ public class Profile_Setting_Page extends Activity {
         userNickName = user.get("nick_name");
         userIntroduce = "";
         userWebSite = "";
-        userPhoneNum = user.get("phone_num");
+        userPhoneNum = user.get("phone_number");
         userGender = user.get("gender");
         userBirth = "";
 
@@ -126,13 +126,13 @@ public class Profile_Setting_Page extends Activity {
         @Override
         public boolean onTouch(View v, MotionEvent event) {
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                v.setPadding(15, 15, 15, 15);
+                //v.setPadding(15, 15, 15, 15);
                 v.setAlpha(0.55f);
             }else if(event.getAction() == MotionEvent.ACTION_CANCEL){
-                v.setPadding(0, 0, 0, 0);
+                //v.setPadding(0, 0, 0, 0);
                 v.setAlpha(1.0f);
             } else if (event.getAction() == MotionEvent.ACTION_UP) {
-                v.setPadding(0, 0, 0, 0);
+                //v.setPadding(0, 0, 0, 0);
                 v.setAlpha(1.0f);
                 switch(v.getId()){
                     case R.id.back_btn:
