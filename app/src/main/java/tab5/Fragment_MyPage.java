@@ -759,9 +759,7 @@ public class Fragment_MyPage extends Fragment{
                 v.setAlpha(1.0f);
                 switch(v.getId()){
                     case R.id.edit_profile_btn:
-                        Intent intent = new Intent(getActivity(), User_Profile_Edit_Dialog.class);
-                        intent.putExtra("from", "not_register");
-                        intent.putExtra("user_email", user_email);
+                        Intent intent = new Intent(getActivity(),Profile_Setting_Page.class);
                         startActivity(intent);
                         break;
                     case R.id.grid_btn:
