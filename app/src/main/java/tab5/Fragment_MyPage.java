@@ -148,6 +148,9 @@ public class Fragment_MyPage extends Fragment{
     }
 
     private void InitView(){
+        ImageView setting_btn = (ImageView)v.findViewById(R.id.setting_btn);
+        setting_btn.setOnTouchListener(myOnTouchListener);
+
         listItems = new ArrayList<Fragment_Timeline_item>();
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
         recyclerView.setNestedScrollingEnabled(false);
@@ -787,6 +790,10 @@ public class Fragment_MyPage extends Fragment{
                         grid_btn.setImageResource(R.mipmap.no_click_grid_btn);
                         list_btn.setImageResource(R.mipmap.no_click_list_btn);
                         wish_btn.setImageResource(R.mipmap.article_like_btn_img);
+                        break;
+                    case R.id.setting_btn:
+                        Intent intent_setting = new Intent(getActivity(), App_Setting_Page.class);
+                        startActivity(intent_setting);
                         break;
 
                 }

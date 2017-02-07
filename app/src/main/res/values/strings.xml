@@ -41,5 +41,8 @@
     <!--크롭 화면 하단 텍스트-->
     <string name="cropview_txt">사진을 움직이거나 크기를 조절하세요.</string>
 
+    <!--앱 설정 휴면 계정-->
+    <string name="stop_account_txt">계정 휴면으로 설정하면 회원님의 모든 게시물은 어느 누구도 볼 수 없습니다.\n(잠시 일상을 떠나 쉬고싶은 회원님께 유용합니다.</string>
+
 
 </resources>
