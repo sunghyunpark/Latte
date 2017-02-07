@@ -2,28 +2,15 @@ package common;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.view.View;
-import android.view.Window;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.seedteam.latte.R;
 
-import java.io.File;
-import java.util.TooManyListenersException;
-
 import app_config.App_Config;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import pushevent.BusProvider;
-import pushevent.FollowBtnPushEvent;
 
 /**
  * created by sunghyun 2017-02-06

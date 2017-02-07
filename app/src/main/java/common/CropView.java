@@ -3,299 +3,626 @@ package common;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.graphics.PointF;
-import android.support.v7.widget.RecyclerView;
+import android.os.Handler;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.GestureDetector.SimpleOnGestureListener;
 import android.view.MotionEvent;
-import android.view.ScaleGestureDetector;
-import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-/**
- * created by sunghyun
- * CropView
- */
+public class CropView extends ImageView {
+    private static final String TAG = "ZoomableImageView";
 
-public class CropView extends ImageView
-{
+    private Bitmap imgBitmap = null;
+
+    private int containerWidth;
+    private int containerHeight;
+
+    Paint background;
+
+    //Matrices will be used to move and zoom image
     Matrix matrix = new Matrix();
+    Matrix savedMatrix = new Matrix();
 
+    PointF start = new PointF();
+
+    float currentScale;
+    float curX;
+    float curY;
+
+    //We can be in one of these 3 states
     static final int NONE = 0;
     static final int DRAG = 1;
     static final int ZOOM = 2;
-    static final int CLICK = 3;
     int mode = NONE;
 
-    PointF last = new PointF();
-    PointF start = new PointF();
-    float minScale = 1f;
-    float maxScale = 4f;
-    float[] m;
+    //For animating stuff
+    float targetX;
+    float targetY;
+    float targetScale;
+    float targetScaleX;
+    float targetScaleY;
+    float scaleChange;
+    float targetRatio;
+    float transitionalRatio;
 
-    float redundantXSpace, redundantYSpace;
-    float width, height;
-    float saveScale = 1f;
-    float right, bottom, origWidth, origHeight, bmWidth, bmHeight;
+    float easing = 0.2f;
+    boolean isAnimating = false;
 
-    ScaleGestureDetector mScaleDetector;
+    float scaleDampingFactor = 0.5f;
+
+    //For pinch and zoom
+    float oldDist = 1f;
+    PointF mid = new PointF();
+
+    private Handler mHandler = new Handler();
+
+    float minScale;
+    float maxScale = 8.0f;
+
+    float wpRadius = 25.0f;
+    float wpInnerRadius = 20.0f;
+
+    float screenDensity;
     Context context;
+    private GestureDetector gestureDetector;
 
-    public class RecyclerViewDisabler implements RecyclerView.OnItemTouchListener {
+    public static final int DEFAULT_SCALE_FIT_INSIDE = 0;
+    public static final int DEFAULT_SCALE_ORIGINAL = 1;
 
-        @Override
-        public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+    private int defaultScale;
+
+    public int getDefaultScale() {
+        return defaultScale;
+    }
+
+    public void setDefaultScale(int defaultScale) {
+        this.defaultScale = defaultScale;
+    }
+
+    public CropView(Context context) {
+        super(context);
+        setFocusable(true);
+        setFocusableInTouchMode(true);
+
+        screenDensity = context.getResources().getDisplayMetrics().density;
+
+        initPaints();
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+        this.context=context;
+    }
+
+    public CropView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+
+        screenDensity = context.getResources().getDisplayMetrics().density;
+        initPaints();
+        gestureDetector = new GestureDetector(new MyGestureDetector());
+
+        defaultScale = CropView.DEFAULT_SCALE_ORIGINAL;
+    }
+
+    private void initPaints() {
+        background = new Paint();
+    }
+
+    @Override
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+
+        //Reset the width and height. Will draw bitmap and change
+        containerWidth = width;
+        containerHeight = height;
+
+        if(imgBitmap != null) {
+            int imgHeight = imgBitmap.getHeight();
+            int imgWidth = imgBitmap.getWidth();
+
+            float scale;
+            int initX = 0;
+            int initY = 0;
+
+            if(defaultScale == CropView.DEFAULT_SCALE_ORIGINAL) {
+                /*
+                //DEFAULT_SCALE_FIT_INSIDE인경우 이거 사용
+                if(imgWidth > containerWidth) {
+                    scale = (float)containerWidth / imgWidth;
+                    float newHeight = imgHeight * scale;
+                    initY = (containerHeight - (int)newHeight)/2;
+
+                    matrix.setScale(scale, scale);
+                    matrix.postTranslate(0, initY);
+                }
+                else {
+                    scale = (float)containerHeight / imgHeight;
+                    float newWidth = imgWidth * scale;
+                    initX = (containerWidth - (int)newWidth)/2;
+
+                    matrix.setScale(scale, scale);
+                    matrix.postTranslate(initX, 0);
+                }*/
+                scale = (float)containerWidth / imgWidth;
+                float newHeight = imgHeight * scale;
+                initY = (containerHeight - (int)newHeight)/2;
+
+                matrix.setScale(scale, scale);
+                matrix.postTranslate(0, initY);
+                curX = initX;
+                curY = initY;
+
+                currentScale = scale;
+                minScale = scale;
+            }
+            else {
+                if(imgWidth > containerWidth) {
+                    initY = (containerHeight - (int)imgHeight)/2;
+                    matrix.postTranslate(0, initY);
+                }
+                else {
+                    initX = (containerWidth - (int)imgWidth)/2;
+                    matrix.postTranslate(initX, 0);
+                }
+
+                curX = initX;
+                curY = initY;
+
+                currentScale = 1.0f;
+                minScale = 1.0f;
+            }
+
+
+            invalidate();
+        }
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        if(imgBitmap != null && canvas != null)
+        {
+            canvas.drawBitmap(imgBitmap, matrix, background);
+        }
+    }
+
+    //Checks and sets the target image x and y co-ordinates if out of bounds
+    private void checkImageConstraints() {
+        if(imgBitmap == null) {
+            return;
+        }
+
+        float[] mvals = new float[9];
+        matrix.getValues(mvals);
+
+        currentScale = mvals[0];
+
+        if(currentScale < minScale) {
+            float deltaScale = minScale / currentScale;
+            float px = containerWidth/2;
+            float py = containerHeight/2;
+            matrix.postScale(deltaScale, deltaScale, px, py);
+            invalidate();
+        }
+
+        matrix.getValues(mvals);
+        currentScale = mvals[0];
+        curX = mvals[2];
+        curY = mvals[5];
+
+        int rangeLimitX = containerWidth - (int)(imgBitmap.getWidth() * currentScale);
+        int rangeLimitY = containerHeight - (int)(imgBitmap.getHeight() * currentScale);
+
+
+        boolean toMoveX = false;
+        boolean toMoveY = false;
+
+        if(rangeLimitX < 0) {
+            if(curX > 0) {
+                targetX = 0;
+                toMoveX = true;
+            }
+            else if(curX < rangeLimitX) {
+                targetX = rangeLimitX;
+                toMoveX = true;
+            }
+        }
+        else {
+            targetX = rangeLimitX / 2;
+            toMoveX = true;
+        }
+
+        if(rangeLimitY < 0) {
+            if(curY > 0) {
+                targetY = 0;
+                toMoveY = true;
+            }
+            else if(curY < rangeLimitY) {
+                targetY = rangeLimitY;
+                toMoveY = true;
+            }
+        }
+        else {
+            targetY = rangeLimitY / 2;
+            toMoveY = true;
+        }
+
+        if(toMoveX == true || toMoveY == true) {
+            if(toMoveY == false) {
+                targetY = curY;
+            }
+            if(toMoveX == false) {
+                targetX = curX;
+            }
+
+            //Disable touch event actions
+            isAnimating = true;
+            //Initialize timer
+            mHandler.removeCallbacks(mUpdateImagePositionTask);
+            mHandler.postDelayed(mUpdateImagePositionTask, 100);
+        }
+    }
+
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        float oldX = 0, newX = 0, sens = 5;
+        if(gestureDetector.onTouchEvent(event)) {
             return true;
         }
 
-        @Override
-        public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-
+        if(isAnimating == true) {
+            return true;
         }
 
-        @Override
-        public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+        //Handle touch events here
+        float[] mvals = new float[9];
+        switch(event.getAction() & MotionEvent.ACTION_MASK) {
+            case MotionEvent.ACTION_DOWN:
+                if(isAnimating == false) {
+                    savedMatrix.set(matrix);
+                    oldX = event.getX();
+                    start.set(event.getX(), event.getY());
+                    mode = DRAG;
+                }
+                break;
 
+            case MotionEvent.ACTION_POINTER_DOWN:
+                oldDist = spacing(event);
+                if(oldDist > 10f) {
+                    savedMatrix.set(matrix);
+                    midPoint(mid, event);
+                    mode = ZOOM;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                newX = event.getX();
+                if (Math.abs(oldX - newX) < sens) {
+                    Toast.makeText(context, "Hello", Toast.LENGTH_LONG).show();
+                    return true;
+                }
+                oldX = 0;
+                newX = 0;
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
+                mode = NONE;
+
+                matrix.getValues(mvals);
+                curX = mvals[2];
+                curY = mvals[5];
+                currentScale = mvals[0];
+
+                if(isAnimating == false) {
+                    checkImageConstraints();
+                }
+                break;
+
+            case MotionEvent.ACTION_MOVE:
+                if(mode == DRAG && isAnimating == false) {
+                    matrix.set(savedMatrix);
+                    float diffX = event.getX() - start.x;
+                    float diffY = event.getY() - start.y;
+
+                    matrix.postTranslate(diffX, diffY);
+
+                    matrix.getValues(mvals);
+                    curX = mvals[2];
+                    curY = mvals[5];
+                    currentScale = mvals[0];
+                }
+                else if(mode == ZOOM && isAnimating == false) {
+                    float newDist = spacing(event);
+                    if(newDist > 10f) {
+                        matrix.set(savedMatrix);
+                        float scale = newDist / oldDist;
+                        matrix.getValues(mvals);
+                        currentScale = mvals[0];
+
+                        if(currentScale * scale <= minScale) {
+                            matrix.postScale(minScale/currentScale, minScale/currentScale, mid.x, mid.y);
+                        }
+                        else if(currentScale * scale >= maxScale) {
+                            matrix.postScale(maxScale/currentScale, maxScale/currentScale, mid.x, mid.y);
+                        }
+                        else {
+                            matrix.postScale(scale, scale, mid.x, mid.y);
+                        }
+
+
+                        matrix.getValues(mvals);
+                        curX = mvals[2];
+                        curY = mvals[5];
+                        currentScale = mvals[0];
+                    }
+                }
+
+                break;
+        }
+
+        //Calculate the transformations and then invalidate
+        invalidate();
+        return true;
+    }
+
+    private float spacing(MotionEvent event) {
+        float x = event.getX(0) - event.getX(1);
+        float y = event.getY(0) - event.getY(1);
+        return (float)Math.sqrt(x * x + y * y);
+    }
+
+    private void midPoint(PointF point, MotionEvent event) {
+        float x = event.getX(0) + event.getX(1);
+        float y = event.getY(0) + event.getY(1);
+        point.set(x/2, y/2);
+    }
+
+    public void setImageBitmap(Bitmap b) {
+        if(b != null) {
+            imgBitmap = b;
+
+            containerWidth = getWidth();
+            containerHeight = getHeight();
+
+            int imgHeight = imgBitmap.getHeight();
+            int imgWidth = imgBitmap.getWidth();
+
+            float scale;
+            int initX = 0;
+            int initY = 0;
+
+            matrix.reset();
+
+            if(defaultScale == CropView.DEFAULT_SCALE_ORIGINAL) {
+                /*
+                //DEFAULT_SCALE_FIT_INSIDE인 경우 이거 사용
+                if(imgWidth > containerWidth) {
+                    scale = (float)containerWidth / imgWidth;
+                    float newHeight = imgHeight * scale;
+                    initY = (containerHeight - (int)newHeight)/2;
+
+                    matrix.setScale(scale, scale);
+                    matrix.postTranslate(0, initY);
+                }
+                else {
+                    scale = (float)containerHeight / imgHeight;
+                    float newWidth = imgWidth * scale;
+                    initX = (containerWidth - (int)newWidth)/2;
+
+                    matrix.setScale(scale, scale);
+                    matrix.postTranslate(initX, 0);
+                }*/
+                scale = (float)containerWidth / imgWidth;
+                float newHeight = imgHeight * scale;
+                initY = (containerHeight - (int)newHeight)/2;
+
+                matrix.setScale(scale, scale);
+                matrix.postTranslate(0, initY);
+                curX = initX;
+                curY = initY;
+
+                currentScale = scale;
+                minScale = scale;
+            }
+            else {
+                if(imgWidth > containerWidth) {
+                    initX = 0;
+                    if(imgHeight > containerHeight) {
+                        initY = 0;
+                    }
+                    else {
+                        initY = (containerHeight - (int)imgHeight)/2;
+                    }
+
+                    matrix.postTranslate(0, initY);
+                }
+                else {
+                    initX = (containerWidth - (int)imgWidth)/2;
+                    if(imgHeight > containerHeight) {
+                        initY = 0;
+                    }
+                    else {
+                        initY = (containerHeight - (int)imgHeight)/2;
+                    }
+                    matrix.postTranslate(initX, 0);
+                }
+
+                curX = initX;
+                curY = initY;
+
+                currentScale = 1.0f;
+                minScale = 1.0f;
+            }
+
+            invalidate();
+        }
+        else {
+            Log.d(TAG, "bitmap is null");
         }
     }
-    public CropView(Context context, AttributeSet attr)
-    {
-        super(context, attr);
-        super.setClickable(true);
-        this.context = context;
-        mScaleDetector = new ScaleGestureDetector(context, new ScaleListener());
-        final RecyclerView.OnItemTouchListener disabler = new RecyclerViewDisabler();
-        matrix.setTranslate(1f, 1f);
-        m = new float[9];
-        setImageMatrix(matrix);
-        setScaleType(ScaleType.MATRIX);
 
-        setOnTouchListener(new OnTouchListener()
-        {
+    public Bitmap getPhotoBitmap() {
+        return imgBitmap;
+    }
 
-            @Override
-            public boolean onTouch(View v, MotionEvent event)
-            {
-                mScaleDetector.onTouchEvent(event);
-                //Upload_Page1.recyclerView.addOnItemTouchListener(disabler);
-                //Upload_Page1.collapsingToolbarLayout
-                matrix.getValues(m);
-                float x = m[Matrix.MTRANS_X];
-                float y = m[Matrix.MTRANS_Y];
-                PointF curr = new PointF(event.getX(), event.getY());
 
-                switch (event.getAction())
-                {
-                    //when one finger is touching
-                    //set the mode to DRAG
-                    case MotionEvent.ACTION_DOWN:
-                        last.set(event.getX(), event.getY());
-                        start.set(last);
-                        mode = DRAG;
-                        break;
-                    //when two fingers are touching
-                    //set the mode to ZOOM
-                    case MotionEvent.ACTION_POINTER_DOWN:
-                        last.set(event.getX(), event.getY());
-                        start.set(last);
-                        mode = ZOOM;
-                        break;
-                    //when a finger moves
-                    //If mode is applicable move image
-                    case MotionEvent.ACTION_MOVE:
-                        //if the mode is ZOOM or
-                        //if the mode is DRAG and already zoomed
-                        if (mode == ZOOM || (mode == DRAG && saveScale > minScale))
-                        {
-                            float deltaX = curr.x - last.x;// x difference
-                            float deltaY = curr.y - last.y;// y difference
-                            float scaleWidth = Math.round(origWidth * saveScale);// width after applying current scale
-                            float scaleHeight = Math.round(origHeight * saveScale);// height after applying current scale
-                            //if scaleWidth is smaller than the views width
-                            //in other words if the image width fits in the view
-                            //limit left and right movement
-                            if (scaleWidth < width)
-                            {
-                                deltaX = 0;
-                                if (y + deltaY > 0)
-                                    deltaY = -y;
-                                else if (y + deltaY < -bottom)
-                                    deltaY = -(y + bottom);
-                            }
-                            //if scaleHeight is smaller than the views height
-                            //in other words if the image height fits in the view
-                            //limit up and down movement
-                            else if (scaleHeight < height)
-                            {
-                                deltaY = 0;
-                                if (x + deltaX > 0)
-                                    deltaX = -x;
-                                else if (x + deltaX < -right)
-                                    deltaX = -(x + right);
-                            }
-                            //if the image doesnt fit in the width or height
-                            //limit both up and down and left and right
-                            /*
-                            else
-                            {
-                                if (x + deltaX > 0)
-                                    deltaX = -x;
-                                else if (x + deltaX < -right)
-                                    deltaX = -(x + right);
+    private Runnable mUpdateImagePositionTask = new Runnable() {
+        public void run() {
+            float[] mvals;
 
-                                if (y + deltaY > 0)
-                                    deltaY = -y;
-                                else if (y + deltaY < -bottom)
-                                    deltaY = -(y + bottom);
-                            }*/
-                            //move the image with the matrix
-                            matrix.postTranslate(deltaX, deltaY);
-                            //set the last touch location to the current
-                            last.set(curr.x, curr.y);
-                        }
-                        break;
-                    //first finger is lifted
-                    case MotionEvent.ACTION_UP:
-                        mode = NONE;
-                        int xDiff = (int) Math.abs(curr.x - start.x);
-                        int yDiff = (int) Math.abs(curr.y - start.y);
-                        if (xDiff < CLICK && yDiff < CLICK)
-                            performClick();
+            if(Math.abs(targetX - curX) < 5 && Math.abs(targetY - curY) < 5) {
+                isAnimating = false;
+                mHandler.removeCallbacks(mUpdateImagePositionTask);
 
-                        break;
-                    // second finger is lifted
-                    case MotionEvent.ACTION_POINTER_UP:
-                        mode = NONE;
+                mvals = new float[9];
+                matrix.getValues(mvals);
 
-                        break;
+                currentScale = mvals[0];
+                curX = mvals[2];
+                curY = mvals[5];
+
+                //Set the image parameters and invalidate display
+                float diffX = (targetX - curX);
+                float diffY = (targetY - curY);
+
+                matrix.postTranslate(diffX, diffY);
+            }
+            else {
+                isAnimating = true;
+                mvals = new float[9];
+                matrix.getValues(mvals);
+
+                currentScale = mvals[0];
+                curX = mvals[2];
+                curY = mvals[5];
+
+                //Set the image parameters and invalidate display
+                float diffX = (targetX - curX) * 0.3f;
+                float diffY = (targetY - curY) * 0.3f;
+
+                matrix.postTranslate(diffX, diffY);
+                mHandler.postDelayed(this, 25);
+            }
+
+            invalidate();
+        }
+    };
+
+    private Runnable mUpdateImageScale = new Runnable() {
+        public void run() {
+            float transitionalRatio = targetScale / currentScale;
+            float dx;
+            if(Math.abs(transitionalRatio - 1) > 0.05) {
+                isAnimating = true;
+                if(targetScale > currentScale) {
+                    dx = transitionalRatio - 1;
+                    scaleChange = 1 + dx * 0.2f;
+
+                    currentScale *= scaleChange;
+
+                    if(currentScale > targetScale) {
+                        currentScale = currentScale / scaleChange;
+                        scaleChange = 1;
+                    }
                 }
-                setImageMatrix(matrix);
-                invalidate();
-                //Upload_Page1.recyclerView.removeOnItemTouchListener(disabler);
+                else {
+                    dx = 1 - transitionalRatio;
+                    scaleChange = 1 - dx * 0.5f;
+                    currentScale *= scaleChange;
 
+                    if(currentScale < targetScale) {
+                        currentScale = currentScale / scaleChange;
+                        scaleChange = 1;
+                    }
+                }
+
+
+                if(scaleChange != 1) {
+                    matrix.postScale(scaleChange, scaleChange, targetScaleX, targetScaleY);
+                    mHandler.postDelayed(mUpdateImageScale, 15);
+                    invalidate();
+                }
+                else {
+                    isAnimating = false;
+                    scaleChange = 1;
+                    matrix.postScale(targetScale/currentScale, targetScale/currentScale, targetScaleX, targetScaleY);
+                    currentScale = targetScale;
+                    mHandler.removeCallbacks(mUpdateImageScale);
+                    invalidate();
+                    checkImageConstraints();
+                }
+            }
+            else {
+                isAnimating = false;
+                scaleChange = 1;
+                matrix.postScale(targetScale/currentScale, targetScale/currentScale, targetScaleX, targetScaleY);
+                currentScale = targetScale;
+                mHandler.removeCallbacks(mUpdateImageScale);
+                invalidate();
+                checkImageConstraints();
+            }
+        }
+    };
+
+    /** Show an event in the LogCat view, for debugging */
+    private void dumpEvent(MotionEvent event) {
+        String names[] = { "DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE", "POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?" };
+        StringBuilder sb = new StringBuilder();
+        int action = event.getAction();
+        int actionCode = action & MotionEvent.ACTION_MASK;
+        sb.append("event ACTION_").append(names[actionCode]);
+        if (actionCode == MotionEvent.ACTION_POINTER_DOWN || actionCode == MotionEvent.ACTION_POINTER_UP) {
+            sb.append("(pid ").append(action >> MotionEvent.ACTION_POINTER_ID_SHIFT);
+            sb.append(")");
+        }
+        sb.append("[");
+
+        for (int i = 0; i < event.getPointerCount(); i++) {
+            sb.append("#").append(i);
+            sb.append("(pid ").append(event.getPointerId(i));
+            sb.append(")=").append((int) event.getX(i));
+            sb.append(",").append((int) event.getY(i));
+            if (i + 1 < event.getPointerCount())
+                sb.append(";");
+        }
+        sb.append("]");
+    }
+
+    class MyGestureDetector extends SimpleOnGestureListener {
+        @Override
+        public boolean onDoubleTap(MotionEvent event) {
+            if(isAnimating == true) {
                 return true;
             }
 
-        });
-    }
+            scaleChange = 1;
+            isAnimating = true;
+            targetScaleX = event.getX();
+            targetScaleY = event.getY();
 
-    @Override
-    public void setImageBitmap(Bitmap bm)
-    {
-        super.setImageBitmap(bm);
-        bmWidth = bm.getWidth();
-        bmHeight = bm.getHeight();
-    }
-
-    public void setMaxZoom(float x)
-    {
-        maxScale = x;
-    }
-
-    private class ScaleListener extends ScaleGestureDetector.SimpleOnScaleGestureListener
-    {
-
-        @Override
-        public boolean onScaleBegin(ScaleGestureDetector detector)
-        {
-            mode = ZOOM;
+            if(Math.abs(currentScale - maxScale) > 0.1) {
+                targetScale = maxScale;
+            }
+            else {
+                targetScale = minScale;
+            }
+            targetRatio = targetScale / currentScale;
+            mHandler.removeCallbacks(mUpdateImageScale);
+            mHandler.post(mUpdateImageScale);
             return true;
         }
 
         @Override
-        public boolean onScale(ScaleGestureDetector detector)
-        {
-            float mScaleFactor = detector.getScaleFactor();
-            float origScale = saveScale;
-            saveScale *= mScaleFactor;
-            if (saveScale > maxScale)
-            {
-                saveScale = maxScale;
-                mScaleFactor = maxScale / origScale;
-            }
-            else if (saveScale < minScale)
-            {
-                saveScale = minScale;
-                mScaleFactor = minScale / origScale;
-            }
-            right = width * saveScale - width - (2 * redundantXSpace * saveScale);
-            bottom = height * saveScale - height - (2 * redundantYSpace * saveScale);
-            if (origWidth * saveScale <= width || origHeight * saveScale <= height)
-            {
-                matrix.postScale(mScaleFactor, mScaleFactor, width / 2, height / 2);
-                if (mScaleFactor < 1)
-                {
-                    matrix.getValues(m);
-                    float x = m[Matrix.MTRANS_X];
-                    float y = m[Matrix.MTRANS_Y];
-                    if (mScaleFactor < 1)
-                    {
-                        if (Math.round(origWidth * saveScale) < width)
-                        {
-                            if (y < -bottom)
-                                matrix.postTranslate(0, -(y + bottom));
-                            else if (y > 0)
-                                matrix.postTranslate(0, -y);
-                        }
-                        else
-                        {
-                            if (x < -right)
-                                matrix.postTranslate(-(x + right), 0);
-                            else if (x > 0)
-                                matrix.postTranslate(-x, 0);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                matrix.postScale(mScaleFactor, mScaleFactor, detector.getFocusX(), detector.getFocusY());
-                matrix.getValues(m);
-                float x = m[Matrix.MTRANS_X];
-                float y = m[Matrix.MTRANS_Y];
-                if (mScaleFactor < 1) {
-                    if (x < -right)
-                        matrix.postTranslate(-(x + right), 0);
-                    else if (x > 0)
-                        matrix.postTranslate(-x, 0);
-                    if (y < -bottom)
-                        matrix.postTranslate(0, -(y + bottom));
-                    else if (y > 0)
-                        matrix.postTranslate(0, -y);
-                }
-            }
-            return true;
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            return super.onFling(e1, e2, velocityX, velocityY);
+        }
+
+        @Override
+        public boolean onDown(MotionEvent e) {
+            return false;
         }
     }
 
-    @Override
-    protected void onMeasure (int widthMeasureSpec, int heightMeasureSpec)
-    {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        width = MeasureSpec.getSize(widthMeasureSpec);
-        height = MeasureSpec.getSize(heightMeasureSpec);
-        //Fit to screen.
-        float scale;
-        float scaleX =  width / bmWidth;
-        float scaleY = height / bmHeight;
-        scale = Math.min(scaleX, scaleY);
-        matrix.setScale(scale, scale);
-        setImageMatrix(matrix);
-        saveScale = 1f;
-
-        // Center the image
-        redundantYSpace = height - (scale * bmHeight) ;
-        redundantXSpace = width - (scale * bmWidth);
-        redundantYSpace /= 2;
-        redundantXSpace /= 2;
-
-        matrix.postTranslate(redundantXSpace, redundantYSpace);
-
-        origWidth = width - 2 * redundantXSpace;
-        origHeight = height - 2 * redundantYSpace;
-        right = width * saveScale - width - (2 * redundantXSpace * saveScale);
-        bottom = height * saveScale - height - (2 * redundantYSpace * saveScale);
-        setImageMatrix(matrix);
-
-    }
 }

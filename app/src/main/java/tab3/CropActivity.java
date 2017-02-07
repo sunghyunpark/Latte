@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import com.seedteam.latte.R;
 import java.io.File;
 
-import common.CropView;
+import common.CropView2;
 import common.Util;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -39,7 +39,7 @@ public class CropActivity extends Activity {
 
     private int crop_size;    // 크롭 사이즈
 
-    CropView myCropView;
+    CropView2 myCropView;
     Bitmap selected_img_bit;
     ViewGroup top_menu_layout;
 
@@ -59,7 +59,7 @@ public class CropActivity extends Activity {
         String file_path = intent.getExtras().getString("file_path");
         selected_img_bit = BitmapFactory.decodeFile(file_path);
 
-        myCropView = (CropView)findViewById(R.id.result_img);
+        myCropView = (CropView2)findViewById(R.id.result_img);
         myCropView.setImageBitmap(selected_img_bit);
 
         top_menu_layout = (ViewGroup) findViewById(R.id.top_menu_layout);
@@ -84,7 +84,7 @@ public class CropActivity extends Activity {
         return snapshot;
     }
 
-    public void makeMaskImage(CropView mImageView, Bitmap bit)
+    public void makeMaskImage(CropView2 mImageView, Bitmap bit)
     {
 
         Bitmap crop_bit = Bitmap.createBitmap(crop_size,crop_size, Bitmap.Config.ARGB_8888);
