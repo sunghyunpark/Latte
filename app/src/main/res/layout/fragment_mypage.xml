@@ -82,25 +82,6 @@
                         android:background="@drawable/profile_round_shape"
                         android:layout_marginLeft="10dp"/>
 
-                    <RelativeLayout
-                        android:id="@+id/heart_layout"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:visibility="gone">
-
-                        <ImageView
-                            android:id="@+id/heart_img"
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:src="@mipmap/ic_launcher"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content" />
-
-                    </RelativeLayout>
 
                     <ImageView
                         android:id="@+id/add_couple_btn"
@@ -116,50 +97,25 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
                     android:layout_marginTop="10dp"
                     android:layout_below="@+id/profile_layout"
                     android:background="#33464646">
-
-                    <!--이름, 소개 글 레이아웃-->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:id="@+id/my_name_txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/profile_img_layout"
-                            android:layout_centerHorizontal="true"
-                            android:textColor="#ffffff"
-                            android:layout_marginLeft="10dp"
-                            android:textSize="15dp"
-                            android:layout_marginTop="10dp"/>
-                        <TextView
-                            android:id="@+id/introduce_txt"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#ffffff"
-                            android:layout_marginTop="3dp"
-                            android:layout_marginLeft="10dp"
-                            android:text="hello world"/>
-
-                    </LinearLayout>
 
                     <!--정보 레이아웃 -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_weight="1">
+                        android:layout_weight="6"
+                        android:paddingRight="3dp"
+                        android:paddingLeft="3dp"
+                        android:orientation="horizontal">
                         <!--게시글, 팔로워, 팔로잉 정보 레이아웃-->
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="60dp"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginRight="20dp">
+                            android:layout_marginRight="10dp"
+                            android:layout_weight="3">
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
@@ -228,26 +184,82 @@
                                     android:textColor="#ffffff"
                                     android:text="팔로잉"/>
                             </LinearLayout>
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center_vertical"
+                                android:layout_weight="1">
+                                <TextView
+                                    android:id="@+id/favorite_friends_count_txt"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:textColor="#ffffff"
+                                    android:textSize="13dp"
+                                    android:text="0"
+                                    android:layout_gravity="center_horizontal"/>
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center_horizontal"
+                                    android:textStyle="bold"
+                                    android:textSize="14dp"
+                                    android:textColor="#ffffff"
+                                    android:text="친한친구"/>
+                            </LinearLayout>
                         </LinearLayout>
-                        <!--구분선-->
+
                         <LinearLayout
-                            android:layout_width="fill_parent"
-                            android:layout_height="0.5dp"
-                            android:orientation="horizontal"
-                            android:layout_marginRight="20dp"
-                            android:background="#ffe0e0e0"></LinearLayout>
-                        <!--프로필 수정 버튼-->
-                        <Button
-                            android:id="@+id/edit_profile_btn"
                             android:layout_width="match_parent"
-                            android:layout_height="35dp"
-                            android:layout_marginRight="20dp"
-                            android:background="@drawable/my_page_profile_edit_btn_shape"
-                            android:layout_marginTop="5dp"
-                            android:textColor="#ffffff"
-                            android:textSize="14dp"
-                            android:text="프로필 수정"/>
+                            android:layout_height="60dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_weight="7">
+                            <!--프로필 수정 버튼-->
+                            <Button
+                                android:id="@+id/edit_profile_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center_vertical"
+                                android:background="@drawable/my_page_profile_edit_btn_shape"
+                                android:layout_marginTop="5dp"
+                                android:textColor="#ffffff"
+                                android:textSize="14dp"
+                                android:text="프로필 수정"/>
+                        </LinearLayout>
+
                     </LinearLayout>
+
+                    <!--이름, 소개 글 레이아웃-->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="4"
+                        android:orientation="vertical">
+                        <TextView
+                            android:id="@+id/my_name_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/profile_img_layout"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="#ffffff"
+                            android:layout_marginLeft="10dp"
+                            android:textStyle="bold"
+                            android:textSize="15dp"/>
+                        <TextView
+                            android:id="@+id/introduce_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#ffffff"
+                            android:layout_marginTop="3dp"
+                            android:maxLines="4"
+                            android:layout_marginBottom="3dp"
+                            android:layout_marginLeft="10dp"
+                            android:ellipsize="end"
+                            android:text="hello world"/>
+
+                    </LinearLayout>
+
+
                 </LinearLayout>
             </RelativeLayout>
 
@@ -259,7 +271,7 @@
                 android:background="#ffe0e0e0"></LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="40dp"
                 android:background="#ffe0e0e0"
                 android:orientation="horizontal">
 
@@ -302,12 +314,6 @@
                         android:layout_centerHorizontal="true"/>
                 </RelativeLayout>
             </LinearLayout>
-            <!--구분선-->
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="1dp"
-                android:orientation="horizontal"
-                android:background="#ffe0e0e0"></LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
