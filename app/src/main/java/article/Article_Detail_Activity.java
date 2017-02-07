@@ -309,6 +309,7 @@ public class Article_Detail_Activity extends Activity {
                         for(int i=0;i<size;i++){
                             Fragment_Timeline_item item = new Fragment_Timeline_item();
                             item.setArticle_id(articledata.getGrid_article().get(i).getArticle_id());
+                            item.setArticle_img_path(articledata.getGrid_article().get(i).getArticle_photo_url());
                             item.setArticle_img_thumb_path(articledata.getGrid_article().get(i).getArticle_photo_thumb_url());
                             listItems_thumb.add(item);
                         }

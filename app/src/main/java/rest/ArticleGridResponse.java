@@ -8,6 +8,7 @@ package rest;
 public class ArticleGridResponse {
 
     private String article_id;
+    private String article_photo_url;
     private String article_photo_thumb_url;
 
 
@@ -17,6 +18,14 @@ public class ArticleGridResponse {
 
     public void setArticle_photo_thumb_url(String article_photo_thumb_url) {
         this.article_photo_thumb_url = article_photo_thumb_url;
+    }
+
+    public String getArticle_photo_url() {
+        return article_photo_url;
+    }
+
+    public void setArticle_photo_url(String article_photo_url) {
+        this.article_photo_url = article_photo_url;
     }
 
     public String getArticle_id() {
