@@ -158,12 +158,16 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                     int size = like_item.getLikes_item().size();
                     Fragment_Follow_Like_item item;
                     ArrayList<String> contents_imgList;
+                    ArrayList<String> contents_Thumb_imgList;
                     ArrayList<String> article_idList;
                     ArrayList<HashMap<String, String>> UserArray;
                     HashMap<String, String> User;
+
+
                     for(int i=0;i<size;i++){
                         item = new Fragment_Follow_Like_item();
                         contents_imgList = new ArrayList<String>();
+                        contents_Thumb_imgList = new ArrayList<String>();
                         article_idList = new ArrayList<String>();
                         UserArray = new ArrayList<HashMap<String, String>>();
                         User = new HashMap<String, String>();
@@ -184,8 +188,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                                 //단일
                                 article_idList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_id());    //단일 사진 id
                                 item.setArticle_id(article_idList);
-                                contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
+                                contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_url());
+                                contents_Thumb_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());//단일 사진
                                 item.setContent_img(contents_imgList);
+                                item.setContent_Thumb_img(contents_Thumb_imgList);
                                 User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(0).getNick_name());
                                 User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(0).getUid());
                                 UserArray.add(User);
@@ -200,8 +206,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                                 for(int j=0;j<like_all_size;j++){
                                     article_idList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_id());
                                     item.setArticle_id(article_idList);
-                                    contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_thumb_url());    //묶음 사진
+                                    contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_url());
+                                    contents_Thumb_imgList.add(like_item.getLikes_item().get(i).getContents().get(j).getArticle_photo_thumb_url());    //묶음 사진
                                     item.setContent_img(contents_imgList);
+                                    item.setContent_Thumb_img(contents_Thumb_imgList);
                                     User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(j).getNick_name());
                                     User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(j).getUid());
                                     UserArray.add(User);
@@ -231,8 +239,10 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         }else if(like_item.getLikes_item().get(i).getCategory().equals("comment")){
                             article_idList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_id());    //단일 사진 id
                             item.setArticle_id(article_idList);
-                            contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
+                            contents_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_url());
+                            contents_Thumb_imgList.add(like_item.getLikes_item().get(i).getContents().get(0).getArticle_photo_thumb_url());    //단일 사진
                             item.setContent_img(contents_imgList);
+                            item.setContent_Thumb_img(contents_Thumb_imgList);
                             User.put("userB_nickName", like_item.getLikes_item().get(i).getContents().get(0).getNick_name());
                             User.put("userB_uid", like_item.getLikes_item().get(i).getContents().get(0).getUid());
                             UserArray.add(User);
@@ -243,6 +253,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         listItems.add(item);
                         item = null;
                         contents_imgList = null;
+                        contents_Thumb_imgList = null;
                         article_idList = null;
                         UserArray = null;
                         User = null;
@@ -420,14 +431,14 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 return builder;
             }else if(type.equals("like_list")){
-                contents_str = String.format(res.getString(R.string.like_following_likelist), getItem(position).getUserA(), getItem(position).getContent_img().size(),getItem(position).getCreated_at());
+                contents_str = String.format(res.getString(R.string.like_following_likelist), getItem(position).getUserA(), getItem(position).getContent_Thumb_img().size(),getItem(position).getCreated_at());
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
                 //user A
                 builder.setSpan(new SpanClick(getItem(position).getUserA()), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUserA().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-                String cnt_str = String.valueOf(getItem(position).getContent_img().size());
+                String cnt_str = String.valueOf(getItem(position).getContent_Thumb_img().size());
                 //시간
                 builder.setSpan(new ForegroundColorSpan(color_gray),  getItem(position).getUserA().length()+15+cnt_str.length(),
                         getItem(position).getUserA().length()+15+cnt_str.length() + getItem(position).getCreated_at().length()+2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -457,7 +468,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(0))
+                        .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
 
@@ -500,7 +511,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(0))
+                        .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
@@ -649,7 +660,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         VHitem.content_pic8.setVisibility(View.VISIBLE);
                     }
                     Glide.with(getActivity())
-                            .load(app_config.get_SERVER_IP()+currentItem.getContent_img().get(i))
+                            .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(i))
                             .error(null)
                             .into(getList(position,VHitem).get(i));
                 }
@@ -774,9 +785,9 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
         private ArrayList<String> getImgList(int position){
             ArrayList<String> ImgList = new ArrayList<String>();
-            int size = getItem(position).getContent_img().size();
+            int size = getItem(position).getContent_Thumb_img().size();
             for(int i=0;i<size;i++){
-                ImgList.add(getItem(position).getContent_img().get(i));
+                ImgList.add(getItem(position).getContent_Thumb_img().get(i));
             }
             return ImgList;
 
@@ -815,7 +826,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
         private int getListCount(int position){
             int cnt = 0;
-            cnt = getItem(position).getContent_img().size();
+            cnt = getItem(position).getContent_Thumb_img().size();
 
             return cnt;
         }

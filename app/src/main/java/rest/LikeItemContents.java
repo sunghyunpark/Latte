@@ -10,6 +10,7 @@ public class LikeItemContents {
     private String uid;
     private String nick_name;
     private String article_id;
+    private String article_photo_url;
     private String article_photo_thumb_url;
     private String comment_text;
     private String follow_state;    //팔로우 상태
@@ -37,6 +38,14 @@ public class LikeItemContents {
 
     public void setArticle_id(String article_id) {
         this.article_id = article_id;
+    }
+
+    public String getArticle_photo_url() {
+        return article_photo_url;
+    }
+
+    public void setArticle_photo_url(String article_photo_url) {
+        this.article_photo_url = article_photo_url;
     }
 
     public String getArticle_photo_thumb_url() {

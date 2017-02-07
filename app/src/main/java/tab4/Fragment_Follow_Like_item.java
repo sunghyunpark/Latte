@@ -16,7 +16,8 @@ public class Fragment_Follow_Like_item {
     //private ArrayList<String> userB_uid;
     private String userA_profile_img;    //앞에 있는 유저 프로필
     private ArrayList<String> article_id;    //해당 아이템의 아티클 id
-    private ArrayList<String> content_img;    //이미지
+    private ArrayList<String> content_img;    //이미지 원본
+    private ArrayList<String> content_Thumb_img;    //이미지 썸네일
     private String comment_text;    //댓글일 경우 댓글 내용
 
     private String created_at;
@@ -76,6 +77,14 @@ public class Fragment_Follow_Like_item {
 
     public void setContent_img(ArrayList<String> content_img) {
         this.content_img = content_img;
+    }
+
+    public ArrayList<String> getContent_Thumb_img() {
+        return content_Thumb_img;
+    }
+
+    public void setContent_Thumb_img(ArrayList<String> content_Thumb_img) {
+        this.content_Thumb_img = content_Thumb_img;
     }
 
     public String getComment_text() {
