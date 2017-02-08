@@ -40,6 +40,7 @@ public interface ApiInterface {
      * @param fb_id
      * @param kt_id
      * @param email
+     * @param nick_name
      * @return
      */
     @FormUrlEncoded
@@ -47,7 +48,8 @@ public interface ApiInterface {
     Call<IsUserResponse> PostSNS_ID(@Field("tag") String tag
             , @Field("fb_id") String fb_id
             , @Field("kt_id") String kt_id
-            , @Field("email") String email);
+            , @Field("email") String email
+            , @Field("nick_name") String nick_name);
 
     /**
      * upload.php로 데이터 전송

@@ -18,7 +18,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
 
     // Database Name
     private static final String DATABASE_NAME = db_name.getDATABASE_NAME();
@@ -38,6 +38,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final String KEY_NICK_NAME = "nick_name";
     private static final String KEY_PHONE_NUMBER = "phone_number";
     private static final String KEY_PROFILE_IMG = "profile_img";
+    private static final String KEY_BIRTHDAY = "birthday";
+    private static final String KEY_SELF_INTRODUCE = "self_introduce";
+    private static final String KEY_WEBSITE = "website";
     private static final String KEY_CREATED_AT = "created_at";
     private static final String KEY_FCM_TOKEN = "fcm_token";
 
@@ -63,6 +66,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
                 + KEY_NICK_NAME + " TEXT,"
                 + KEY_PHONE_NUMBER + " TEXT,"
                 + KEY_PROFILE_IMG + " TEXT,"
+                + KEY_BIRTHDAY + " TEXT,"
+                + KEY_SELF_INTRODUCE + " TEXT,"
+                + KEY_WEBSITE + " TEXT,"
                 + KEY_CREATED_AT + " TEXT,"
                 + KEY_FCM_TOKEN + " TEXT)";
         db.execSQL(CREATE_LOGIN_TABLE);
@@ -99,7 +105,8 @@ public class SQLiteHandler extends SQLiteOpenHelper {
      * */
     public void addUser( String uid, String login_method, String fb_id, String kt_id, String name
             , String gender, String email, String nick_name
-            , String phone_number, String profile_img, String created_at, String fcm_token) {
+            , String phone_number, String profile_img, String birthday, String self_introduce,
+                         String website, String created_at, String fcm_token) {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -114,6 +121,9 @@ public class SQLiteHandler extends SQLiteOpenHelper {
         values.put(KEY_NICK_NAME, nick_name);
         values.put(KEY_PHONE_NUMBER, phone_number);
         values.put(KEY_PROFILE_IMG, profile_img);
+        values.put(KEY_BIRTHDAY, birthday);
+        values.put(KEY_SELF_INTRODUCE, self_introduce);
+        values.put(KEY_WEBSITE, website);
         values.put(KEY_CREATED_AT, created_at);
         values.put(KEY_FCM_TOKEN, fcm_token);
 
@@ -147,8 +157,11 @@ public class SQLiteHandler extends SQLiteOpenHelper {
             user.put("nick_name", cursor.getString(8));
             user.put("phone_number", cursor.getString(9));
             user.put("profile_img", cursor.getString(10));
-            user.put("created_at", cursor.getString(11));
-            user.put("fcm_token", cursor.getString(12));
+            user.put("birthday", cursor.getString(11));
+            user.put("self_introduce", cursor.getString(12));
+            user.put("website", cursor.getString(13));
+            user.put("created_at", cursor.getString(14));
+            user.put("fcm_token", cursor.getString(15));
 
         }
         cursor.close();

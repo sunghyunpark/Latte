@@ -64,7 +64,7 @@ public class Email_Register_Page extends Activity {
         /**
          * email 회원가입 부분이라 IsUser API에서 fb_id, kt_id는 굳이 넘길필요가 없어서 null 처리해둠
          */
-        Call<IsUserResponse> call = apiService.PostSNS_ID("isuser", null, null, email);
+        Call<IsUserResponse> call = apiService.PostSNS_ID("isuser", null, null, email, null);
         call.enqueue(new Callback<IsUserResponse>() {
             @Override
             public void onResponse(Call<IsUserResponse> call, Response<IsUserResponse> response) {

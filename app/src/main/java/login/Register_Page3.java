@@ -36,6 +36,7 @@ import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
 import rest.ApiInterface;
+import rest.IsUserResponse;
 import rest.UserResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +62,9 @@ public class Register_Page3 extends Activity {
     private String mPhone_number="";
     private String mNick_name="";
     private String mProfile_img_path="";
+
+    //닉네임 중복 체크
+    private boolean nickNameCheck = false;
 
     private SessionManager mSessionManager;
     private SQLiteHandler mSQLite;
@@ -150,6 +154,8 @@ public class Register_Page3 extends Activity {
                     Toast.makeText(getApplicationContext(),"정보를 입력해주세요",Toast.LENGTH_SHORT).show();
                 }else if((mPhone_number.length()!=11)){
                     Toast.makeText(getApplicationContext(), "올바른 폰번호 형식이 아닙니다.",Toast.LENGTH_SHORT).show();
+                }else if(!IsUser(mNick_name)){
+                    Toast.makeText(getApplicationContext(), "이미 동일한 닉네임이 존재합니다.",Toast.LENGTH_SHORT).show();
                 }else{
                     //회원가입 POST
                     PostRegisterUser(mLogin_method, mFb_id, mKt_id, mEmail, mName, mPassword, mGender, mNick_name,
@@ -157,6 +163,38 @@ public class Register_Page3 extends Activity {
                 }
             }
         });
+    }
+
+    private boolean IsUser(final String nick_name){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        /**
+         * email 회원가입 부분이라 IsUser API에서 fb_id, kt_id는 굳이 넘길필요가 없어서 null 처리해둠
+         */
+        Call<IsUserResponse> call = apiService.PostSNS_ID("isuser", null, null, null, nick_name);
+        call.enqueue(new Callback<IsUserResponse>() {
+            @Override
+            public void onResponse(Call<IsUserResponse> call, Response<IsUserResponse> response) {
+
+                IsUserResponse userdata = response.body();
+                if(userdata.isError()){
+                    //사용가능
+                    nickNameCheck = true;
+                }else{
+                    nickNameCheck = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IsUserResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+            }
+        });
+
+        return nickNameCheck;
     }
 
 
@@ -212,7 +250,8 @@ public class Register_Page3 extends Activity {
                     //내장 디비에 insert
                     mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
                             userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
-                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getCreated_at(), token);
+                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getBirthday(),
+                            userdata.getUser().getSelf_introduce(), userdata.getUser().getWebsite(), userdata.getUser().getCreated_at(), token);
                     //fcm 토큰 서버에 등록
                     common.PostRegisterFCMToken(Register_Page3.this, userdata.getUser().getUid(), token, "Y");
                     if(!profile_img_path.equals("")){

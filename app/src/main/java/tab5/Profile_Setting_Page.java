@@ -47,11 +47,11 @@ public class Profile_Setting_Page extends Activity {
         backgroundPath = "test_img/test_img.jpg";
         userName = user.get("name");
         userNickName = user.get("nick_name");
-        userIntroduce = "";
-        userWebSite = "";
+        userIntroduce = user.get("self_introduce");
+        userWebSite = user.get("website");
         userPhoneNum = user.get("phone_number");
         userGender = user.get("gender");
-        userBirth = "";
+        userBirth = user.get("birthday");
 
         InitView();
 
