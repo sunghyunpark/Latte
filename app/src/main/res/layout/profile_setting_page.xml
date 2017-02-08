@@ -47,7 +47,9 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="ok"
+                    android:textSize="15dp"
+                    android:textColor="@color/AppBasicColor"
+                    android:text="저장"
                     android:background="@null"/>
             </RelativeLayout>
             <!--구분선-->
@@ -189,6 +191,7 @@
                         android:layout_toRightOf="@+id/nick_name_img"
                         android:layout_marginLeft="20dp"
                         android:maxLines="1"
+                        android:inputType="text"
                         android:ellipsize="end"
                         android:paddingRight="15dp"
                         android:hint="닉네임"
@@ -216,6 +219,7 @@
                         android:layout_toRightOf="@+id/website_img"
                         android:layout_marginLeft="20dp"
                         android:maxLines="1"
+                        android:inputType="text"
                         android:ellipsize="end"
                         android:paddingRight="15dp"
                         android:textColor="#000000"
