@@ -226,6 +226,16 @@
                         android:hint="웹사이트" />
                 </RelativeLayout>
 
+                <TextView
+                    android:id="@+id/introduce_length_txt"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:textColor="@color/AppBasicColor"
+                    android:text="0/300"
+                    android:textSize="14dp"
+                    android:layout_marginRight="10dp"/>
+
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -244,6 +254,7 @@
                         android:layout_height="wrap_content"
                         android:background="@null"
                         android:textSize="15dp"
+                        android:maxLength="300"
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/introduce_img"
                         android:layout_marginLeft="20dp"

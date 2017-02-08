@@ -3,6 +3,8 @@ package tab5;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -29,7 +31,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
  * created by sunghyun at 2017-02-07
  */
 
-public class Profile_Setting_Page extends Activity {
+public class Profile_Setting_Page extends Activity implements TextWatcher {
     private App_Config app_config = new App_Config();
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
     private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox, birthEditBox;
@@ -112,6 +114,7 @@ public class Profile_Setting_Page extends Activity {
         webSiteEditBox.clearFocus();
         introduceEditBox.setText(introduce);
         introduceEditBox.clearFocus();
+        introduceEditBox.addTextChangedListener(this);
 
         emailTextView.setText(userEmail);
         phoneNumEditBox.setText(userPhoneNum);
@@ -120,6 +123,27 @@ public class Profile_Setting_Page extends Activity {
         birthEditBox.setText(userBirth);
         birthEditBox.clearFocus();
 
+    }
+
+    @Override
+    public void afterTextChanged(Editable s) {
+
+    }
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count,
+                                  int after) {
+
+    }
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+        TextView introduce_legth_txt = (TextView)findViewById(R.id.introduce_length_txt);
+        if(s.length() >= 300)
+        {
+            Toast.makeText(Profile_Setting_Page.this, "300자 까지 입력 가능합니다.", Toast.LENGTH_SHORT).show();
+        }
+        introduce_legth_txt.setText(s.length() + "/300자");
+        introduce_legth_txt.setTextColor(getResources().getColor(R.color.PrimaryColor));
     }
 
     private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
