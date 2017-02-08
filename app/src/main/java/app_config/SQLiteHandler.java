@@ -89,7 +89,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     /**
      * DB 정보 수정
      */
-    public void updateUser(String uid, String file_path){
+    public void updateUserProfile(String uid, String file_path){
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -97,6 +97,26 @@ public class SQLiteHandler extends SQLiteOpenHelper {
 
         db.update(TABLE_LOGIN,values,"uid = '"+uid+"'", null);
         db.execSQL("UPDATE "+TABLE_LOGIN+" SET profile_img = '"+file_path+"' WHERE uid = '"+uid+"'");
+        this.close();
+    }
+
+    public void updateUserInfo(String uid, String name, String nick_name, String website, String self_introduce,
+                               String phone_number, String gender, String birth){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_NAME,name);
+        values.put(KEY_NICK_NAME,nick_name);
+        values.put(KEY_WEBSITE,website);
+        values.put(KEY_SELF_INTRODUCE,self_introduce);
+        values.put(KEY_PHONE_NUMBER,phone_number);
+        values.put(KEY_GENDER,gender);
+        values.put(KEY_BIRTHDAY,birth);
+
+        db.update(TABLE_LOGIN,values,"uid = '"+uid+"'", null);
+        db.execSQL("UPDATE "+TABLE_LOGIN+" SET name = '"+name+"', nick_name = '"+nick_name+"', website = '"+website+"'," +
+                "self_introduce = '"+self_introduce+"', phone_number = '"+phone_number+"', gender = '"+gender+"'," +
+                "birthday = '"+birth+"' WHERE uid = '"+uid+"'");
         this.close();
     }
 

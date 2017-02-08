@@ -55,7 +55,7 @@ public class Image_Uploader {
 
                     if(!response.body().isError()){
                         Toast.makeText(context, "ImageUploader ok", Toast.LENGTH_SHORT).show();
-                        mSQLite.updateUser(uid, response.body().getFile_path());
+                        mSQLite.updateUserProfile(uid, response.body().getFile_path());
                         //서버에 업로드 후 로컬에 남아있는 이미지 파일 삭제
 
                         file.delete();

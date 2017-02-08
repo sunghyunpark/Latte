@@ -237,7 +237,13 @@ public interface ApiInterface {
                                                 @Field("login_state") String login_state);
 
     @FormUrlEncoded
-    @POST("fcm/fcm.php")
-    Call<CommonErrorResponse> UploadArticleFCMToFollower(@Field("tag") String tag,
-                                                   @Field("uid") String uid);
+    @POST("myplace/myplace_btn.php")
+    Call<CommonErrorResponse> PostMyProfileInfo(@Field("tag") String tag,
+                                                @Field("uid") String uid, @Field("name") String name,
+                                                @Field("nick_name") String nick_name,
+                                                @Field("website") String website,
+                                                @Field("self_introduce") String self_introduce,
+                                                @Field("phone_number") String phone_number,
+                                                @Field("gender") String gender,
+                                                @Field("birthday") String birthday);
 }

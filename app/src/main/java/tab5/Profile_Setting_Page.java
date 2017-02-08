@@ -2,11 +2,15 @@ package tab5;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -18,6 +22,7 @@ import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -31,23 +36,37 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pushevent.BusProvider;
 import pushevent.SelectDatePickerPushEvent;
+import rest.ApiClient;
+import rest.ApiInterface;
+import rest.CommonErrorResponse;
+import rest.IsUserResponse;
+import rest.LikePageResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import tab4.Fragment_Follow_Like_item;
 
 /**
  * created by sunghyun at 2017-02-07
  */
 
 public class Profile_Setting_Page extends Activity implements TextWatcher {
+
     private App_Config app_config = new App_Config();
+    private SQLiteHandler db;
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
     private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox;
-    private TextView emailTextView, genderTextView, birthTextView;
+    private TextView emailTextView, genderTextView, birthTextView, introduce_length_txt;
+
+    //닉네임 중복 체크
+    private boolean nickNameCheck = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_setting_page);
 
-        SQLiteHandler db = new SQLiteHandler(this);
+        db = new SQLiteHandler(this);
         HashMap<String, String> user = db.getUserDetails();
         userUid = user.get("uid");
         userEmail = user.get("email");
@@ -114,6 +133,11 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         phoneNumEditBox = (EditText)findViewById(R.id.phone_edit_box);
         birthTextView = (TextView)findViewById(R.id.birth_txt);
 
+        introduce_length_txt = (TextView)findViewById(R.id.introduce_length_txt);
+
+        Button save_btn = (Button)findViewById(R.id.save_btn);
+        save_btn.setOnTouchListener(myOnTouchListener);
+
         nameEditBox.setText(name);
         nameEditBox.clearFocus();
         nickNameEditBox.setText(nickname);
@@ -121,22 +145,79 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         webSiteEditBox.setText(website);
         webSiteEditBox.clearFocus();
         introduceEditBox.setText(introduce);
+        introduce_length_txt.setText(introduceEditBox.getText().toString().length() + "/300자");
         introduceEditBox.clearFocus();
         introduceEditBox.addTextChangedListener(this);
 
-        emailTextView.setText(userEmail);
-        phoneNumEditBox.setText(userPhoneNum);
+        emailTextView.setText(email);
+        phoneNumEditBox.setText(phone_num);
         phoneNumEditBox.clearFocus();
-        genderTextView.setText(userGender);
-        birthTextView.setText(userBirth);
-        birthTextView.setOnClickListener(new View.OnClickListener() {
+        genderTextView.setText(gender);
+        birthTextView.setText(birth);
+        birthTextView.setOnTouchListener(myOnTouchListener);
+
+    }
+
+    private boolean IsUser(final String nick_name){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        /**
+         * email 회원가입 부분이라 IsUser API에서 fb_id, kt_id는 굳이 넘길필요가 없어서 null 처리해둠
+         */
+        Call<IsUserResponse> call = apiService.PostSNS_ID("isuser", null, null, null, nick_name);
+        call.enqueue(new Callback<IsUserResponse>() {
             @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), Select_Date_Dialog.class);
-                startActivity(intent);
+            public void onResponse(Call<IsUserResponse> call, Response<IsUserResponse> response) {
+
+                IsUserResponse userdata = response.body();
+                if(userdata.isError()){
+                    //사용가능
+                    nickNameCheck = true;
+                }else{
+                    nickNameCheck = false;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IsUserResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
             }
         });
 
+        return nickNameCheck;
+    }
+
+    private void SaveProfileInfo(String uid, String name, String nick_name, String website, String self_introduce,
+                                 String phone_number, String gender, String birthday){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.PostMyProfileInfo("profile", uid, name, nick_name, website, self_introduce,
+                phone_number, gender, birthday);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse commonErrorResponse = response.body();
+
+                if(!commonErrorResponse.isError()){
+
+                }else{
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(getApplicationContext(), "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -151,13 +232,12 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
 
-        TextView introduce_legth_txt = (TextView)findViewById(R.id.introduce_length_txt);
         if(s.length() >= 300)
         {
             Toast.makeText(Profile_Setting_Page.this, "300자 까지 입력 가능합니다.", Toast.LENGTH_SHORT).show();
         }
-        introduce_legth_txt.setText(s.length() + "/300자");
-        introduce_legth_txt.setTextColor(getResources().getColor(R.color.PrimaryColor));
+        introduce_length_txt.setText(s.length() + "/300자");
+        introduce_length_txt.setTextColor(getResources().getColor(R.color.PrimaryColor));
     }
 
     @Override
@@ -191,7 +271,31 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
                     case R.id.back_btn:
                         finish();
                         break;
-
+                    case R.id.birth_txt:
+                        Intent intent = new Intent(getApplicationContext(), Select_Date_Dialog.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.save_btn:
+                        if((userNickName.equals(nickNameEditBox.getText().toString()))){
+                            SaveProfileInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                                    introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
+                                    birthTextView.getText().toString());
+                            db.updateUserInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                                    introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
+                                    birthTextView.getText().toString());
+                            finish();
+                        }else if(IsUser(nickNameEditBox.getText().toString())){
+                            SaveProfileInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                                    introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
+                                    birthTextView.getText().toString());
+                            db.updateUserInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                                    introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
+                                    birthTextView.getText().toString());
+                            finish();
+                        }else{
+                            Toast.makeText(getApplicationContext(), "이미 동일한 닉네임이 존재합니다.",Toast.LENGTH_SHORT).show();
+                        }
+                        break;
                 }
             }
             return true;
