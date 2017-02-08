@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -15,17 +16,21 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.util.HashMap;
 import java.util.UUID;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import common.Select_Date_Dialog;
 import common.User_Profile_Edit_Dialog;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import pushevent.BusProvider;
+import pushevent.SelectDatePickerPushEvent;
 
 /**
  * created by sunghyun at 2017-02-07
@@ -34,8 +39,9 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 public class Profile_Setting_Page extends Activity implements TextWatcher {
     private App_Config app_config = new App_Config();
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
-    private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox, birthEditBox;
-    private TextView emailTextView, genderTextView;
+    private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox;
+    private TextView emailTextView, genderTextView, birthTextView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +60,8 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         userPhoneNum = user.get("phone_number");
         userGender = user.get("gender");
         userBirth = user.get("birthday");
+
+        BusProvider.getInstance().register(this);    //날짜 다이얼로그로부터 받음.
 
         InitView();
 
@@ -104,7 +112,7 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         emailTextView = (TextView)findViewById(R.id.email_txt);
         genderTextView = (TextView)findViewById(R.id.gender_txt);
         phoneNumEditBox = (EditText)findViewById(R.id.phone_edit_box);
-        birthEditBox = (EditText)findViewById(R.id.birth_edit_box);
+        birthTextView = (TextView)findViewById(R.id.birth_txt);
 
         nameEditBox.setText(name);
         nameEditBox.clearFocus();
@@ -120,8 +128,14 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         phoneNumEditBox.setText(userPhoneNum);
         phoneNumEditBox.clearFocus();
         genderTextView.setText(userGender);
-        birthEditBox.setText(userBirth);
-        birthEditBox.clearFocus();
+        birthTextView.setText(userBirth);
+        birthTextView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), Select_Date_Dialog.class);
+                startActivity(intent);
+            }
+        });
 
     }
 
@@ -144,6 +158,20 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         }
         introduce_legth_txt.setText(s.length() + "/300자");
         introduce_legth_txt.setTextColor(getResources().getColor(R.color.PrimaryColor));
+    }
+
+    @Override
+    protected void onDestroy() {
+        // Always unregister when an object no longer should be on the bus.
+        BusProvider.getInstance().unregister(this);
+        super.onDestroy();
+
+    }
+
+    @Subscribe
+    public void FinishLoad(SelectDatePickerPushEvent mPushEvent) {
+        String date = mPushEvent.getDate();
+        birthTextView.setText(date);
     }
 
     private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {

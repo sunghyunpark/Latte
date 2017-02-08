@@ -387,8 +387,8 @@
                         android:layout_centerVertical="true"
                         android:layout_marginLeft="10dp"/>
 
-                    <EditText
-                        android:id="@+id/birth_edit_box"
+                    <TextView
+                        android:id="@+id/birth_txt"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@null"
@@ -396,8 +396,7 @@
                         android:layout_centerVertical="true"
                         android:layout_toRightOf="@+id/birth_img"
                         android:layout_marginLeft="20dp"
-                        android:hint="생년월일(yymmdd)"
-                        android:inputType="date"
+                        android:hint="생년월일"
                         android:ellipsize="end"
                         android:paddingRight="15dp"
                         android:textColor="#000000" />

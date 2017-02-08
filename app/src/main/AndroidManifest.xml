@@ -134,6 +134,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme" >
         </activity>
+        <activity
+            android:name="common.Select_Date_Dialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomDatePickDailog" >
+        </activity>
     </application>
 
 </manifest>
