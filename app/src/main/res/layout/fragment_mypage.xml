@@ -50,7 +50,7 @@
             <!--상단 정보 레이아웃-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="260dp">
+                android:layout_height="270dp">
                 <ImageView
                     android:id="@+id/background_img"
                     android:layout_width="match_parent"
