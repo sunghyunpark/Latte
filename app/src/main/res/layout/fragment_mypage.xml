@@ -255,8 +255,7 @@
                             android:maxLines="4"
                             android:layout_marginBottom="3dp"
                             android:layout_marginLeft="10dp"
-                            android:ellipsize="end"
-                            android:text="hello world"/>
+                            android:ellipsize="end"/>
 
                     </LinearLayout>
 

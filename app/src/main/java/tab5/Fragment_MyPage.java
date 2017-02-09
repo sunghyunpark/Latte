@@ -74,8 +74,9 @@ public class Fragment_MyPage extends Fragment{
     private String user_name;
     private String user_nick_name;
     private String user_profile_path;
+    private String user_self_introduce;
     //상단 프로필 레이아웃 백그라운드, 그리드, 리스트, 위시 버튼
-    private ImageView background_img, grid_btn, list_btn, wish_btn;
+    private ImageView grid_btn, list_btn, wish_btn;
     //사용자 정보(게시글수, 팔로잉 수, 팔로워 수)
     private TextView article_count_txt, following_count_txt, follower_count_txt;
     //사용자 이름, 소개글
@@ -127,6 +128,7 @@ public class Fragment_MyPage extends Fragment{
         user_email = user.get("email");
         user_nick_name = user.get("nick_name");
         user_profile_path = user.get("profile_img");
+        user_self_introduce = user.get("self_introduce");
     }
 
     @Override
@@ -187,7 +189,7 @@ public class Fragment_MyPage extends Fragment{
     }
     private void SetProfile(){
         //백그라운드 이미지
-        background_img = (ImageView)v.findViewById(R.id.background_img);
+        ImageView background_img = (ImageView)v.findViewById(R.id.background_img);
         Glide.with(getActivity())
                 .load(app_config.get_SERVER_IP()+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
@@ -247,6 +249,7 @@ public class Fragment_MyPage extends Fragment{
 
         my_nickname_txt.setText(user_nick_name);
         my_name_txt.setText(user_name);
+        introduce_txt.setText(user_self_introduce);
     }
 
     /**
