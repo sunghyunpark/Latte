@@ -102,7 +102,6 @@ public class Fragment_MyPage extends Fragment{
     @Override
     public void onResume(){
         super.onResume();
-
         /**
          * 디테일뷰갔다가 다시 돌아올때 해당 아티클의 정보를 최신화 하기 위함
          * 네트워크 체크를 하여 네트워크가 off일 때 Network Off를 호출하여 realm에 저장된 데이터로 보여줌
