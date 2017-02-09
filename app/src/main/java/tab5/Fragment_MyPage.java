@@ -196,6 +196,22 @@ public class Fragment_MyPage extends Fragment{
                 .bitmapTransform(new BlurTransformation(getActivity(), 18))
                 .error(null)
                 .into(background_img);
+        //백그라운드 히스토리(앞)
+        ImageView background_history_front = (ImageView)v.findViewById(R.id.history_front);
+        Glide.with(getActivity())
+                .load(app_config.get_SERVER_IP()+user_profile_path)
+                //.transform(new Util.BlurTransformation(getActivity()))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .error(null)
+                .into(background_history_front);
+        //백그라운드 히스토리(뒤)
+        ImageView background_history_back = (ImageView)v.findViewById(R.id.history_back);
+        Glide.with(getActivity())
+                .load(app_config.get_SERVER_IP()+"test_img/test_img.jpg")
+                //.transform(new Util.BlurTransformation(getActivity()))
+                .signature(new StringSignature(UUID.randomUUID().toString()))
+                .error(null)
+                .into(background_history_back);
         //유저 프로필
         ImageView user_profile_img = (ImageView)v.findViewById(R.id.user_profile_img);
         Glide.with(getActivity())
