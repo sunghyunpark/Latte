@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -15,7 +16,27 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.seedteam.latte.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
+
+import rest.ApiClient;
+import rest.ApiInterface;
+import rest.IsUserResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * created by sunghyun 2016-11-26
@@ -26,6 +47,10 @@ public class Login_Page extends FragmentActivity {
     //Viewpager
     private ViewPager mViewPager;
     private PagerAdapter mPagerAdapter;
+
+    //facebook login
+    private CallbackManager callbackManager;
+    private String login_method, fb_email, fb_pw, fb_id, name, gender;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +116,119 @@ public class Login_Page extends FragmentActivity {
                 }
             }
         });
+    }
+    /* facebook login 부분 클라는 구현완료됨  기획서 스펙보고 다시 작업할때 적용하도록 함
+       xml 파일에서 해당 버튼에 android:onClick="facebookLoginOnClick" 속성주기
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void facebookLoginOnClick(View v){
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+
+        LoginManager.getInstance().logInWithReadPermissions(Login_Page.this,
+                Arrays.asList("public_profile", "email"));
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+            @Override
+            public void onSuccess(final LoginResult result) {
+
+                GraphRequest request;
+                request = GraphRequest.newMeRequest(result.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+
+                    @Override
+                    public void onCompleted(JSONObject user, GraphResponse response) {
+                        if (response.getError() != null) {
+
+                        } else {
+                            try{
+                                Log.i("TAG", "user: " + user.toString());
+                                Log.i("TAH", "id: " + user.get("id"));
+                                Log.i("TAH", "name: " + user.get("name"));
+                                Log.i("TAH", "email: " + user.get("email"));
+                                Log.i("TAH", "gender: " + user.get("gender"));
+                                login_method = "facebook";
+                                fb_email = user.get("email").toString();
+                                fb_id = user.get("id").toString();
+                                fb_pw = user.get("id").toString();
+                                name = user.get("name").toString();
+                                gender = user.get("gender").toString();
+                                Log.i("TAG", "AccessToken: " + result.getAccessToken().getToken());
+
+                                setResult(RESULT_OK);
+                            }catch (JSONException e){
+
+                            }
+
+                            GoNext(fb_id);
+
+                        }
+                    }
+                });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+                Log.e("test", "Error: " + error);
+                //finish();
+            }
+
+            @Override
+            public void onCancel() {
+                //finish();
+            }
+        });
+    }
+*/
+    //facebook 계정으로 이미 가입한 사용자가 있는지 판별 후 다음 과업 진행
+    private void GoNext(final String fb_id){
+
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        /**
+         * email 회원가입 부분이라 IsUser API에서 fb_id, kt_id는 굳이 넘길필요가 없어서 null 처리해둠
+         */
+        Call<IsUserResponse> call = apiService.PostSNS_ID("isuser", fb_id, null, null, null);
+        call.enqueue(new Callback<IsUserResponse>() {
+            @Override
+            public void onResponse(Call<IsUserResponse> call, Response<IsUserResponse> response) {
+
+                IsUserResponse userdata = response.body();
+                if(userdata.isError()){
+                    //사용가능
+                    Intent intent = new Intent(getApplicationContext(), Register_Page2.class);
+                    intent.putExtra("login_method", login_method);
+                    intent.putExtra("email", fb_email);
+                    intent.putExtra("password", fb_pw);
+                    intent.putExtra("fb_id", fb_id);
+                    intent.putExtra("name", name);
+                    intent.putExtra("gender", gender);
+                    startActivity(intent);
+                    overridePendingTransition(R.anim.anim_in, R.anim.anim_out);
+                }else{
+                    //로그인
+                    Toast.makeText(getApplicationContext(),"login", Toast.LENGTH_SHORT).show();
+
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IsUserResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+            }
+        });
+
     }
 
     private class PagerAdapter extends FragmentStatePagerAdapter {
