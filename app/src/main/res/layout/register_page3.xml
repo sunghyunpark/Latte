@@ -91,6 +91,7 @@
             android:layout_height="50dp"
             android:layout_marginTop="20dp"
             android:hint="닉네임"
+            android:singleLine="true"
             android:textColor="#ffffff"
             android:textColorHint="#55ffffff"
             android:paddingLeft="20dp"
