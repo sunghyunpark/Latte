@@ -83,7 +83,6 @@ public class Upload_Page1 extends Activity {
     private boolean isCropImg;
 
     private ArrayList<Upload_Page1_item> listItems;
-    private GridLayoutManager lLayout;
     private Bitmap mCurrentImg_bitmap;    //현재 이미지 비트맵
 
     CollapsingToolbarLayout collapsingToolbarLayout;
@@ -137,7 +136,7 @@ public class Upload_Page1 extends Activity {
 
 
         recyclerView = (RecyclerView)findViewById(R.id.recyclerView);
-        lLayout = new GridLayoutManager(Upload_Page1.this,4);
+        GridLayoutManager lLayout = new GridLayoutManager(Upload_Page1.this,4);
         recyclerView.setLayoutManager(lLayout);
         recyclerView.setNestedScrollingEnabled(false);
 

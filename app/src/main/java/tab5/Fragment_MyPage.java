@@ -77,8 +77,6 @@ public class Fragment_MyPage extends Fragment{
     private ImageView grid_btn, list_btn, wish_btn;
     //사용자 정보(게시글수, 팔로잉 수, 팔로워 수)
     private TextView article_count_txt, following_count_txt, follower_count_txt;
-    //사용자 이름, 소개글
-    private TextView my_name_txt, introduce_txt, my_nickname_txt;
 
     //리사이클러뷰
     private RecyclerAdapter_list adapter_list;    //그리드 어댑터
@@ -228,9 +226,9 @@ public class Fragment_MyPage extends Fragment{
         follower_count_txt = (TextView)v.findViewById(R.id.follower_count_txt);    //팔로워 수
         following_count_txt = (TextView)v.findViewById(R.id.following_count_txt);    //팔로잉 수
         Button edit_profile_btn = (Button)v.findViewById(R.id.edit_profile_btn);    //프로필 수정 버튼
-        my_name_txt = (TextView)v.findViewById(R.id.my_name_txt);    //내 이름
-        introduce_txt = (TextView)v.findViewById(R.id.introduce_txt);    //소개글
-        my_nickname_txt = (TextView)v.findViewById(R.id.my_nickname_txt);    //상단바 닉네임
+        TextView my_name_txt = (TextView)v.findViewById(R.id.my_name_txt);    //내 이름
+        TextView introduce_txt = (TextView)v.findViewById(R.id.introduce_txt);    //소개글
+        TextView my_nickname_txt = (TextView)v.findViewById(R.id.my_nickname_txt);    //상단바 닉네임
 
         grid_btn = (ImageView)v.findViewById(R.id.grid_btn);    // 그리드 버튼
         list_btn = (ImageView)v.findViewById(R.id.list_btn);    // 리스트 버튼

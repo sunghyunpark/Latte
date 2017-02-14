@@ -70,8 +70,6 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Article_Comment_item> listItems;
     private int first_pos=0;
     private int last_pos=0;
@@ -83,8 +81,6 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
     private EditText comment_edit_box;
     //eidt_box_send
     private ImageView send_comment_btn;
-    //자신이 작성한 댓글 내용
-    private String my_comment_str;
     //댓글이 비었을 때의 뷰
     private TextView empty_view;
 
@@ -118,8 +114,8 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
     private void InitView(){
         empty_view = (TextView)findViewById(R.id.empty_comment_txt);
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);
@@ -427,7 +423,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
                 v.setAlpha(1.0f);
                 switch(v.getId()){
                     case R.id.send_btn:
-                        my_comment_str = comment_edit_box.getText().toString();
+                        String my_comment_str = comment_edit_box.getText().toString();
                         my_comment_str = my_comment_str.trim();
                         if(my_comment_str.equals("")){
                             Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();

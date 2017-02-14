@@ -22,7 +22,6 @@ public class Fragment_Timeline extends Fragment {
     private String uid;
     //뷰페이저
     private ViewPager mViewPager;
-    private pagerAdapter adapter;
     private static final int NUM_PAGES = 2;//페이지 수
     private int temp = 0; //현재 페이지
 
@@ -102,7 +101,7 @@ public class Fragment_Timeline extends Fragment {
 
         //뷰페이저
         mViewPager = (ViewPager) v.findViewById(R.id.pager);
-        adapter = new pagerAdapter(getChildFragmentManager());
+        pagerAdapter adapter = new pagerAdapter(getChildFragmentManager());
         mViewPager.setAdapter(adapter);
         mViewPager.setCurrentItem(temp);            // 현재 페이지
         mViewPager.setOffscreenPageLimit(2);        // 미리 불러오는 화면 갯수

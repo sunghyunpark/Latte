@@ -79,7 +79,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     //리사이클러뷰
     private RecyclerAdapter adapter;
     private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_Timeline_item> listItems;
     private int first_pos=0;
     private int last_pos=0;
@@ -177,7 +176,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     //뷰 초기화
     private void InitView(){
         recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getContext());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);

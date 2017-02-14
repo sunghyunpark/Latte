@@ -57,14 +57,9 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
     //사용자 정보
     private String uid;
-    //팔로우 정보(otto)
-    private String follow_uid;    //otto pushevent
-    private String follow_state_from_pushevent;    //otto pushevent
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_My_Article_Like_item> listItems;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
@@ -112,8 +107,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     }
 
     private void InitView(){
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);
@@ -780,8 +775,8 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
     @Subscribe
     public void FinishLoad(FollowBtnPushEvent mPushEvent) {
 
-        follow_uid = mPushEvent.getUid();
-        follow_state_from_pushevent = mPushEvent.getState();
+        String follow_uid = mPushEvent.getUid();
+        String follow_state_from_pushevent = mPushEvent.getState();
         int position = mPushEvent.getPosition();
 
         if(follow_state_from_pushevent.equals("N")){

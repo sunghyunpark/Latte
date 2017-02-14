@@ -38,7 +38,6 @@ public class Upload_Page2 extends Activity {
 
     //업로드 할 이미지 로컬 경로
     private String upload_img_path;
-    private String upload_img_name;
     //사용자정보
     private String login_method;
     private String uid;
@@ -206,7 +205,7 @@ public class Upload_Page2 extends Activity {
                             Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
                         }else{
                             if(util.isCheckNetworkState(Upload_Page2.this)){
-                                upload_img_name = util.MakeImageName(uid);
+                                String upload_img_name = util.MakeImageName(uid);
                                 /**
                                  * Asynctask로 적용하기 전 사용
                                  */

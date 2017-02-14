@@ -41,13 +41,9 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     private String uid;
     //해당 아티클 id
     private String article_id;
-    private String follow_uid;    //otto pushevent
-    private String follow_state_from_pushevent;    //otto pushevent
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Article_Like_item> listItems;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
@@ -81,8 +77,8 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     private void InitView(){
         empty_like_txt = (TextView)findViewById(R.id.empty_like_txt);
 
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);
@@ -310,8 +306,8 @@ public class Article_Like_Activity extends Activity implements SwipeRefreshLayou
     @Subscribe
     public void FinishLoad(FollowBtnPushEvent mPushEvent) {
 
-        follow_uid = mPushEvent.getUid();
-        follow_state_from_pushevent = mPushEvent.getState();
+        String follow_uid = mPushEvent.getUid();
+        String follow_state_from_pushevent = mPushEvent.getState();
         int position = mPushEvent.getPosition();
 
         if(follow_state_from_pushevent.equals("N")){

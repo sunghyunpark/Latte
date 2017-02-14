@@ -56,8 +56,6 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_Follow_Like_item> listItems;
     //리프레쉬
     private SwipeRefreshLayout mSwipeRefresh;
@@ -97,8 +95,8 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
     }
 
     private void InitView(){
-        recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getActivity());
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
         mSwipeRefresh.setOnRefreshListener(this);

@@ -20,7 +20,7 @@ import retrofit2.Response;
 public class Image_Uploader {
 
     private SQLiteHandler mSQLite;
-    Util util = new Util();
+    private Util util = new Util();
 
     /**
      * 프로필 이미지업로더

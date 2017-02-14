@@ -55,7 +55,7 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
     private SQLiteHandler db;
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
     private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox;
-    private TextView emailTextView, genderTextView, birthTextView, introduce_length_txt;
+    private TextView genderTextView, birthTextView, introduce_length_txt;
 
     //닉네임 중복 체크
     private boolean nickNameCheck = false;
@@ -127,7 +127,7 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         webSiteEditBox = (EditText)findViewById(R.id.website_edit_box);
         introduceEditBox = (EditText)findViewById(R.id.introduce_edit_box);
 
-        emailTextView = (TextView)findViewById(R.id.email_txt);
+        TextView emailTextView = (TextView)findViewById(R.id.email_txt);
         genderTextView = (TextView)findViewById(R.id.gender_txt);
         phoneNumEditBox = (EditText)findViewById(R.id.phone_edit_box);
         birthTextView = (TextView)findViewById(R.id.birth_txt);

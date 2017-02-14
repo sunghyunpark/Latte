@@ -46,7 +46,6 @@ public class Login_Page extends FragmentActivity {
 
     //Viewpager
     private ViewPager mViewPager;
-    private PagerAdapter mPagerAdapter;
 
     //facebook login
     private CallbackManager callbackManager;
@@ -64,7 +63,7 @@ public class Login_Page extends FragmentActivity {
     private void InitView(){
         //viewpager
         mViewPager = (ViewPager) findViewById(R.id.intro_pager);
-        mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
+        PagerAdapter mPagerAdapter = new PagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mPagerAdapter);
 
         //하단 동그라미, 텍스트 초기화

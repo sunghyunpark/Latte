@@ -70,21 +70,16 @@ public class Article_Detail_Activity extends Activity {
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Article_Comment_item> listItems;
 
     //article thumb 리사이클러뷰
     ArticleThumbRecyclerAdapter adapter_thumb;
     RecyclerView recyclerView_thumb;
     private ArrayList<Fragment_Timeline_item> listItems_thumb;
-    private GridLayoutManager lLayout_thumb;
     private TextView article_thumb_title;    //article_thumb_title
 
     private boolean like_state_flag;   //좋아요 상태 플래그
     private boolean follow_state_flag;    //팔로잉 상태 플래그
-    private String follow_state_from_pushevent;    //otto push event로부터 받음
-    private String follow_uid;    //otto push event로부터 받음
     private int like_cnt;    //좋아요 카운트
 
     ImageView article_user_profile_img;    //아티클 작성자 프로필 경로
@@ -127,8 +122,8 @@ public class Article_Detail_Activity extends Activity {
 
     private void InitView(){
         //초기화
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         article_user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         article_user_nickname_txt = (TextView)findViewById(R.id.user_nickname_txt);
@@ -152,7 +147,7 @@ public class Article_Detail_Activity extends Activity {
         //thumb
         article_thumb_title = (TextView)findViewById(R.id.article_thumb_title);
         recyclerView_thumb = (RecyclerView)findViewById(R.id.recyclerView_article_thumb);
-        lLayout_thumb = new GridLayoutManager(getApplicationContext(),3);
+        GridLayoutManager lLayout_thumb = new GridLayoutManager(getApplicationContext(),3);
 
         listItems_thumb = new ArrayList<Fragment_Timeline_item>();
         recyclerView_thumb.setLayoutManager(lLayout_thumb);
@@ -660,8 +655,8 @@ public class Article_Detail_Activity extends Activity {
     @Subscribe
     public void FinishLoad(FollowBtnPushEvent mPushEvent) {
 
-        follow_uid = mPushEvent.getUid();
-        follow_state_from_pushevent = mPushEvent.getState();
+        String follow_uid = mPushEvent.getUid();
+        String follow_state_from_pushevent = mPushEvent.getState();
 
         if(follow_state_from_pushevent.equals("N")){
             follow_state_flag = false;

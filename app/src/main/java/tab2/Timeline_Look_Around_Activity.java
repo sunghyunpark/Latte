@@ -67,8 +67,6 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
     //리사이클러뷰
     private RecyclerAdapter adapter;
-    private RecyclerView recyclerView;
-    private LinearLayoutManager linearLayoutManager;
     private ArrayList<Fragment_Timeline_item> listItems;
     private int first_pos=0;
     private int last_pos=0;
@@ -121,8 +119,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
     }
     //뷰 초기화
     private void InitView(){
-        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
-        linearLayoutManager = new LinearLayoutManager(getApplicationContext());
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerViewFrameLayout = (FrameLayout)findViewById(R.id.recyclerViewFrameLayout);
         title_bar_layout = (ViewGroup)findViewById(R.id.title_bar);
         //리프레쉬

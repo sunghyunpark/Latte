@@ -17,7 +17,6 @@ import app_config.App_Config;
  */
 public class ImageViewer extends Activity {
 
-    private String imageViewer_local_path;
     CropView ImageViewer;
 
     @Override
@@ -26,7 +25,7 @@ public class ImageViewer extends Activity {
         setContentView(R.layout.imageviewer);
 
         Intent intent = getIntent();
-        imageViewer_local_path = intent.getExtras().getString("article_photo_url");
+        String imageViewer_local_path = intent.getExtras().getString("article_photo_url");
         ImageViewer = (CropView)findViewById(R.id.image_view_pic);
 
         Glide.with(getApplicationContext())

@@ -48,7 +48,6 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
     RecyclerAdapter adapter;
     RecyclerView recyclerView;
     private ArrayList<Fragment_Timeline_item> listItems;
-    private GridLayoutManager lLayout;
     private int first_pos=0;
     private int last_pos=0;
     private static final int LOAD_DATA_COUNT = 45;
@@ -102,7 +101,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
     private void InitView(){
 
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
-        lLayout = new GridLayoutManager(getActivity(),3);
+        GridLayoutManager lLayout = new GridLayoutManager(getActivity(),3);
         recyclerView.setLayoutManager(lLayout);
         //리프레쉬
         mSwipeRefresh = (SwipeRefreshLayout)v.findViewById(R.id.swipe_layout);
