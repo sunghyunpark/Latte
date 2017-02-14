@@ -11,9 +11,6 @@ import java.util.HashMap;
 
 public class SQLiteHandler extends SQLiteOpenHelper {
 
-    public static App_Config db_name = new App_Config();//appconfig에 있는 데이터베이스명 가져오기
-
-
     private static final String TAG = SQLiteHandler.class.getSimpleName();
 
     // All Static variables
@@ -21,7 +18,7 @@ public class SQLiteHandler extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 3;
 
     // Database Name
-    private static final String DATABASE_NAME = db_name.getDATABASE_NAME();
+    private static final String DATABASE_NAME = "latte";
 
     // Login table name
     private static final String TABLE_LOGIN = "login";

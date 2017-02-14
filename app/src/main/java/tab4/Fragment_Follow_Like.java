@@ -51,7 +51,6 @@ import tab2.HidingScrollListener;
  */
 public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private App_Config app_config = new App_Config();
     //사용자 정보
     private String uid;
 
@@ -457,7 +456,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -468,7 +467,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(0))
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getContent_Thumb_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
 
@@ -485,7 +484,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -500,7 +499,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -511,7 +510,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                 VHitem.content_txt.setMovementMethod(LinkMovementMethod.getInstance());
 
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(0))
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getContent_Thumb_img().get(0))
                         .error(null)
                         .into(VHitem.content_pic);
                 VHitem.content_pic.setOnClickListener(new View.OnClickListener() {
@@ -526,7 +525,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
 
                 //user_profile
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUserA_profile_img())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUserA_profile_img())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -660,7 +659,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         VHitem.content_pic8.setVisibility(View.VISIBLE);
                     }
                     Glide.with(getActivity())
-                            .load(app_config.get_SERVER_IP()+currentItem.getContent_Thumb_img().get(i))
+                            .load(App_Config.getInstance().getServer_base_ip()+currentItem.getContent_Thumb_img().get(i))
                             .error(null)
                             .into(getList(position,VHitem).get(i));
                 }

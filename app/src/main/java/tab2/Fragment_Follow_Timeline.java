@@ -70,7 +70,6 @@ import tab4.Fragment_Like;
 
 public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private App_Config app_config = new App_Config();
     private Realm mRealm;
     private RealmConfig realmConfig;
 
@@ -578,7 +577,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //user_profile
                 Glide.with(getContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
@@ -610,7 +609,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
                 //article_img
                 Glide.with(getContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
                         .asBitmap()
                         .format(DecodeFormat.PREFER_ARGB_8888)
                         .error(null)

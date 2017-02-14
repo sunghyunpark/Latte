@@ -1,5 +1,6 @@
 package com.seedteam.latte;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.HashMap;
 
+import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.SessionManager;
 import login.Login_Page;
@@ -67,6 +69,9 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         super.onCreate(savedInstanceState);
         //setTheme(android.R.style.Theme_Holo_Light_NoActionBar_TranslucentDecor);
         setContentView(R.layout.activity_main);
+
+        App_Config.getInstance().setServer_base_ip("http://ustserver.cafe24.com/ust/");
+        App_Config.getInstance().setApp_local_path("storage/emulated/0/WePic/");
 
         session = new SessionManager(getApplicationContext());
         if(!session.isLoggedIn()){

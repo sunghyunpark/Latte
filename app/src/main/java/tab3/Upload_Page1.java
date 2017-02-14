@@ -66,8 +66,6 @@ import pushevent.Upload_ArticlePicPushEvent;
  */
 public class Upload_Page1 extends Activity {
 
-    private App_Config app_config = new App_Config();
-
     private SQLiteHandler db;    //SQLite
 
     //os6.0 permission
@@ -276,12 +274,12 @@ public class Upload_Page1 extends Activity {
         /**
          * 일단 resize_before비트맵을 로컬에 저장한다
          */
-        File folder_path = new File(app_config.getLocalPath());
+        File folder_path = new File(App_Config.getInstance().getApp_local_path());
         if(!folder_path.exists()){
             folder_path.mkdir();
         }
 
-        String resize_before_path = app_config.getLocalPath()+"resize_before.png";
+        String resize_before_path = App_Config.getInstance().getApp_local_path()+"resize_before.png";
         //로컬에 저장
         OutputStream outStream = null;
         File file = new File(resize_before_path);
@@ -327,7 +325,7 @@ public class Upload_Page1 extends Activity {
             }
             Bitmap resized_bitmap = BitmapFactory.decodeFile(resize_before_path, options);
 
-            File fileCacheItem = new File(app_config.getLocalPath() + file_name);
+            File fileCacheItem = new File(App_Config.getInstance().getApp_local_path() + file_name);
             OutputStream out = null;
 
             try {
@@ -348,7 +346,7 @@ public class Upload_Page1 extends Activity {
                     e.printStackTrace();
                 }
             }
-            return app_config.getLocalPath() + file_name;
+            return App_Config.getInstance().getApp_local_path() + file_name;
 
         } else {
             try{

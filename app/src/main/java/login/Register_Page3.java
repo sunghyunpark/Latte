@@ -48,7 +48,6 @@ import tab3.Upload_Page1;
  */
 public class Register_Page3 extends Activity {
 
-    private App_Config app_config = new App_Config();
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_PHONE_STATE = 10;
     //사용자 정보
@@ -209,7 +208,7 @@ public class Register_Page3 extends Activity {
             profile_plus_img.setVisibility(View.GONE);
             if(login_method.equals("email")){
                 Glide.with(getApplicationContext())
-                        .load(new File(app_config.getLocalPath(),img_path))
+                        .load(new File(App_Config.getInstance().getApp_local_path(),img_path))
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         .signature(new StringSignature(UUID.randomUUID().toString()))
                         .error(null)
@@ -261,7 +260,7 @@ public class Register_Page3 extends Activity {
                          * ImageUploader에서 프로필 경로를 다시 받아와 내장 DB에서 프로필 부분만 update
                          */
                         if(login_method.equals("email")){
-                            local_profile_path = app_config.getLocalPath()+profile_img_path;
+                            local_profile_path = App_Config.getInstance().getApp_local_path()+profile_img_path;
                         }else if(login_method.equals("facebook")){
                             local_profile_path = profile_img_path;
                         }

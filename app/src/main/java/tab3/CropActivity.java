@@ -35,8 +35,6 @@ import pushevent.Upload_ArticlePicPushEvent;
 
 public class CropActivity extends Activity {
 
-    private App_Config app_config = new App_Config();
-
     private int crop_size;    // 크롭 사이즈
 
     CropView2 myCropView;
@@ -102,12 +100,12 @@ public class CropActivity extends Activity {
 
         BitmapDrawable d = (BitmapDrawable)mImageView.getDrawable();
         Bitmap local_save_bit = d.getBitmap();
-        File folder_path = new File(app_config.getLocalPath());
+        File folder_path = new File(App_Config.getInstance().getApp_local_path());
         if(!folder_path.exists()){
             folder_path.mkdir();
         }
 
-        String cropImage_path = app_config.getLocalPath()+"cropImage.png";
+        String cropImage_path = App_Config.getInstance().getApp_local_path()+"cropImage.png";
         //로컬에 저장
         OutputStream outStream = null;
         File file = new File(cropImage_path);

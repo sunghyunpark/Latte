@@ -52,7 +52,6 @@ import tab4.Fragment_Follow_Like_item;
 
 public class Profile_Setting_Page extends Activity implements TextWatcher {
 
-    private App_Config app_config = new App_Config();
     private SQLiteHandler db;
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
     private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox;
@@ -108,13 +107,13 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         ImageView background_edit_btn = (ImageView)findViewById(R.id.background_edit_btn);
         //대문 사진
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+background_path)
+                .load(App_Config.getInstance().getServer_base_ip()+background_path)
                 //.bitmapTransform(new RoundedCornersTransformation(getApplicationContext(),50,50))
                 .error(null)
                 .into(background_edit_btn);
         //유저 프로필
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+profile_path)
+                .load(App_Config.getInstance().getServer_base_ip()+profile_path)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)

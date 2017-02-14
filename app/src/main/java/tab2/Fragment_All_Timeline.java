@@ -42,7 +42,6 @@ import tab4.Fragment_Like;
 
 public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
-    private App_Config app_config = new App_Config();
     //사용자 정보
     private String uid;
     //리사이클러뷰
@@ -336,7 +335,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_thumb_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_thumb_path())
                         .error(null)
                         .into(VHitem.article_img);
 

@@ -22,8 +22,6 @@ import pushevent.FollowBtnPushEvent;
  */
 public class Cancel_Following_Dialog extends Activity {
 
-    private App_Config app_config = new App_Config();
-
     //다이얼로그에 보여질 사용자 정보
     private String user_profile_img_path;
     private String user_nickname;
@@ -53,7 +51,7 @@ public class Cancel_Following_Dialog extends Activity {
 
         //프로필
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+user_profile_img_path)
+                .load(App_Config.getInstance().getServer_base_ip()+user_profile_img_path)
                 //.transform(new Util.CircleTransform(getApplicationContext()))
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)

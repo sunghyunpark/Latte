@@ -60,8 +60,6 @@ import tab3.Upload_Page2;
  */
 public class Timeline_Look_Around_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener{
 
-    private App_Config app_config = new App_Config();
-
     //사용자 정보
     private String uid;
     //선택한 아티클 id
@@ -457,7 +455,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                 //user_profile
                 Glide.with(getApplicationContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
@@ -476,7 +474,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
 
                 //article_img
                 Glide.with(getApplicationContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);

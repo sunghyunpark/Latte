@@ -63,8 +63,6 @@ import tab2.Fragment_Timeline_item;
  */
 public class Article_Detail_Activity extends Activity {
 
-    private App_Config app_config = new App_Config();
-
     //게시글 정보
     private String user_uid;    //내 uid
     private String article_id;    //아티클 id
@@ -168,7 +166,7 @@ public class Article_Detail_Activity extends Activity {
 
         //아티클 사진
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+article_photo_url)
+                .load(App_Config.getInstance().getServer_base_ip()+article_photo_url)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(null)
                 .into(article_photo_img);
@@ -203,7 +201,7 @@ public class Article_Detail_Activity extends Activity {
 
                     //작성자 프로필
                     Glide.with(getApplicationContext())
-                            .load(app_config.get_SERVER_IP()+articledata.getArticle().getProfile_img_thumb())
+                            .load(App_Config.getInstance().getServer_base_ip()+articledata.getArticle().getProfile_img_thumb())
                             .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                             .placeholder(R.drawable.profile_basic_img)
                             .error(null)
@@ -402,7 +400,7 @@ public class Article_Detail_Activity extends Activity {
 
                 //user_profile
                 Glide.with(getApplicationContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
@@ -579,7 +577,7 @@ public class Article_Detail_Activity extends Activity {
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getApplicationContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_thumb_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_thumb_path())
                         .error(null)
                         .into(VHitem.article_img);
 

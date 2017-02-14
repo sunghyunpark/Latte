@@ -16,7 +16,7 @@ import app_config.App_Config;
  * created by sunghyun 2017-02-06
  */
 public class ImageViewer extends Activity {
-    private App_Config app_config = new App_Config();
+
     private String imageViewer_local_path;
     CropView ImageViewer;
 
@@ -30,7 +30,7 @@ public class ImageViewer extends Activity {
         ImageViewer = (CropView)findViewById(R.id.image_view_pic);
 
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+imageViewer_local_path)
+                .load(App_Config.getInstance().getServer_base_ip()+imageViewer_local_path)
                 .asBitmap()
                 .into(new SimpleTarget<Bitmap>() {
                     @Override

@@ -65,8 +65,6 @@ import retrofit2.Response;
  */
 public class Fragment_MyPage extends Fragment{
 
-
-    private App_Config app_config = new App_Config();
     private SQLiteHandler db;
     //사용자 정보
     private String user_uid;
@@ -190,7 +188,7 @@ public class Fragment_MyPage extends Fragment{
         //백그라운드 이미지
         ImageView background_img = (ImageView)v.findViewById(R.id.background_img);
         Glide.with(getActivity())
-                .load(app_config.get_SERVER_IP()+"test_img/test_img.jpg")
+                .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
                 .signature(new StringSignature(UUID.randomUUID().toString()))
                 .bitmapTransform(new BlurTransformation(getActivity(), 18))
@@ -199,7 +197,7 @@ public class Fragment_MyPage extends Fragment{
         //백그라운드 히스토리(앞)
         ImageView background_history_front = (ImageView)v.findViewById(R.id.history_front);
         Glide.with(getActivity())
-                .load(app_config.get_SERVER_IP()+user_profile_path)
+                .load(App_Config.getInstance().getServer_base_ip()+user_profile_path)
                 //.transform(new Util.BlurTransformation(getActivity()))
                 .signature(new StringSignature(UUID.randomUUID().toString()))
                 .error(null)
@@ -207,7 +205,7 @@ public class Fragment_MyPage extends Fragment{
         //백그라운드 히스토리(뒤)
         ImageView background_history_back = (ImageView)v.findViewById(R.id.history_back);
         Glide.with(getActivity())
-                .load(app_config.get_SERVER_IP()+"test_img/test_img.jpg")
+                .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
                 .signature(new StringSignature(UUID.randomUUID().toString()))
                 .error(null)
@@ -215,7 +213,7 @@ public class Fragment_MyPage extends Fragment{
         //유저 프로필
         ImageView user_profile_img = (ImageView)v.findViewById(R.id.user_profile_img);
         Glide.with(getActivity())
-                .load(app_config.get_SERVER_IP()+user_profile_path)
+                .load(App_Config.getInstance().getServer_base_ip()+user_profile_path)
                 .bitmapTransform(new CropCircleTransformation(getActivity()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
@@ -541,7 +539,7 @@ public class Fragment_MyPage extends Fragment{
 
                 //user_profile
                 Glide.with(getContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getActivity()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
@@ -574,7 +572,7 @@ public class Fragment_MyPage extends Fragment{
 
                 //article_img
                 Glide.with(getContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
                         .error(null)
                         .override(displaySize,displaySize)
                         .into(VHitem.article_img);
@@ -731,7 +729,7 @@ public class Fragment_MyPage extends Fragment{
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getActivity())
-                        .load(app_config.get_SERVER_IP()+currentItem.getArticle_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
                         .error(null)
                         .into(VHitem.article_img);
 

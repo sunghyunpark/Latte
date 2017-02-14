@@ -60,7 +60,6 @@ import retrofit2.Response;
  */
 public class Article_Comment_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener,TextWatcher {
 
-    private App_Config app_config = new App_Config();
     private SQLiteHandler db;    //SQLite
     //사용자 정보
     private String uid;    //로그인 user uid
@@ -140,7 +139,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
         ImageView user_profile_img = (ImageView)findViewById(R.id.user_profile_img);
         Glide.with(getApplicationContext())
-                .load(app_config.get_SERVER_IP()+user_profile_path)
+                .load(App_Config.getInstance().getServer_base_ip()+user_profile_path)
                 .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                 .placeholder(R.drawable.profile_basic_img)
                 .error(null)
@@ -361,7 +360,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
                 //user_profile
                 Glide.with(getApplicationContext())
-                        .load(app_config.get_SERVER_IP()+currentItem.getUser_profile_img_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUser_profile_img_path())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
                         //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
