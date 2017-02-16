@@ -162,7 +162,6 @@ public class Article_Detail_Activity extends Activity {
         //아티클 사진
         Glide.with(getApplicationContext())
                 .load(App_Config.getInstance().getServer_base_ip()+article_photo_url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .error(null)
                 .into(article_photo_img);
         article_photo_img.setOnClickListener(new View.OnClickListener() {
