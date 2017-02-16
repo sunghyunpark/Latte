@@ -43,6 +43,18 @@ public class RealmUtil {
 
     }
 
+    /**
+     * 프로필 수정화면 정보 업데이트
+     * @param context
+     * @param userUid
+     * @param userName
+     * @param userNickName
+     * @param userWebsite
+     * @param userSelfIntroduce
+     * @param userPhone_num
+     * @param userGender
+     * @param userBirth
+     */
     public void UpdateDB(Context context, String userUid, String userName, String userNickName, String userWebsite,
                          String userSelfIntroduce, String userPhone_num, String userGender, String userBirth){
         Realm mRealm;
@@ -60,6 +72,30 @@ public class RealmUtil {
             user_db.setUserPhoneNumber(userPhone_num);
             user_db.setUserGender(userGender);
             user_db.setUserBirthday(userBirth);
+        }catch (Exception e){
+
+        }finally {
+            mRealm.commitTransaction();
+            RefreshUserInfo(context, userUid);
+        }
+    }
+
+    /**
+     * 프로필 사진 변경
+     * @param context
+     * @param userUid
+     * @param userProfileImg
+     */
+    public void UpdateProfileDB(Context context, String userUid, String userProfileImg){
+        Realm mRealm;
+        RealmConfig realmConfig;
+        realmConfig = new RealmConfig();
+        mRealm = Realm.getInstance(realmConfig.UserInfo_DefaultRealmVersion(context));
+        Realm_UserData user_db = mRealm.where(Realm_UserData.class).equalTo("no",0).findFirst();
+
+        try{
+            mRealm.beginTransaction();
+            user_db.setUserProfileImg(userProfileImg);
         }catch (Exception e){
 
         }finally {
