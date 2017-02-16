@@ -52,7 +52,6 @@ import tab5.Fragment_MyPage;
  * 6. git push origin master
  *
  *
- * 현재 하단탭 메뉴 부분을 커스텀으로 제작
  */
 public class MainActivity extends FragmentActivity implements View.OnClickListener {
 
