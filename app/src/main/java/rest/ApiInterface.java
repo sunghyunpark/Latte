@@ -251,4 +251,17 @@ public interface ApiInterface {
                                                 @Field("phone_number") String phone_number,
                                                 @Field("gender") String gender,
                                                 @Field("birthday") String birthday);
+
+    /**
+     * 내 아티클 삭제
+     * @param tag -> article_delete
+     * @param uid
+     * @param article_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> DeleteArticle(@Field("tag") String tag,
+                                            @Field("uid") String uid,
+                                            @Field("article_id") String article_id);
 }

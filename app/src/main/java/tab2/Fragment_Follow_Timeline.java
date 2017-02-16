@@ -741,9 +741,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             }
         }
         private void removeItem(int position){
+            common.DeleteMyArticle(getActivity(), uid, getItem(position).getArticle_id());
             listItems.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, listItems.size());
+
         }
         @Override
         public int getItemViewType(int position) {

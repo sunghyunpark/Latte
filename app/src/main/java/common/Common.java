@@ -20,6 +20,35 @@ import retrofit2.Response;
 
 public class Common {
 
+
+    public void DeleteMyArticle(final Context context, String uid, String article_id){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.DeleteArticle("article_delete", uid, article_id);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse tokenResponse = response.body();
+                if (!tokenResponse.isError()) {
+                    Toast.makeText(context,"게시물을 삭제했습니다.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context,"삭제 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(context, "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     /**
      * 로그인/회원가입 시 토큰을 서버 및 로컬 디비에 저장
      * 로그아웃 시 로컬 디비 삭제 및 서버에 삭제 요청
