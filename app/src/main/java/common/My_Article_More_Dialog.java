@@ -17,6 +17,7 @@ import article.Article_Edit_Activity;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import pushevent.BusProvider;
 import pushevent.FollowBtnPushEvent;
+import pushevent.My_Article_More_BtnPushEvent;
 
 /**
  * created by sunghyun 2017-02-16
@@ -25,6 +26,7 @@ import pushevent.FollowBtnPushEvent;
 public class My_Article_More_Dialog extends Activity {
 
     private String userUid, article_id, article_photo_url, article_contents;
+    private int pos;    // 아티클 삭제 시 해당 아이템 포지션값
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +39,7 @@ public class My_Article_More_Dialog extends Activity {
         article_id = intent.getExtras().getString("article_id");
         article_photo_url = intent.getExtras().getString("article_photo_url");
         article_contents = intent.getExtras().getString("article_contents");
+        pos = intent.getExtras().getInt("position");
 
     }
 
@@ -55,7 +58,8 @@ public class My_Article_More_Dialog extends Activity {
 
                 break;
             case R.id.article_delete_btn:
-
+                BusProvider.getInstance().post(new My_Article_More_BtnPushEvent(pos));
+                finish();
                 break;
 
 

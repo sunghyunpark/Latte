@@ -31,6 +31,7 @@ import com.bumptech.glide.load.DecodeFormat;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -51,6 +52,8 @@ import common.Util;
 import io.realm.Realm;
 import io.realm.RealmResults;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import pushevent.BusProvider;
+import pushevent.My_Article_More_BtnPushEvent;
 import realm.RealmConfig;
 import realm.Realm_TimeLine_Follow;
 import rest.ApiClient;
@@ -99,6 +102,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     @Override
     public void onDestroy(){
         super.onDestroy();
+        BusProvider.getInstance().unregister(this);
         if(mRealm!=null)
             mRealm.close();
     }
@@ -144,6 +148,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         realmConfig = new RealmConfig();
         mRealm = Realm.getInstance(realmConfig.TimeLine_Follow_DefaultRealmVersion(getActivity()));
+
+        BusProvider.getInstance().register(this);    // 내 아티클 삭제 할때 포지션값 받기위해
 
         /**
          * 네트워크가 on일 땐 굳이 로컬에 데이터들을 저장할 필요가 없으므로 삭제해버림
@@ -535,12 +541,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             return state;
         }
 
-
-        /**
-         * 해당 아티클이 내가 게시한 아티클인지 판별
-         * @param position
-         * @return
-         */
         private boolean IsMyArticle(int position){
             boolean isMyArticle = false;
             String article_user_uid = getItem(position).getUid();
@@ -616,6 +616,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                             intent.putExtra("article_id", currentItem.getArticle_id());
                             intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
                             intent.putExtra("article_contents", currentItem.getArticle_contents());
+                            intent.putExtra("position", position);
                             startActivity(intent);
                         }else{
                             //내 아티클 아닌 경우
@@ -739,6 +740,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.created_at.setText(util.formatTimeString(to));
             }
         }
+        private void removeItem(int position){
+            listItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, listItems.size());
+        }
         @Override
         public int getItemViewType(int position) {
             return TYPE_ITEM_USER_ATTICLE;
@@ -748,6 +754,14 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         public int getItemCount() {
             return listItems.size();
         }
+    }
+
+    @Subscribe
+    public void FinishLoad(My_Article_More_BtnPushEvent mPushEvent) {
+
+        int pos = mPushEvent.getPosition();
+        adapter.removeItem(pos);
+
     }
 
     /**
