@@ -12,6 +12,8 @@ import android.widget.Button;
 
 import com.seedteam.latte.R;
 
+import app_config.UserInfo;
+
 /**
  * created by sunghyun 2016-12-08
  */
@@ -44,6 +46,8 @@ public class Fragment_Timeline extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        uid = UserInfo.getInstance().getUserUid();
+
     }
 
     @Override
@@ -55,7 +59,6 @@ public class Fragment_Timeline extends Fragment {
         Bundle bundle = getArguments();
         if(bundle != null){
             String msg = bundle.getString("KEY_MSG");
-            uid = bundle.getString("user_uid");
             if(msg != null){
 
             }

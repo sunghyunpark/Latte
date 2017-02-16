@@ -34,6 +34,11 @@ public interface ApiInterface {
             , @Field("phone_number") String phone_number
             , @Field("profile_img") String profile_img);
 
+    //유저 정보
+    @FormUrlEncoded
+    @POST("login/login.php")
+    Call<UserResponse> GetUserInfo(@Field("tag") String tag, @Field("uid") String userUid);
+
     /**
      * 회원가입 시 계정이 존재하는지 안하는지 판별
      * @param tag -> isuser
@@ -70,7 +75,7 @@ public interface ApiInterface {
     @Multipart
     @POST("upload/upload_img.php")
     Call<ImageUploadeResponse> Upload_Article_Image(@Part("tag") RequestBody tag,
-                                                  @Part MultipartBody.Part file);
+                                                    @Part MultipartBody.Part file);
 
     /**
      *
@@ -110,7 +115,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline.php")
     Call<ArticleDetailResponse> PostTimeLineDetailData(@Field("tag") String tag, @Field("uid") String uid,
-                                                  @Field("article_id") String article_id);
+                                                       @Field("article_id") String article_id);
 
     /**
      * 디테일뷰 진입 후 다시 돌아왔을 때 해당 아티클의 최신정보 갱신
@@ -122,7 +127,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline.php")
     Call<ArticleDetailBack> PostTimeLineDetailBack(@Field("tag") String tag, @Field("uid") String uid,
-                                                       @Field("article_id") String article_id);
+                                                   @Field("article_id") String article_id);
 
     /**
      * 아티클에서 좋아요 탭했을 때 상태값 전송
@@ -135,8 +140,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline_btn.php")
     Call<CommonErrorResponse> PostArticleLike(@Field("tag") String tag, @Field("uid") String uid,
-                                           @Field("article_id") String article_id,
-                                           @Field("like_state") String like_state);
+                                              @Field("article_id") String article_id,
+                                              @Field("like_state") String like_state);
 
     /**
      * 댓글화면에서 댓글 전송
@@ -175,7 +180,7 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline_btn.php")
     Call<ArticleLikeListResponse> PostArticleLikeList(@Field("tag") String tag, @Field("article_id") String article_id,
-                                                    @Field("uid") String uid);
+                                                      @Field("uid") String uid);
 
     /**
      * 팔로우 버튼 눌렀을때
@@ -189,8 +194,8 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline_btn.php")
     Call<CommonErrorResponse> PostFollow(@Field("tag") String tag, @Field("uid") String uid,
-                                             @Field("following_uid") String following_uid,
-                                             @Field("follow_state") String follow_state);
+                                         @Field("following_uid") String following_uid,
+                                         @Field("follow_state") String follow_state);
 
     /**
      * 개인공간
@@ -232,9 +237,9 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("fcm/fcm.php")
     Call<CommonErrorResponse> PostRegisterFCMToken(@Field("tag") String tag,
-                                                @Field("uid") String uid,
-                                                @Field("token") String token,
-                                                @Field("login_state") String login_state);
+                                                   @Field("uid") String uid,
+                                                   @Field("token") String token,
+                                                   @Field("login_state") String login_state);
 
     @FormUrlEncoded
     @POST("myplace/myplace_btn.php")

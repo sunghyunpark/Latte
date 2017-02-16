@@ -41,6 +41,7 @@ import java.util.UUID;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import app_config.UserInfo;
 import common.Common;
 import common.Send_Report_Dialog;
 import common.User_Profile_Edit_Dialog;
@@ -65,7 +66,6 @@ import retrofit2.Response;
  */
 public class Fragment_MyPage extends Fragment{
 
-    private SQLiteHandler db;
     //사용자 정보
     private String user_uid;
     private String user_email;
@@ -117,13 +117,15 @@ public class Fragment_MyPage extends Fragment{
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = new SQLiteHandler(getActivity());
-        HashMap<String, String> user = db.getUserDetails();
-        user_name = user.get("name");
-        user_email = user.get("email");
-        user_nick_name = user.get("nick_name");
-        user_profile_path = user.get("profile_img");
-        user_self_introduce = user.get("self_introduce");
+
+        user_uid = UserInfo.getInstance().getUserUid();
+        user_name = UserInfo.getInstance().getUserName();
+        user_email = UserInfo.getInstance().getUserEmail();
+        user_nick_name = UserInfo.getInstance().getUserNickName();
+        user_profile_path = UserInfo.getInstance().getUserProfileImg();
+        user_self_introduce = UserInfo.getInstance().getUserSelfIntroduce();
+
+        Toast.makeText(getActivity(), user_email, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -135,7 +137,6 @@ public class Fragment_MyPage extends Fragment{
         Bundle bundle = getArguments();
         if(bundle != null){
             String msg = bundle.getString("KEY_MSG");
-            user_uid = bundle.getString("user_uid");
             if(msg != null){
 
             }

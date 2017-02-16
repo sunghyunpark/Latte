@@ -28,6 +28,7 @@ import java.util.UUID;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import app_config.UserInfo;
 import common.Select_Date_Dialog;
 import common.User_Profile_Edit_Dialog;
 import jp.wasabeef.glide.transformations.BlurTransformation;
@@ -36,6 +37,7 @@ import jp.wasabeef.glide.transformations.CropSquareTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import pushevent.BusProvider;
 import pushevent.SelectDatePickerPushEvent;
+import realm.RealmUtil;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.CommonErrorResponse;
@@ -52,7 +54,6 @@ import tab4.Fragment_Follow_Like_item;
 
 public class Profile_Setting_Page extends Activity implements TextWatcher {
 
-    private SQLiteHandler db;
     private String userUid, userEmail, userProfilePath, backgroundPath, userName, userNickName, userIntroduce, userWebSite, userPhoneNum, userGender, userBirth;
     private EditText nameEditBox, nickNameEditBox, webSiteEditBox, introduceEditBox, phoneNumEditBox;
     private TextView genderTextView, birthTextView, introduce_length_txt;
@@ -65,19 +66,17 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.profile_setting_page);
 
-        db = new SQLiteHandler(this);
-        HashMap<String, String> user = db.getUserDetails();
-        userUid = user.get("uid");
-        userEmail = user.get("email");
-        userProfilePath = user.get("profile_img");
+        userUid = UserInfo.getInstance().getUserUid();
+        userEmail = UserInfo.getInstance().getUserEmail();
+        userProfilePath = UserInfo.getInstance().getUserProfileImg();
         backgroundPath = "test_img/test_img.jpg";
-        userName = user.get("name");
-        userNickName = user.get("nick_name");
-        userIntroduce = user.get("self_introduce");
-        userWebSite = user.get("website");
-        userPhoneNum = user.get("phone_number");
-        userGender = user.get("gender");
-        userBirth = user.get("birthday");
+        userName = UserInfo.getInstance().getUserName();
+        userNickName = UserInfo.getInstance().getUserNickName();
+        userIntroduce = UserInfo.getInstance().getUserSelfIntroduce();
+        userWebSite = UserInfo.getInstance().getUserWebsite();
+        userPhoneNum = UserInfo.getInstance().getUserPhoneNumber();
+        userGender = UserInfo.getInstance().getUserGender();
+        userBirth = UserInfo.getInstance().getUserBirthday();
 
         BusProvider.getInstance().register(this);    //날짜 다이얼로그로부터 받음.
 
@@ -279,7 +278,8 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
                             SaveProfileInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
                                     introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
                                     birthTextView.getText().toString());
-                            db.updateUserInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                            RealmUtil realmUtil = new RealmUtil();
+                            realmUtil.UpdateDB(getApplicationContext(), userUid, nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
                                     introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
                                     birthTextView.getText().toString());
                             finish();
@@ -287,7 +287,8 @@ public class Profile_Setting_Page extends Activity implements TextWatcher {
                             SaveProfileInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
                                     introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
                                     birthTextView.getText().toString());
-                            db.updateUserInfo(userUid,nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
+                            RealmUtil realmUtil = new RealmUtil();
+                            realmUtil.UpdateDB(getApplicationContext(), userUid, nameEditBox.getText().toString(),nickNameEditBox.getText().toString(),webSiteEditBox.getText().toString(),
                                     introduceEditBox.getText().toString(),phoneNumEditBox.getText().toString(),genderTextView.getText().toString(),
                                     birthTextView.getText().toString());
                             finish();

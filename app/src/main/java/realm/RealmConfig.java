@@ -14,6 +14,19 @@ import io.realm.RealmConfiguration;
 
 public class RealmConfig{
 
+    public RealmConfiguration UserInfo_DefaultRealmVersion(Context context){
+
+        Realm.init(context);    //realm 초기화
+        RealmConfiguration config = new RealmConfiguration.Builder()
+                .name("UserInfo.realm")
+                .schemaVersion(0)
+                .deleteRealmIfMigrationNeeded()
+                .build();
+
+        return config;
+
+    }
+
     public RealmConfiguration TimeLine_Follow_DefaultRealmVersion(Context context){
 
         Realm.init(context);    //realm 초기화

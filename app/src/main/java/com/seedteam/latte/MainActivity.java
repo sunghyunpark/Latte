@@ -1,11 +1,10 @@
 package com.seedteam.latte;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +13,22 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.util.HashMap;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.SessionManager;
+import common.Util;
+import io.realm.Realm;
 import login.Login_Page;
+import realm.RealmConfig;
+import realm.RealmUtil;
+import realm.Realm_UserData;
+import rest.ApiClient;
+import rest.ApiInterface;
+import rest.UserResponse;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import tab1.Fragment_Ranking;
 import tab2.Fragment_Timeline;
 import tab3.Upload_Page1;
@@ -55,14 +62,16 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
     private SQLiteHandler db;    //SQLite
 
     //사용자 정보
-    private String login_method;
-    private String uid;
-    private String user_profile_path;
-    private String user_email;
+    private String userUid;
     private String fcm_token;
 
     //현재 페이지
     private int current_page;
+    //Realm
+    private Realm mRealm;
+    private RealmConfig realmConfig;
+
+    Util util = new Util();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,18 +91,17 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
             //세션 유지
             startActivity(new Intent(getApplicationContext(), Splash_Page.class));
 
-            //SQLite로부터 사용자 정보를 가져옴
-            db = new SQLiteHandler(this);
-            HashMap<String, String> user = db.getUserDetails();
-            login_method = user.get("login_method");
-            uid = user.get("uid");
-            user_profile_path = user.get("profile_img");
-            user_email = user.get("email");
-            fcm_token = user.get("fcm_token");
+            InitDB();
+
+            Realm_UserData user_db = mRealm.where(Realm_UserData.class).equalTo("no",0).findFirst();
+            userUid = user_db.getUserUid();
+            fcm_token = user_db.getFcmToken();
+
             Toast.makeText(getApplicationContext(),fcm_token,Toast.LENGTH_SHORT).show();
 
             //최초 UI 초기화
             InitUI();
+            Get_UserInfo(userUid);
         }
     }
 
@@ -129,6 +137,81 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         fragmentTransaction.commit();
         tab1.setImageResource(R.mipmap.ic_page1_selected);
         current_page = 1;
+
+    }
+
+    //Realm 초기화
+    private void InitDB(){
+        realmConfig = new RealmConfig();
+        mRealm = Realm.getInstance(realmConfig.UserInfo_DefaultRealmVersion(getApplicationContext()));
+    }
+
+    /**
+     * 서버에서 받아온 데이터를 Realm에 저장해서 싱클톤으로 사용
+     * 네트워크 에러가 발생시에는 기존에 저장되어있던 데이터들로 사용하도록 함.
+     * @param userUid
+     */
+    private void Get_UserInfo(final String userUid){
+
+        if(util.isCheckNetworkState(getApplicationContext())){
+            ApiInterface apiService =
+                    ApiClient.getClient().create(ApiInterface.class);
+
+            Call<UserResponse> call = apiService.GetUserInfo("user_info", userUid);
+            call.enqueue(new Callback<UserResponse>() {
+                @Override
+                public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
+
+                    UserResponse userdata = response.body();
+                    if (!userdata.isError()) {
+
+                        mRealm.beginTransaction();
+                        Realm_UserData userDb = new Realm_UserData();
+                        userDb.setNo(0);
+                        userDb.setUserUid(userdata.getUser().getUid());
+                        userDb.setUserName(userdata.getUser().getName());
+                        userDb.setUserEmail(userdata.getUser().getEmail());
+                        userDb.setUserLoginMethod(userdata.getUser().getLogin_method());
+                        userDb.setUserFbId(userdata.getUser().getFb_id());
+                        userDb.setUserKtId(userdata.getUser().getKt_id());
+                        userDb.setUserGender(userdata.getUser().getGender());
+                        userDb.setUserNickName(userdata.getUser().getNick_name());
+                        userDb.setUserPhoneNumber(userdata.getUser().getPhone_number());
+                        userDb.setUserProfileImg(userdata.getUser().getProfile_img());
+                        userDb.setUserBirthday(userdata.getUser().getBirthday());
+                        userDb.setUserSelfIntroduce(userdata.getUser().getSelf_introduce());
+                        userDb.setUserWebsite(userdata.getUser().getWebsite());
+                        userDb.setCreated_at(userdata.getUser().getCreated_at());
+                        userDb.setFcmToken(fcm_token);
+
+                        mRealm.copyToRealmOrUpdate(userDb);
+                        mRealm.commitTransaction();
+
+                        RealmUtil realmUtil = new RealmUtil();
+                        realmUtil.RefreshUserInfo(MainActivity.this, userdata.getUser().getUid());
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), userdata.getError_msg()+"", Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+
+                @Override
+                public void onFailure(Call<UserResponse> call, Throwable t) {
+                    // Log error here since request failed
+                    Log.e("tag", t.toString());
+                    Toast.makeText(getApplicationContext(), "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
+
+                }
+            });
+        }else{
+            //network off
+            //네트워크 에러가 발생 시에는 기존에 저장된 데이터로 사용
+            Realm_UserData user_db = mRealm.where(Realm_UserData.class).equalTo("no",0).findFirst();
+            RealmUtil realmUtil = new RealmUtil();
+            realmUtil.RefreshUserInfo(MainActivity.this, user_db.getUserUid());
+        }
+
     }
 
     @Override
@@ -156,8 +239,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }else{
                     fragment = new Fragment_Ranking();
                     bundle.putString("KEY_MSG", "replace");
-                    bundle.putString("user_uid", uid);
-                    bundle.putString("user_email", user_email);
                     fragment.setArguments(bundle);
                     current_page = 1;
                     is_current_page = false;
@@ -170,7 +251,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }else{
                     fragment = new Fragment_Timeline();
                     bundle.putString("KEY_MSG", "replace");
-                    bundle.putString("user_uid", uid);
                     fragment.setArguments(bundle);
                     current_page = 2;
                     is_current_page = false;
@@ -178,9 +258,7 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break ;
             case R.id.tab_3 :
                 Intent intent = new Intent(getApplicationContext(), Upload_Page1.class);
-                intent.putExtra("login_method", login_method);
-                intent.putExtra("user_uid", uid);
-                intent.putExtra("user_profile_path", user_profile_path);
+
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 break ;
@@ -191,7 +269,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }else{
                     fragment = new Fragment_Like();
                     bundle.putString("KEY_MSG", "replace");
-                    bundle.putString("user_uid", uid);
                     fragment.setArguments(bundle);
                     current_page = 4;
                     is_current_page = false;
@@ -204,7 +281,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 }else{
                     fragment = new Fragment_MyPage();
                     bundle.putString("KEY_MSG", "replace");
-                    bundle.putString("user_uid", uid);
                     fragment.setArguments(bundle);
                     current_page = 5;
                     is_current_page = false;

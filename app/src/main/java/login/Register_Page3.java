@@ -33,7 +33,10 @@ import app_config.SessionManager;
 import common.Common;
 import common.Image_Uploader;
 import common.Util;
+import io.realm.Realm;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import realm.RealmConfig;
+import realm.Realm_UserData;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.IsUserResponse;
@@ -66,7 +69,6 @@ public class Register_Page3 extends Activity {
     private boolean nickNameCheck = false;
 
     private SessionManager mSessionManager;
-    private SQLiteHandler mSQLite;
 
     ImageView profile_plus_img, profile_img;
     TextView profile_txt;
@@ -74,6 +76,10 @@ public class Register_Page3 extends Activity {
     Util util = new Util();
     Image_Uploader image_uploader = new Image_Uploader();
     Common common = new Common();
+
+    //Realm
+    private Realm mRealm;
+    private RealmConfig realmConfig;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -239,20 +245,29 @@ public class Register_Page3 extends Activity {
 
                 UserResponse userdata = response.body();
                 if (!userdata.isError()) {
-                    mSQLite = new SQLiteHandler(getApplicationContext());
+                    realmConfig = new RealmConfig();
+                    mRealm = Realm.getInstance(realmConfig.UserInfo_DefaultRealmVersion(getApplicationContext()));
+
                     //회원가입 성공 후 uid값을 받아와 이미지 업로더에 넘김
                     String local_profile_path = "";
                     //Toast.makeText(getApplicationContext(), "성공", Toast.LENGTH_SHORT).show();
                     mSessionManager.setLogin(true);//로그인 성공 시 세션 유지
                     // Get token
                     String token = FirebaseInstanceId.getInstance().getToken();
-                    //내장 디비에 insert
-                    mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
-                            userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
-                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getBirthday(),
-                            userdata.getUser().getSelf_introduce(), userdata.getUser().getWebsite(), userdata.getUser().getCreated_at(), token);
+                    String userUid = userdata.getUser().getUid();
+
+                    //Realm 저장
+                    mRealm.beginTransaction();
+                    Realm_UserData userDb = new Realm_UserData();
+                    userDb.setNo(0);
+                    userDb.setUserUid(userUid);
+                    userDb.setFcmToken(token);
+
+                    mRealm.copyToRealmOrUpdate(userDb);
+                    mRealm.commitTransaction();
+
                     //fcm 토큰 서버에 등록
-                    common.PostRegisterFCMToken(Register_Page3.this, userdata.getUser().getUid(), token, "Y");
+                    common.PostRegisterFCMToken(Register_Page3.this, userUid, token, "Y");
                     if(!profile_img_path.equals("")){
                         /**
                          * email -> 단말기 내부 이미지 저장경로
@@ -264,10 +279,9 @@ public class Register_Page3 extends Activity {
                         }else if(login_method.equals("facebook")){
                             local_profile_path = profile_img_path;
                         }
-                        String UserUid = userdata.getUser().getUid();
-                        String ImageName = util.MakeImageName(UserUid);
+                        String ImageName = util.MakeImageName(userUid);
                         //서버에 업로드
-                        image_uploader.Upload_ProfileImage(Register_Page3.this, "profile", login_method, UserUid, ImageName, local_profile_path);
+                        image_uploader.Upload_ProfileImage(Register_Page3.this, "profile", login_method, userUid, ImageName, local_profile_path);
 
                     }
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);

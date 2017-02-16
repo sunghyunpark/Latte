@@ -22,8 +22,12 @@ import java.util.HashMap;
 import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.SessionManager;
+import app_config.UserInfo;
 import common.Common;
+import io.realm.Realm;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import realm.RealmConfig;
+import realm.Realm_UserData;
 
 /**
  * created by sunghyun at 2017-02-07
@@ -33,7 +37,9 @@ public class App_Setting_Page extends Activity {
 
     //세션
     private SessionManager session;
-    private SQLiteHandler db;
+    //Realm
+    private Realm mRealm;
+    private RealmConfig realmConfig;
 
     //사용자 정보
     private String user_uid;
@@ -48,10 +54,9 @@ public class App_Setting_Page extends Activity {
         setContentView(R.layout.app_setting_page);
 
         session = new SessionManager(getApplicationContext());
-        db = new SQLiteHandler(getApplicationContext());
-        HashMap<String, String> user = db.getUserDetails();
-        user_uid = user.get("uid");
-        fcm_token = user.get("fcm_token");
+
+        user_uid = UserInfo.getInstance().getUserUid();
+        fcm_token = UserInfo.getInstance().getFcmToken();
 
         InitView();
 
@@ -69,10 +74,14 @@ public class App_Setting_Page extends Activity {
 
     private void logoutUser() {
         session.setLogin(false);
-        db.deleteUsers();
+        realmConfig = new RealmConfig();
+        mRealm = Realm.getInstance(realmConfig.UserInfo_DefaultRealmVersion(getApplicationContext()));
+        Realm_UserData user_db = mRealm.where(Realm_UserData.class).equalTo("no",0).findFirst();
+        mRealm.beginTransaction();
+        user_db.deleteFromRealm();
+        mRealm.commitTransaction();
         //fcm 토큰 서버에 등록
-        Log.d("logout", user_uid);
-        Log.d("logout", fcm_token);
+
         common.PostRegisterFCMToken(getApplicationContext(), user_uid, fcm_token, "N");
         /*
         try{

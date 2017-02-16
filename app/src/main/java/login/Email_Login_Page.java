@@ -22,6 +22,9 @@ import app_config.SessionManager;
 import common.Common;
 import common.Util;
 import fcm.FirebaseInstanceIDService;
+import io.realm.Realm;
+import realm.RealmConfig;
+import realm.Realm_UserData;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.UserResponse;
@@ -35,9 +38,12 @@ import retrofit2.Response;
 public class Email_Login_Page extends Activity {
 
     private SessionManager mSessionManager;
-    private SQLiteHandler mSQLite;
 
     EditText email_edit_box, pw_edit_box;
+
+    //Realm
+    private Realm mRealm;
+    private RealmConfig realmConfig;
 
     Util util = new Util();
     Common common = new Common();
@@ -88,7 +94,6 @@ public class Email_Login_Page extends Activity {
         call.enqueue(new Callback<UserResponse>() {
             @Override
             public void onResponse(Call<UserResponse> call, Response<UserResponse> response) {
-                mSQLite = new SQLiteHandler(getApplicationContext());
                 UserResponse userdata = response.body();
 
                 if(userdata.isError()){
@@ -96,16 +101,26 @@ public class Email_Login_Page extends Activity {
                     Toast.makeText(getApplicationContext(),userdata.getError_msg()+"",Toast.LENGTH_SHORT).show();
                 }else{
                     //로그인 성공
+                    realmConfig = new RealmConfig();
+                    mRealm = Realm.getInstance(realmConfig.UserInfo_DefaultRealmVersion(getApplicationContext()));
+
                     mSessionManager.setLogin(true);    //로그인 성공 시 세션 유지
                     // Get token
                     String token = FirebaseInstanceId.getInstance().getToken();
-                    //내장 디비에 insert
-                    mSQLite.addUser(userdata.getUser().getUid(), userdata.getUser().getLogin_method(), userdata.getUser().getFb_id(), userdata.getUser().getKt_id(),
-                            userdata.getUser().getName(), userdata.getUser().getGender(), userdata.getUser().getEmail(), userdata.getUser().getNick_name(),
-                            userdata.getUser().getPhone_number(), userdata.getUser().getProfile_img(), userdata.getUser().getBirthday(),
-                            userdata.getUser().getSelf_introduce(), userdata.getUser().getWebsite(), userdata.getUser().getCreated_at(), token);
+                    String userUid = userdata.getUser().getUid();
+
+                    //Realm 저장
+                    mRealm.beginTransaction();
+                    Realm_UserData userDb = new Realm_UserData();
+                    userDb.setNo(0);
+                    userDb.setUserUid(userUid);
+                    userDb.setFcmToken(token);
+
+                    mRealm.copyToRealmOrUpdate(userDb);
+                    mRealm.commitTransaction();
+
                     //fcm 토큰 서버에 등록
-                    common.PostRegisterFCMToken(Email_Login_Page.this, userdata.getUser().getUid(), token, "Y");
+                    common.PostRegisterFCMToken(Email_Login_Page.this, userUid, token, "Y");
                     //로그인 성공 후 메인화면으로 이동
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);

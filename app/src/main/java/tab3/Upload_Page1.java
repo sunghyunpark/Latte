@@ -51,6 +51,7 @@ import java.util.UUID;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import app_config.UserInfo;
 import common.Util;
 import pushevent.BusProvider;
 import pushevent.Register_ProfilePushEvent;
@@ -65,8 +66,6 @@ import pushevent.Upload_ArticlePicPushEvent;
  *
  */
 public class Upload_Page1 extends Activity {
-
-    private SQLiteHandler db;    //SQLite
 
     //os6.0 permission
     private static final int REQUEST_PERMISSIONS_READ_EXTERNAL_STORAGE = 10;
@@ -113,13 +112,10 @@ public class Upload_Page1 extends Activity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         upload_page1 = this;
-        db = new SQLiteHandler(this);
-        HashMap<String, String> user = db.getUserDetails();
 
-        Intent intent = getIntent();
-        uid = intent.getExtras().getString("user_uid");
-        login_method = intent.getExtras().getString("login_method");
-        user_profile_path = user.get("profile_img");
+        uid = UserInfo.getInstance().getUserUid();
+        login_method = UserInfo.getInstance().getUserLoginMethod();
+        user_profile_path = UserInfo.getInstance().getUserProfileImg();
 
         BusProvider.getInstance().register(this);
 

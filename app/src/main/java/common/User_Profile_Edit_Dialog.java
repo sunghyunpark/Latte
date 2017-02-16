@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import app_config.UserInfo;
 import pushevent.BusProvider;
 import pushevent.Register_ProfilePushEvent;
 
@@ -45,7 +46,6 @@ public class User_Profile_Edit_Dialog extends Activity {
     private String email;
     private String login_method;
 
-    private SQLiteHandler db;    //SQLite
     Image_Uploader image_uploader = new Image_Uploader();
     Util util = new Util();
 
@@ -55,10 +55,8 @@ public class User_Profile_Edit_Dialog extends Activity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);//위의 타이틀바 제거인데 setContentView 전에 넣어줘야함 뷰가 생성되기전에 제거되어야하므로...
         setContentView(R.layout.user_profile_edit_dialog);
 
-        db = new SQLiteHandler(this);
-        HashMap<String, String> user = db.getUserDetails();
-        uid = user.get("uid");
-        login_method = user.get("login_method");
+        uid = UserInfo.getInstance().getUserUid();
+        login_method = UserInfo.getInstance().getUserLoginMethod();
 
         Intent intent = getIntent();
         from = intent.getExtras().getString("from");

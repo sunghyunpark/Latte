@@ -44,6 +44,7 @@ import java.util.UUID;
 
 import app_config.App_Config;
 import app_config.SQLiteHandler;
+import app_config.UserInfo;
 import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import rest.ApiClient;
@@ -60,7 +61,6 @@ import retrofit2.Response;
  */
 public class Article_Comment_Activity extends Activity implements SwipeRefreshLayout.OnRefreshListener,TextWatcher {
 
-    private SQLiteHandler db;    //SQLite
     //사용자 정보
     private String uid;    //로그인 user uid
     private String user_nick_name;    //로그인 user_nick_name
@@ -103,10 +103,8 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
         uid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
 
-        db = new SQLiteHandler(this);
-        HashMap<String, String> user = db.getUserDetails();
-        user_nick_name = user.get("nick_name");
-        user_profile_path = user.get("profile_img");
+        user_nick_name = UserInfo.getInstance().getUserNickName();
+        user_profile_path = UserInfo.getInstance().getUserProfileImg();
 
         InitView();
         LoadArticleComment(true,0,0);
