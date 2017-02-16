@@ -144,7 +144,22 @@
         <activity
             android:name="common.Select_Date_Dialog"
             android:screenOrientation="portrait"
-            android:theme="@style/CustomDatePickDailog" >
+            android:theme="@style/CustomDatePickDialog" >
+        </activity>
+        <activity
+            android:name="common.My_Article_More_Dialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomDialog" >
+        </activity>
+        <activity
+            android:name="common.Other_Article_More_Dialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomDialog" >
+        </activity>
+        <activity
+            android:name="article.Article_Edit_Activity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
     </application>
 

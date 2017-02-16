@@ -44,6 +44,8 @@ import article.Article_Comment_Activity;
 import article.Article_Detail_Activity;
 import article.Article_Like_Activity;
 import common.Common;
+import common.My_Article_More_Dialog;
+import common.Other_Article_More_Dialog;
 import common.Send_Report_Dialog;
 import common.Util;
 import io.realm.Realm;
@@ -533,6 +535,25 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             return state;
         }
 
+
+        /**
+         * 해당 아티클이 내가 게시한 아티클인지 판별
+         * @param position
+         * @return
+         */
+        private boolean IsMyArticle(int position){
+            boolean isMyArticle = false;
+            String article_user_uid = getItem(position).getUid();
+
+            if(article_user_uid.equals(uid)){
+                isMyArticle = true;
+            }else{
+                isMyArticle = false;
+            }
+
+            return isMyArticle;
+        }
+
         /**
          * 좋아요 상태가 변경되었을 때 해당 아아템의 데이터 값을 변경해줌
          * 이 메소드는 좋아요 버튼을 눌렀을 때 클릭이벤트에 따라 설정값을 다르게 해줌
@@ -588,8 +609,19 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(getActivity(), Send_Report_Dialog.class));
-                        getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
+                        if(IsMyArticle(position)){
+                            //내 아티클인 경우
+                            Intent intent = new Intent(getActivity(), My_Article_More_Dialog.class);
+                            intent.putExtra("user_uid", uid);
+                            intent.putExtra("article_id", currentItem.getArticle_id());
+                            intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
+                            intent.putExtra("article_contents", currentItem.getArticle_contents());
+                            startActivity(intent);
+                        }else{
+                            //내 아티클 아닌 경우
+                            Intent intent = new Intent(getActivity(), Other_Article_More_Dialog.class);
+                            startActivity(intent);
+                        }
                     }
                 });
 
