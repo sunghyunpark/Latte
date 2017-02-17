@@ -21,6 +21,8 @@
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center_horizontal"
+        android:padding="1dp"
+        android:background="@drawable/profile_round_shape_appcolor"
         android:layout_marginTop="20dp"/>
 
     <TextView
