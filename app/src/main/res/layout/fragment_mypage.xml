@@ -70,7 +70,6 @@
                         android:layout_height="30dp"
                         android:padding="1dp"
                         android:layout_alignParentRight="true"
-                        android:src="@mipmap/ic_launcher"
                         android:scaleType="fitXY"
                         android:background="@drawable/myplace_background_shape_white"/>
                     <ImageView
@@ -82,7 +81,6 @@
                         android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:scaleType="fitXY"
-                        android:src="@mipmap/ic_launcher"
                         android:background="@drawable/myplace_background_shape_white"/>
 
                 </RelativeLayout>
@@ -99,6 +97,7 @@
                     android:layout_marginLeft="10dp"/>
 
                 <LinearLayout
+                    android:id="@+id/self_introduce_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"

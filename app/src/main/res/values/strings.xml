@@ -60,4 +60,7 @@
     <!--아티클 신고 후 차단 여부 다이얼로그-->
     <string name="report_after_block_txt">해당 게시자 %1$s님을 차단 하시겠습니까?</string>
 
+    <!--내 소개글 다이얼로그 비어있을 때 문구-->
+    <string name="self_introduce_empty_txt">소개글이 없습니다.</string>
+
 </resources>

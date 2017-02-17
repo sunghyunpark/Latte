@@ -171,6 +171,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/CustomDialog" >
         </activity>
+        <activity
+            android:name="common.Self_Introduce_Dialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomDialog" >
+        </activity>
     </application>
 
 </manifest>

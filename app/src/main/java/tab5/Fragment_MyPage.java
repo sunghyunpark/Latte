@@ -43,6 +43,7 @@ import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.UserInfo;
 import common.Common;
+import common.Self_Introduce_Dialog;
 import common.Send_Report_Dialog;
 import common.User_Profile_Edit_Dialog;
 import common.Util;
@@ -233,10 +234,20 @@ public class Fragment_MyPage extends Fragment{
         TextView introduce_txt = (TextView)v.findViewById(R.id.introduce_txt);    //소개글
         TextView website_txt = (TextView)v.findViewById(R.id.website_txt);    //웹사이트
         TextView my_nickname_txt = (TextView)v.findViewById(R.id.my_nickname_txt);    //상단바 닉네임
+        TextView introduce_empty_txt = (TextView)v.findViewById(R.id.empty_txt);    //소개글 비어있을 경우
 
         grid_btn = (ImageView)v.findViewById(R.id.grid_btn);    // 그리드 버튼
         list_btn = (ImageView)v.findViewById(R.id.list_btn);    // 리스트 버튼
         wish_btn = (ImageView)v.findViewById(R.id.wish_btn);    // 위시 버튼
+
+        ViewGroup self_introduce_layout = (ViewGroup)v.findViewById(R.id.self_introduce_layout);    //소개글 레이아웃
+        self_introduce_layout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Self_Introduce_Dialog.class);
+                startActivity(intent);
+            }
+        });
 
         //처음 디폴트는 그리드형식이라 그리드로 초기화 해줌
         SetArticleGrid();
@@ -255,11 +266,8 @@ public class Fragment_MyPage extends Fragment{
         });
 
         grid_btn.setOnTouchListener(myOnTouchListener);
-
         list_btn.setOnTouchListener(myOnTouchListener);
-
         wish_btn.setOnTouchListener(myOnTouchListener);
-
         edit_profile_btn.setOnTouchListener(myOnTouchListener);
 
         my_nickname_txt.setText(user_nick_name);
