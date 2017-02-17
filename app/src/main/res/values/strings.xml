@@ -57,4 +57,7 @@
     <string name="article_report_4">타인을 사칭하는 게시물</string>
     <string name="article_report_5">기타</string>
 
+    <!--아티클 신고 후 차단 여부 다이얼로그-->
+    <string name="report_after_block_txt">해당 게시자 %1$s님을 차단 하시겠습니까?</string>
+
 </resources>

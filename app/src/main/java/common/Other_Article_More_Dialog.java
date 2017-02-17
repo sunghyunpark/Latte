@@ -14,7 +14,7 @@ import com.seedteam.latte.R;
  */
 public class Other_Article_More_Dialog extends Activity {
 
-    private String userUid, article_id;
+    private String userUid, article_id, article_user_profile_img,article_user_uid,article_user_nickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +25,9 @@ public class Other_Article_More_Dialog extends Activity {
         Intent intent = getIntent();
         userUid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
+        article_user_profile_img = intent.getExtras().getString("article_user_profile_img");
+        article_user_uid = intent.getExtras().getString("article_user_uid");    //아티클 게시자 uid
+        article_user_nickname = intent.getExtras().getString("article_user_nickname");
 
     }
 
@@ -36,6 +39,9 @@ public class Other_Article_More_Dialog extends Activity {
                 Intent intent_report = new Intent(getApplicationContext(), Send_Report_Dialog.class);
                 intent_report.putExtra("user_uid", userUid);
                 intent_report.putExtra("article_id", article_id);
+                intent_report.putExtra("article_user_profile_img",article_user_profile_img);
+                intent_report.putExtra("article_user_uid", article_user_uid);
+                intent_report.putExtra("article_user_nickname", article_user_nickname);
                 startActivity(intent_report);
                 overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 finish();

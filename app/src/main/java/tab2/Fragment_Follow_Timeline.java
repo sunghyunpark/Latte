@@ -623,8 +623,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         }else{
                             //내 아티클 아닌 경우
                             Intent intent = new Intent(getActivity(), Other_Article_More_Dialog.class);
-                            intent.putExtra("user_uid", uid);
+                            intent.putExtra("user_uid", uid);    //내 uid
                             intent.putExtra("article_id", currentItem.getArticle_id());
+                            intent.putExtra("article_user_profile_img", currentItem.getUser_profile_img_path());
+                            intent.putExtra("article_user_uid", currentItem.getUid());
+                            intent.putExtra("article_user_nickname", currentItem.getUser_nickname());
                             startActivity(intent);
                         }
                     }

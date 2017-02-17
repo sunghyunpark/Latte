@@ -31,9 +31,9 @@ public class Common {
 
                 CommonErrorResponse tokenResponse = response.body();
                 if (!tokenResponse.isError()) {
-                    Toast.makeText(context,"신고해주셔서 감사합니다", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"신고해주셔서 감사합니다", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(context,"신고 실패", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(context,"신고 실패", Toast.LENGTH_SHORT).show();
                 }
 
             }

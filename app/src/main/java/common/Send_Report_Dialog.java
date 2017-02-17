@@ -16,7 +16,7 @@ import com.seedteam.latte.R;
  */
 public class Send_Report_Dialog extends Activity {
 
-    private String userUid, article_id;
+    private String userUid, article_id,article_user_profile_img,article_user_uid,article_user_nickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,9 @@ public class Send_Report_Dialog extends Activity {
         Intent intent = getIntent();
         userUid = intent.getExtras().getString("user_uid");
         article_id = intent.getExtras().getString("article_id");
+        article_user_profile_img = intent.getExtras().getString("article_user_profile_img");
+        article_user_uid = intent.getExtras().getString("article_user_uid");
+        article_user_nickname = intent.getExtras().getString("article_user_nickname");
 
     }
 
@@ -58,6 +61,12 @@ public class Send_Report_Dialog extends Activity {
                 break;
         }
         common.ReportArticle(getApplicationContext(), userUid, article_id, report_str);
+        //신고 후 차단 여부 다이얼로그로 이동
+        Intent intent_report_after_block = new Intent(getApplicationContext(), Send_Report_After_Block_Dialog.class);
+        intent_report_after_block.putExtra("article_user_profile_img", article_user_profile_img);
+        intent_report_after_block.putExtra("article_user_uid", article_user_uid);
+        intent_report_after_block.putExtra("article_user_nickname", article_user_nickname);
+        startActivity(intent_report_after_block);
         finish();
     }
 

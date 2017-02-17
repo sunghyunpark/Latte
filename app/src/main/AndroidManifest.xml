@@ -166,6 +166,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/CustomDialog" >
         </activity>
+        <activity
+            android:name="common.Send_Report_After_Block_Dialog"
+            android:screenOrientation="portrait"
+            android:theme="@style/CustomDialog" >
+        </activity>
     </application>
 
 </manifest>

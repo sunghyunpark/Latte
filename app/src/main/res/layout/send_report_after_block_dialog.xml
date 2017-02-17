@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="250dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/common_dialog_shape"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="해당 게시물의 신고가 접수되었습니다."
+        android:textStyle="bold"
+        android:textSize="14dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#000000"/>
+
+    <ImageView
+        android:id="@+id/user_profile_img"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"/>
+
+    <TextView
+        android:id="@+id/dialog_txt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:textSize="14dp"
+        android:textColor="#000000"
+        android:text="@string/report_after_block_txt"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="15dp"/>
+
+    <LinearLayout
+        android:id="@+id/btn_layout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="7dp"
+        android:paddingBottom="10dp">
+        <Button
+            android:id="@+id/block_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:onClick="buttonPressed"
+            android:textColor="@color/AppBasicColor"
+            android:textSize="14dp"
+            android:text="차단"/>
+        <Button
+            android:id="@+id/only_report_btn"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#ffffff"
+            android:onClick="buttonPressed"
+            android:textSize="14dp"
+            android:textColor="@color/AppBasicColor"
+            android:text="아니오, 신고만 원합니다."/>
+    </LinearLayout>
+</LinearLayout>
