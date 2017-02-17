@@ -264,4 +264,19 @@ public interface ApiInterface {
     Call<CommonErrorResponse> DeleteArticle(@Field("tag") String tag,
                                             @Field("uid") String uid,
                                             @Field("article_id") String article_id);
+
+    /**
+     * 내 아티클 수정
+     * @param tag -> article_update
+     * @param uid
+     * @param article_id
+     * @param article_contents
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> EditArticle(@Field("tag") String tag,
+                                          @Field("uid") String uid,
+                                          @Field("article_id") String article_id,
+                                          @Field("article_text") String article_contents);
 }

@@ -609,6 +609,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
                         if(IsMyArticle(position)){
                             //내 아티클인 경우
                             Intent intent = new Intent(getActivity(), My_Article_More_Dialog.class);

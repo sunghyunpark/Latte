@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ScrollView;
@@ -48,6 +49,7 @@ import retrofit2.Response;
 public class Article_Edit_Activity extends Activity{
 
     private String userUid, article_id, article_photo_url, article_contents;
+    private EditText article_editBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,9 +70,11 @@ public class Article_Edit_Activity extends Activity{
         ImageView userProfileImg = (ImageView)findViewById(R.id.user_profile_img);
         TextView userNickNametxt = (TextView)findViewById(R.id.user_nickname_txt);
         ImageView articleImg = (ImageView)findViewById(R.id.article_img);
-        EditText article_editBox = (EditText)findViewById(R.id.article_edit_box);
+        article_editBox = (EditText)findViewById(R.id.article_edit_box);
         ImageView back_btn = (ImageView)findViewById(R.id.back_btn);
         back_btn.setOnTouchListener(myOnTouchListener);
+        Button save_btn = (Button)findViewById(R.id.save_btn);
+        save_btn.setOnTouchListener(myOnTouchListener);
 
         //(나) 프로필
         Glide.with(getApplicationContext())
@@ -112,6 +116,17 @@ public class Article_Edit_Activity extends Activity{
                 switch(v.getId()){
                     case R.id.back_btn:
                         finish();
+                        break;
+                    case R.id.save_btn:
+                        article_contents = article_editBox.getText().toString();
+                        article_contents = article_contents.trim();
+                        if(article_contents.equals("")){
+                            Toast.makeText(getApplicationContext(), "내용을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                        }else{
+                            Common common = new Common();
+                            common.EditMyArticle(getApplicationContext(), userUid, article_id, article_contents);
+                            finish();
+                        }
                         break;
                 }
             }
