@@ -25,7 +25,7 @@ import pushevent.My_Article_More_BtnPushEvent;
  */
 public class My_Article_More_Dialog extends Activity {
 
-    private String userUid, article_id, article_photo_url, article_contents;
+    private String userUid, article_id, article_photo_url, article_contents,from_place;
     private int pos;    // 아티클 삭제 시 해당 아이템 포지션값
 
     @Override
@@ -40,6 +40,7 @@ public class My_Article_More_Dialog extends Activity {
         article_photo_url = intent.getExtras().getString("article_photo_url");
         article_contents = intent.getExtras().getString("article_contents");
         pos = intent.getExtras().getInt("position");
+        from_place = intent.getExtras().getString("from_place");    //어디로 부터 진입한건지
 
     }
 
@@ -60,6 +61,7 @@ public class My_Article_More_Dialog extends Activity {
             case R.id.article_delete_btn:
                 Intent intent_delete = new Intent(getApplicationContext(), Article_Delete_Alert_Dialog.class);
                 intent_delete.putExtra("position", pos);
+                intent_delete.putExtra("from_place", from_place);
                 startActivity(intent_delete);
                 finish();
                 break;

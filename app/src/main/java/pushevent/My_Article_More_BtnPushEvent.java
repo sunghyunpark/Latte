@@ -7,7 +7,15 @@ public class My_Article_More_BtnPushEvent
      */
 
     private int position;    //리사이클러뷰로부터 올때의 해당 아이템 position
+    private String from;    //어디로부터 발생한 이벤트 인지..(timeline, lookaround, myplace 등등등
 
+    public String getFrom() {
+        return from;
+    }
+
+    public void setFrom(String from) {
+        this.from = from;
+    }
 
     public int getPosition() {
         return position;
@@ -18,8 +26,9 @@ public class My_Article_More_BtnPushEvent
     }
 
 
-    public My_Article_More_BtnPushEvent(int position){
+    public My_Article_More_BtnPushEvent(int position, String from){
         this.position = position;
+        this.from = from;
     }
 
 }

@@ -24,6 +24,7 @@ import pushevent.My_Article_More_BtnPushEvent;
 public class Article_Delete_Alert_Dialog extends Activity {
 
     private int pos;    //삭제할 아이템 포지션
+    private String from_place;    //어디로부터 진입한건지
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,7 @@ public class Article_Delete_Alert_Dialog extends Activity {
 
         Intent intent = getIntent();
         pos = intent.getExtras().getInt("position");
+        from_place = intent.getExtras().getString("from_place");
 
 
     }
@@ -41,7 +43,7 @@ public class Article_Delete_Alert_Dialog extends Activity {
     public void buttonPressed(View v) {
         switch ((v.getId())){
             case R.id.delete_btn:
-                BusProvider.getInstance().post(new My_Article_More_BtnPushEvent(pos));
+                BusProvider.getInstance().post(new My_Article_More_BtnPushEvent(pos,from_place));
                 finish();
                 break;
             case R.id.cancel_btn:

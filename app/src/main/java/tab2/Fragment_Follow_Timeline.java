@@ -541,6 +541,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             return state;
         }
 
+        /**
+         * 해당 아티클이 내가 작성한 아티클인지 아닌지 판별
+         * @param position
+         * @return
+         */
         private boolean IsMyArticle(int position){
             boolean isMyArticle = false;
             String article_user_uid = getItem(position).getUid();
@@ -619,6 +624,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                             intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
                             intent.putExtra("article_contents", currentItem.getArticle_contents());
                             intent.putExtra("position", position);
+                            intent.putExtra("from_place", "timeline");
                             startActivity(intent);
                         }else{
                             //내 아티클 아닌 경우
@@ -769,7 +775,10 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     public void FinishLoad(My_Article_More_BtnPushEvent mPushEvent) {
 
         int pos = mPushEvent.getPosition();
-        adapter.removeItem(pos);
+        String from = mPushEvent.getFrom();
+        if(from.equals("timeline")){
+            adapter.removeItem(pos);
+        }
 
     }
 

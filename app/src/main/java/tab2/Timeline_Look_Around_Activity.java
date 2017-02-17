@@ -31,6 +31,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,8 +44,12 @@ import article.Article_Comment_Activity;
 import article.Article_Detail_Activity;
 import article.Article_Like_Activity;
 import common.Common;
+import common.My_Article_More_Dialog;
+import common.Other_Article_More_Dialog;
 import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
+import pushevent.BusProvider;
+import pushevent.My_Article_More_BtnPushEvent;
 import rest.ApiClient;
 import rest.ApiInterface;
 import rest.ArticleDetailBack;
@@ -82,6 +87,12 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
     FrameLayout recyclerViewFrameLayout;
 
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+    }
+
+    @Override
     public void onResume(){
         super.onResume();
         /**
@@ -107,6 +118,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         setContentView(R.layout.timeline_look_around_activity);
 
         listItems = new ArrayList<Fragment_Timeline_item>();
+
+        BusProvider.getInstance().register(this);    // 내 아티클 삭제 할때 포지션값 받기위해
 
         Intent intent = getIntent();
         uid = intent.getExtras().getString("user_uid");
@@ -412,6 +425,24 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         }
 
         /**
+         * 해당 아티클이 내가 작성한 아티클인지 아닌지 판별
+         * @param position
+         * @return
+         */
+        private boolean IsMyArticle(int position){
+            boolean isMyArticle = false;
+            String article_user_uid = getItem(position).getUid();
+
+            if(article_user_uid.equals(uid)){
+                isMyArticle = true;
+            }else{
+                isMyArticle = false;
+            }
+
+            return isMyArticle;
+        }
+
+        /**
          * 좋아요 상태가 변경되었을 때 해당 아아템의 데이터 값을 변경해줌
          * 이 메소드는 좋아요 버튼을 눌렀을 때 클릭이벤트에 따라 설정값을 다르게 해줌
          * @param state
@@ -466,7 +497,28 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
+                        if(IsMyArticle(position)){
+                            //내 아티클인 경우
+                            Intent intent = new Intent(getApplicationContext(), My_Article_More_Dialog.class);
+                            intent.putExtra("user_uid", uid);
+                            intent.putExtra("article_id", currentItem.getArticle_id());
+                            intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
+                            intent.putExtra("article_contents", currentItem.getArticle_contents());
+                            intent.putExtra("position", position);
+                            intent.putExtra("from_place","lookaround");
+                            startActivity(intent);
+                        }else{
+                            //내 아티클 아닌 경우
+                            Intent intent = new Intent(getApplicationContext(), Other_Article_More_Dialog.class);
+                            intent.putExtra("user_uid", uid);    //내 uid
+                            intent.putExtra("article_id", currentItem.getArticle_id());
+                            intent.putExtra("article_user_profile_img", currentItem.getUser_profile_img_path());
+                            intent.putExtra("article_user_uid", currentItem.getUid());
+                            intent.putExtra("article_user_nickname", currentItem.getUser_nickname());
+                            startActivity(intent);
+                        }
                     }
                 });
 
@@ -577,6 +629,13 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 VHitem.created_at.setText(util.formatTimeString(to));
             }
         }
+        private void removeItem(int position){
+            common.DeleteMyArticle(getApplicationContext(), uid, getItem(position).getArticle_id());
+            listItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, listItems.size()+1);
+
+        }
         private boolean isPositionHeader(int position) {
             return position == 0;
         }
@@ -595,4 +654,16 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
             return listItems.size()+1;
         }
     }
+
+    @Subscribe
+    public void FinishLoad(My_Article_More_BtnPushEvent mPushEvent) {
+
+        int pos = mPushEvent.getPosition();
+        String from = mPushEvent.getFrom();
+        if(from.equals("lookaround")){
+            adapter.removeItem(pos);
+        }
+
+    }
+
 }
