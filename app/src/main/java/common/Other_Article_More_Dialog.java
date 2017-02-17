@@ -1,6 +1,7 @@
 package common;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -13,12 +14,17 @@ import com.seedteam.latte.R;
  */
 public class Other_Article_More_Dialog extends Activity {
 
+    private String userUid, article_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//위의 타이틀바 제거인데 setContentView 전에 넣어줘야함 뷰가 생성되기전에 제거되어야하므로...
         setContentView(R.layout.other_article_more_dialog);
+
+        Intent intent = getIntent();
+        userUid = intent.getExtras().getString("user_uid");
+        article_id = intent.getExtras().getString("article_id");
 
     }
 
@@ -27,7 +33,12 @@ public class Other_Article_More_Dialog extends Activity {
     public void buttonPressed(View v) {
         switch ((v.getId())){
             case R.id.report_btn:
-
+                Intent intent_report = new Intent(getApplicationContext(), Send_Report_Dialog.class);
+                intent_report.putExtra("user_uid", userUid);
+                intent_report.putExtra("article_id", article_id);
+                startActivity(intent_report);
+                overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
+                finish();
                 break;
             case R.id.block_btn:
 

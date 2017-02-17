@@ -20,6 +20,33 @@ import retrofit2.Response;
 
 public class Common {
 
+    public void ReportArticle(final Context context, String uid, String article_id, String reason){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.ReportArticle("report_article_input", uid, article_id, reason);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse tokenResponse = response.body();
+                if (!tokenResponse.isError()) {
+                    Toast.makeText(context,"신고해주셔서 감사합니다", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context,"신고 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(context, "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
 
     public void EditMyArticle(final Context context, String uid, String article_id, String article_contents){
         ApiInterface apiService =

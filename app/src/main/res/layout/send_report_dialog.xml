@@ -36,7 +36,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/send_report_dialog_btn"
-        android:text="불쾌한 리뷰"
+        android:text="@string/article_report_1"
         android:layout_marginTop="15dp"
         android:onClick="buttonPressed"
         android:textColor="#000000"/>
@@ -46,7 +46,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/send_report_dialog_btn"
-        android:text="불법 광고나 홍보"
+        android:text="@string/article_report_2"
         android:layout_marginTop="10dp"
         android:onClick="buttonPressed"
         android:textColor="#000000"/>
@@ -56,7 +56,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/send_report_dialog_btn"
-        android:text="폭력적이거나 음란한 리뷰"
+        android:text="@string/article_report_3"
         android:layout_marginTop="10dp"
         android:onClick="buttonPressed"
         android:textColor="#000000"/>
@@ -66,7 +66,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/send_report_dialog_btn"
-        android:text="타인을 사칭하는 리뷰"
+        android:text="@string/article_report_4"
         android:layout_marginTop="10dp"
         android:onClick="buttonPressed"
         android:textColor="#000000"/>
@@ -76,7 +76,7 @@
         android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/send_report_dialog_btn"
-        android:text="기타"
+        android:text="@string/article_report_5"
         android:layout_marginTop="10dp"
         android:onClick="buttonPressed"
         android:layout_marginBottom="15dp"

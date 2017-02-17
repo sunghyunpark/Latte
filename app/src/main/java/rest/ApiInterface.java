@@ -279,4 +279,19 @@ public interface ApiInterface {
                                           @Field("uid") String uid,
                                           @Field("article_id") String article_id,
                                           @Field("article_text") String article_contents);
+
+    /**
+     * 아티클 신고
+     * @param tag
+     * @param uid
+     * @param article_id
+     * @param reason
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> ReportArticle(@Field("tag") String tag,
+                                          @Field("uid") String uid,
+                                          @Field("article_id") String article_id,
+                                          @Field("reason") String reason);
 }

@@ -6,15 +6,14 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
-import android.widget.Toast;
 
 import com.seedteam.latte.R;
 
 /**
- * created by sunghyun 2017-01-03
- * 신고하기 다이얼로그
+ * created by sunghyun 2017-02-07
+ * 신고하기 후에 해당 사용자를 차단할 것인지 확인 다이얼로그
  */
-public class Send_Report_Dialog extends Activity {
+public class Send_Report_After_Block_Dialog extends Activity {
 
     private String userUid, article_id;
 
