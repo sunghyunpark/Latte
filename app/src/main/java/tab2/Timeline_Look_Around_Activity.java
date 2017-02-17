@@ -497,8 +497,8 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        detail_pos = position;
-                        detail_article_id = currentItem.getArticle_id();
+                        //detail_pos = position;
+                        //detail_article_id = currentItem.getArticle_id();
                         if(IsMyArticle(position)){
                             //내 아티클인 경우
                             Intent intent = new Intent(getApplicationContext(), My_Article_More_Dialog.class);
@@ -631,7 +631,7 @@ public class Timeline_Look_Around_Activity extends Activity implements SwipeRefr
         }
         private void removeItem(int position){
             common.DeleteMyArticle(getApplicationContext(), uid, getItem(position).getArticle_id());
-            listItems.remove(position);
+            listItems.remove(position-1);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, listItems.size()+1);
 

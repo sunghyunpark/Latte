@@ -41,6 +41,7 @@ import java.util.List;
 
 import app_config.App_Config;
 import common.ImageViewer;
+import common.My_Article_More_Dialog;
 import pushevent.BusProvider;
 import common.Cancel_Following_Dialog;
 import common.Common;
@@ -178,6 +179,22 @@ public class Article_Detail_Activity extends Activity {
     }
 
     /**
+     * 해당 아티클이 내가 작성한 아티클인지 아닌지 판별
+     * @return
+     */
+    private boolean IsMyArticle(String article_user_uid){
+        boolean isMyArticle = false;
+
+        if(article_user_uid.equals(user_uid)){
+            isMyArticle = true;
+        }else{
+            isMyArticle = false;
+        }
+
+        return isMyArticle;
+    }
+
+    /**
      * 서버에서 새로운 디테일뷰 데이터를 불러옴
      */
     private void LoadDetailData(){
@@ -189,7 +206,7 @@ public class Article_Detail_Activity extends Activity {
             @Override
             public void onResponse(Call<ArticleDetailResponse> call, Response<ArticleDetailResponse> response) {
 
-                ArticleDetailResponse articledata = response.body();
+                final ArticleDetailResponse articledata = response.body();
                 Resources res = getResources();
                 if (!articledata.isError()) {
 
@@ -203,6 +220,18 @@ public class Article_Detail_Activity extends Activity {
 
                     //작성자 닉네임
                     article_user_nickname_txt.setText(articledata.getArticle().getNick_name());
+
+                    ImageView more_btn = (ImageView)findViewById(R.id.more_btn);
+                    more_btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            if(IsMyArticle(articledata.getArticle().getUid())){
+
+                            }else{
+
+                            }
+                        }
+                    });
 
                     //좋아요 버튼 상태 초기화
                     InitLikeBtn(articledata.getArticle().getArticle_like_state());
@@ -326,6 +355,7 @@ public class Article_Detail_Activity extends Activity {
             }
         });
     }
+
     //3개 댓글 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
