@@ -50,7 +50,7 @@
             <!--상단 정보 레이아웃-->
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="270dp">
+                android:layout_height="280dp">
                 <ImageView
                     android:id="@+id/background_img"
                     android:layout_width="match_parent"
@@ -257,10 +257,22 @@
                             android:layout_height="wrap_content"
                             android:textColor="#ffffff"
                             android:layout_marginTop="3dp"
-                            android:maxLines="4"
-                            android:layout_marginBottom="3dp"
+                            android:maxLines="3"
                             android:layout_marginLeft="10dp"
                             android:paddingRight="10dp"
+                            android:ellipsize="end"/>
+                        <TextView
+                            android:id="@+id/website_txt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/AppBasicColor"
+                            android:maxLines="1"
+                            android:textStyle="bold"
+                            android:autoLink="web"
+                            android:textColorLink="@color/AppBasicColor"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginBottom="3dp"
                             android:ellipsize="end"/>
 
                     </LinearLayout>

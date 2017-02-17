@@ -73,6 +73,7 @@ public class Fragment_MyPage extends Fragment{
     private String user_nick_name;
     private String user_profile_path;
     private String user_self_introduce;
+    private String user_website;
     //상단 프로필 레이아웃 백그라운드, 그리드, 리스트, 위시 버튼
     private ImageView grid_btn, list_btn, wish_btn;
     //사용자 정보(게시글수, 팔로잉 수, 팔로워 수)
@@ -124,6 +125,7 @@ public class Fragment_MyPage extends Fragment{
         user_nick_name = UserInfo.getInstance().getUserNickName();
         user_profile_path = UserInfo.getInstance().getUserProfileImg();
         user_self_introduce = UserInfo.getInstance().getUserSelfIntroduce();
+        user_website = UserInfo.getInstance().getUserWebsite();
 
         Toast.makeText(getActivity(), user_email, Toast.LENGTH_SHORT).show();
     }
@@ -229,6 +231,7 @@ public class Fragment_MyPage extends Fragment{
         Button edit_profile_btn = (Button)v.findViewById(R.id.edit_profile_btn);    //프로필 수정 버튼
         TextView my_name_txt = (TextView)v.findViewById(R.id.my_name_txt);    //내 이름
         TextView introduce_txt = (TextView)v.findViewById(R.id.introduce_txt);    //소개글
+        TextView website_txt = (TextView)v.findViewById(R.id.website_txt);    //웹사이트
         TextView my_nickname_txt = (TextView)v.findViewById(R.id.my_nickname_txt);    //상단바 닉네임
 
         grid_btn = (ImageView)v.findViewById(R.id.grid_btn);    // 그리드 버튼
@@ -262,6 +265,7 @@ public class Fragment_MyPage extends Fragment{
         my_nickname_txt.setText(user_nick_name);
         my_name_txt.setText(user_name);
         introduce_txt.setText(user_self_introduce);
+        website_txt.setText(user_website);
     }
 
     /**
