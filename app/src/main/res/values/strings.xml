@@ -47,5 +47,7 @@
     <!--앱 설정 휴면 계정-->
     <string name="stop_account_txt">계정 휴면으로 설정하면 회원님의 모든 게시물은 어느 누구도 볼 수 없습니다.\n(잠시 일상을 떠나 쉬고싶은 회원님께 유용합니다.</string>
 
+    <!--아티클 삭제 확인 다이얼로그-->
+    <string name="article_delete_alert_txt">이 사진을 삭제하시겠어요?</string>
 
 </resources>

@@ -48,17 +48,19 @@ public class My_Article_More_Dialog extends Activity {
     public void buttonPressed(View v) {
         switch ((v.getId())){
             case R.id.article_edit_btn:
-                Intent intent = new Intent(getApplicationContext(), Article_Edit_Activity.class);
-                intent.putExtra("user_uid", userUid);
-                intent.putExtra("article_id", article_id);
-                intent.putExtra("article_photo_url", article_photo_url);
-                intent.putExtra("article_contents", article_contents);
-                startActivity(intent);
+                Intent intent_edit = new Intent(getApplicationContext(), Article_Edit_Activity.class);
+                intent_edit.putExtra("user_uid", userUid);
+                intent_edit.putExtra("article_id", article_id);
+                intent_edit.putExtra("article_photo_url", article_photo_url);
+                intent_edit.putExtra("article_contents", article_contents);
+                startActivity(intent_edit);
                 finish();
 
                 break;
             case R.id.article_delete_btn:
-                BusProvider.getInstance().post(new My_Article_More_BtnPushEvent(pos));
+                Intent intent_delete = new Intent(getApplicationContext(), Article_Delete_Alert_Dialog.class);
+                intent_delete.putExtra("position", pos);
+                startActivity(intent_delete);
                 finish();
                 break;
 
