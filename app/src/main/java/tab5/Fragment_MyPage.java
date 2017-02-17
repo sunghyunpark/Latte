@@ -60,6 +60,7 @@ import rest.PersonalPlaceResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import tab3.Upload_Page1;
 
 /**
  * created by sunghyun 2017-01-05
@@ -155,6 +156,9 @@ public class Fragment_MyPage extends Fragment{
         listItems = new ArrayList<Fragment_Timeline_item>();
         recyclerView = (RecyclerView)v.findViewById(R.id.recyclerView);
         recyclerView.setNestedScrollingEnabled(false);
+
+        Button go_btn = (Button)v.findViewById(R.id.go_btn);
+        go_btn.setOnTouchListener(myOnTouchListener);
 
         SetProfile();    //프로필 설정
         SetInfoData();    //그 외 정보 설정(게시글수, 팔로워수, 팔로잉수, 프로필수정버튼, 이름, 소개글
@@ -821,6 +825,11 @@ public class Fragment_MyPage extends Fragment{
                     case R.id.setting_btn:
                         Intent intent_setting = new Intent(getActivity(), App_Setting_Page.class);
                         startActivity(intent_setting);
+                        break;
+                    case R.id.go_btn:
+                        Intent intent_go = new Intent(getActivity(), Upload_Page1.class);
+                        startActivity(intent_go);
+                        getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                         break;
 
                 }

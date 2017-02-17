@@ -257,7 +257,6 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
                 break ;
             case R.id.tab_3 :
                 Intent intent = new Intent(getApplicationContext(), Upload_Page1.class);
-
                 startActivity(intent);
                 overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
                 break ;

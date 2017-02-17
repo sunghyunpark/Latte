@@ -39,11 +39,14 @@
 
             <Button
                 android:id="@+id/go_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="100dp"
+                android:layout_height="40dp"
                 android:layout_below="@id/empty_txt"
                 android:layout_centerHorizontal="true"
-                android:textSize="14dp"
+                android:background="@drawable/rectangle_btn_appcolor"
+                android:textColor="@color/AppBasicColor"
+                android:layout_marginTop="10dp"
+                android:textSize="16dp"
                 android:text="업로드"/>
         </RelativeLayout>
     </RelativeLayout>

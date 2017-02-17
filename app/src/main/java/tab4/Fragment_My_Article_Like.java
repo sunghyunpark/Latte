@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import tab2.HidingScrollListener;
+import tab3.Upload_Page1;
 
 /**
  * created by sunghyun 2017-01-16
@@ -130,6 +132,16 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
             @Override
             public void onShow() {
                 showViews();
+            }
+        });
+
+        Button go_btn = (Button)v.findViewById(R.id.go_btn);
+        go_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), Upload_Page1.class);
+                startActivity(intent);
+                getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
             }
         });
 
