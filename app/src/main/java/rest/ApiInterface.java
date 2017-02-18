@@ -308,4 +308,15 @@ public interface ApiInterface {
                                           @Field("uid") String uid,
                                           @Field("article_id") String article_id,
                                           @Field("wishlist_state") String wishlist_state);
+
+    /**
+     * 위시 리스트 화면
+     * @param tag -> wishlist
+     * @param uid
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("myplace/myplace_btn.php")
+    Call<WishListResponse> GetWishList(@Field("tag") String tag,
+                                       @Field("uid") String uid);
 }

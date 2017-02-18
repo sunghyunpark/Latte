@@ -813,7 +813,9 @@ public class Fragment_MyPage extends Fragment{
                     case R.id.wish_btn:
                         grid_btn.setImageResource(R.mipmap.no_click_grid_btn);
                         list_btn.setImageResource(R.mipmap.no_click_list_btn);
-                        wish_btn.setImageResource(R.mipmap.article_like_btn_img);
+                        //wish_btn.setImageResource(R.mipmap.article_like_btn_img);
+                        Intent intent_wish = new Intent(getActivity(), WishList_Activity.class);
+                        startActivity(intent_wish);
                         break;
                     case R.id.setting_btn:
                         Intent intent_setting = new Intent(getActivity(), App_Setting_Page.class);
