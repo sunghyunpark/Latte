@@ -81,6 +81,7 @@ public class Article_Detail_Activity extends Activity {
 
     private boolean like_state_flag;   //좋아요 상태 플래그
     private boolean follow_state_flag;    //팔로잉 상태 플래그
+    private boolean wish_state_flag;    // 위시 상태 플래그
     private int like_cnt;    //좋아요 카운트
 
     ImageView article_user_profile_img;    //아티클 작성자 프로필 경로
@@ -235,6 +236,8 @@ public class Article_Detail_Activity extends Activity {
 
                     //좋아요 버튼 상태 초기화
                     InitLikeBtn(articledata.getArticle().getArticle_like_state());
+                    //위시 버튼 상태 초기화
+                    InitWishBtn(articledata.getArticle().getArticle_wishlist_state());
 
                     //아티클 좋아요 txt
                     article_like_cnt_txt.setText(String.format(res.getString(R.string.article_like_cnt),articledata.getArticle().getArticle_like_cnt()));
@@ -535,16 +538,51 @@ public class Article_Detail_Activity extends Activity {
                 if(like_state_flag){
                     like_state_flag = false;
                     ch_cnt -= 1;
-                    common.PostArticleLikeState(Article_Detail_Activity.this, user_uid, article_id, "N");
+                    common.PostArticleLikeState(getApplicationContext(), user_uid, article_id, "N");
                     article_like_img.setBackgroundResource(R.mipmap.article_not_like_btn_img);
                 }else{
                     like_state_flag = true;
                     ch_cnt += 1;
-                    common.PostArticleLikeState(Article_Detail_Activity.this, user_uid, article_id, "Y");
+                    common.PostArticleLikeState(getApplicationContext(), user_uid, article_id, "Y");
                     article_like_img.setBackgroundResource(R.mipmap.article_like_btn_img);
                 }
                 like_cnt = ch_cnt;
                 article_like_cnt_txt.setText("좋아요 "+like_cnt+"개");
+            }
+        });
+    }
+
+    /**
+     * 위시 상태에 따른 위시 버튼 초기화
+     * @param wish_state
+     */
+    private void InitWishBtn(String wish_state){
+
+        final ImageView article_wish_img = (ImageView)findViewById(R.id.wish_btn);
+
+        if(wish_state == null || wish_state.equals("")){
+            wish_state = "N";
+        }
+        if(wish_state.equals("Y")){
+            wish_state_flag = true;
+            article_wish_img.setBackgroundResource(R.mipmap.article_like_btn_img);
+        }else{
+            wish_state_flag = false;
+            article_wish_img.setBackgroundResource(R.mipmap.article_not_like_btn_img);
+        }
+        article_wish_img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(wish_state_flag){
+                    wish_state_flag = false;
+                    common.PostWishBtn(getApplicationContext(), user_uid, article_id, "N");
+                    article_wish_img.setBackgroundResource(R.mipmap.article_not_like_btn_img);
+                }else{
+                    wish_state_flag = true;
+                    common.PostWishBtn(getApplicationContext(), user_uid, article_id, "Y");
+                    article_wish_img.setBackgroundResource(R.mipmap.article_like_btn_img);
+                }
+
             }
         });
     }

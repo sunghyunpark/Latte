@@ -112,6 +112,14 @@
                     android:layout_toRightOf="@+id/comment_btn"
                     android:layout_marginLeft="18dp"/>
 
+                <ImageView
+                    android:id="@+id/wish_btn"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"/>
+
 
             </RelativeLayout>
             <!--구분선-->

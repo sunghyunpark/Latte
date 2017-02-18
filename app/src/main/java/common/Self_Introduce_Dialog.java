@@ -4,10 +4,12 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.seedteam.latte.R;
@@ -40,6 +42,8 @@ public class Self_Introduce_Dialog extends Activity {
         TextView user_email_txt = (TextView)findViewById(R.id.user_email_txt);
         TextView self_introduce_txt = (TextView)findViewById(R.id.self_introduce_txt);
         TextView website_txt = (TextView)findViewById(R.id.website_txt);
+        ImageView cancel_btn = (ImageView)findViewById(R.id.cancel_btn);
+        cancel_btn.setOnTouchListener(myOnTouchListener);
 
         //프로필
         Glide.with(getApplicationContext())
@@ -57,18 +61,28 @@ public class Self_Introduce_Dialog extends Activity {
 
 
     }
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
 
-    //button event
-    public void buttonPressed(View v) {
-        switch ((v.getId())){
-            case R.id.cancel_btn:
-                finish();
-                break;
-
-
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            }else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.cancel_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
         }
-
-    }
+    };
 
 
 }

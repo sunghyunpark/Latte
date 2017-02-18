@@ -291,7 +291,21 @@ public interface ApiInterface {
     @FormUrlEncoded
     @POST("timeline/timeline_btn.php")
     Call<CommonErrorResponse> ReportArticle(@Field("tag") String tag,
+                                            @Field("uid") String uid,
+                                            @Field("article_id") String article_id,
+                                            @Field("reason") String reason);
+
+    /**
+     * 위시 리스트 버튼
+     * @param tag -> wishlist_btn
+     * @param uid
+     * @param article_id
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("timeline/timeline_btn.php")
+    Call<CommonErrorResponse> PostWishBtn(@Field("tag") String tag,
                                           @Field("uid") String uid,
                                           @Field("article_id") String article_id,
-                                          @Field("reason") String reason);
+                                          @Field("wishlist_state") String wishlist_state);
 }

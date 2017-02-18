@@ -129,7 +129,6 @@ public class Fragment_MyPage extends Fragment{
         user_self_introduce = UserInfo.getInstance().getUserSelfIntroduce();
         user_website = UserInfo.getInstance().getUserWebsite();
 
-        Toast.makeText(getActivity(), user_email, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -195,7 +194,6 @@ public class Fragment_MyPage extends Fragment{
         ImageView background_img = (ImageView)v.findViewById(R.id.background_img);
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
-                //.transform(new Util.BlurTransformation(getActivity()))
                 .bitmapTransform(new BlurTransformation(getActivity(), 18))
                 .error(null)
                 .into(background_img);
@@ -203,14 +201,12 @@ public class Fragment_MyPage extends Fragment{
         ImageView background_history_front = (ImageView)v.findViewById(R.id.history_front);
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+user_profile_path)
-                //.transform(new Util.BlurTransformation(getActivity()))
                 .error(null)
                 .into(background_history_front);
         //백그라운드 히스토리(뒤)
         ImageView background_history_back = (ImageView)v.findViewById(R.id.history_back);
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
-                //.transform(new Util.BlurTransformation(getActivity()))
                 .error(null)
                 .into(background_history_back);
         //유저 프로필

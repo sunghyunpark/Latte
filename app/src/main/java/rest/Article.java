@@ -21,6 +21,7 @@ public class Article {
     private String article_comment_cnt;    //article 댓글 수
     private String article_like_state;    //좋아요 상태 (Y or N)
     private String article_follow_state;    //팔로우 상태
+    private String article_wishlist_state;   //위시 리스트 상태
 
 
     public String getUid() {
@@ -134,5 +135,14 @@ public class Article {
     public void setArticle_follow_state(String article_follow_state) {
         this.article_follow_state = article_follow_state;
     }
+
+    public String getArticle_wishlist_state() {
+        return article_wishlist_state;
+    }
+
+    public void setArticle_wishlist_state(String article_wishlist_state) {
+        this.article_wishlist_state = article_wishlist_state;
+    }
+
 
 }

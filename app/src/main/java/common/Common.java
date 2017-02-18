@@ -20,6 +20,35 @@ import retrofit2.Response;
 
 public class Common {
 
+
+    public void PostWishBtn(final Context context, String uid, String article_id, String state){
+        ApiInterface apiService =
+                ApiClient.getClient().create(ApiInterface.class);
+
+        Call<CommonErrorResponse> call = apiService.PostWishBtn("wishlist_btn", uid, article_id, state);
+        call.enqueue(new Callback<CommonErrorResponse>() {
+            @Override
+            public void onResponse(Call<CommonErrorResponse> call, Response<CommonErrorResponse> response) {
+
+                CommonErrorResponse tokenResponse = response.body();
+                if (!tokenResponse.isError()) {
+                    Toast.makeText(context,"wish 성공", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context,"wish 실패", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CommonErrorResponse> call, Throwable t) {
+                // Log error here since request failed
+                Log.e("tag", t.toString());
+                Toast.makeText(context, "retrofit error", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
     public void ReportArticle(final Context context, String uid, String article_id, String reason){
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
