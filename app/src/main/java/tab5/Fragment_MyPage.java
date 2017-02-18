@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.signature.StringSignature;
 import com.seedteam.latte.R;
+import com.squareup.otto.Subscribe;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +44,7 @@ import app_config.App_Config;
 import app_config.SQLiteHandler;
 import app_config.UserInfo;
 import common.Common;
+import common.My_Article_More_Dialog;
 import common.Self_Introduce_Dialog;
 import common.Send_Report_Dialog;
 import common.User_Profile_Edit_Dialog;
@@ -52,6 +54,8 @@ import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import article.Article_Comment_Activity;
 import article.Article_Detail_Activity;
 import article.Article_Like_Activity;
+import pushevent.BusProvider;
+import pushevent.My_Article_More_BtnPushEvent;
 import tab2.Fragment_Timeline_item;
 import rest.ApiClient;
 import rest.ApiInterface;
@@ -118,6 +122,12 @@ public class Fragment_MyPage extends Fragment{
         }
     }
     @Override
+    public void onDestroy(){
+        super.onDestroy();
+        BusProvider.getInstance().unregister(this);
+
+    }
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
@@ -128,6 +138,8 @@ public class Fragment_MyPage extends Fragment{
         user_profile_path = UserInfo.getInstance().getUserProfileImg();
         user_self_introduce = UserInfo.getInstance().getUserSelfIntroduce();
         user_website = UserInfo.getInstance().getUserWebsite();
+
+        BusProvider.getInstance().register(this);    // 내 아티클 삭제 할때 포지션값 받기위해
 
     }
 
@@ -560,8 +572,16 @@ public class Fragment_MyPage extends Fragment{
                 VHitem.more_btn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        startActivity(new Intent(getActivity(), Send_Report_Dialog.class));
-                        getActivity().overridePendingTransition(R.anim.anim_up, R.anim.anim_up2);
+                        detail_pos = position;
+                        detail_article_id = currentItem.getArticle_id();
+                        Intent intent = new Intent(getActivity(), My_Article_More_Dialog.class);
+                        intent.putExtra("user_uid", user_uid);
+                        intent.putExtra("article_id", currentItem.getArticle_id());
+                        intent.putExtra("article_photo_url", currentItem.getArticle_img_path());
+                        intent.putExtra("article_contents", currentItem.getArticle_contents());
+                        intent.putExtra("position", position);
+                        intent.putExtra("from_place", "myplace");
+                        startActivity(intent);
                     }
                 });
 
@@ -678,6 +698,13 @@ public class Fragment_MyPage extends Fragment{
                 VHitem.created_at.setText(util.formatTimeString(to));
             }
         }
+        private void removeItem(int position){
+            common.DeleteMyArticle(getActivity(), user_uid, getItem(position).getArticle_id());
+            listItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, listItems.size());
+
+        }
         @Override
         public int getItemViewType(int position) {
             return TYPE_ITEM_USER_ATTICLE;
@@ -687,6 +714,17 @@ public class Fragment_MyPage extends Fragment{
         public int getItemCount() {
             return listItems.size();
         }
+    }
+
+    @Subscribe
+    public void FinishLoad(My_Article_More_BtnPushEvent mPushEvent) {
+
+        int pos = mPushEvent.getPosition();
+        String from = mPushEvent.getFrom();
+        if(from.equals("myplace")){
+            adapter_list.removeItem(pos);
+        }
+
     }
 
     //그리드 어댑터
