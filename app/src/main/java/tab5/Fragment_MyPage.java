@@ -196,7 +196,6 @@ public class Fragment_MyPage extends Fragment{
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
-                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .bitmapTransform(new BlurTransformation(getActivity(), 18))
                 .error(null)
                 .into(background_img);
@@ -205,7 +204,6 @@ public class Fragment_MyPage extends Fragment{
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+user_profile_path)
                 //.transform(new Util.BlurTransformation(getActivity()))
-                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .error(null)
                 .into(background_history_front);
         //백그라운드 히스토리(뒤)
@@ -213,7 +211,6 @@ public class Fragment_MyPage extends Fragment{
         Glide.with(getActivity())
                 .load(App_Config.getInstance().getServer_base_ip()+"test_img/test_img.jpg")
                 //.transform(new Util.BlurTransformation(getActivity()))
-                .signature(new StringSignature(UUID.randomUUID().toString()))
                 .error(null)
                 .into(background_history_back);
         //유저 프로필
