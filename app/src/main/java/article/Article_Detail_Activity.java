@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -165,7 +167,20 @@ public class Article_Detail_Activity extends Activity {
         Picasso.with(this)
                 .load(App_Config.getInstance().getServer_base_ip()+article_photo_url)
                 .transform(PicassoTransformations.resizeTransformation)
-                .into(article_photo_img);
+                .into(article_photo_img, new com.squareup.picasso.Callback() {
+                    @Override
+                    public void onSuccess() {
+                        Bitmap bit = ((BitmapDrawable)article_photo_img.getDrawable()).getBitmap();
+                        article_photo_img.getLayoutParams().width = bit.getWidth();
+                        article_photo_img.getLayoutParams().height = bit.getHeight() - bit.getHeight()/8;
+
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
 
         article_photo_img.setOnClickListener(new View.OnClickListener() {
             @Override
