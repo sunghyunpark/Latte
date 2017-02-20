@@ -167,20 +167,7 @@ public class Article_Detail_Activity extends Activity {
         Picasso.with(this)
                 .load(App_Config.getInstance().getServer_base_ip()+article_photo_url)
                 .transform(PicassoTransformations.resizeTransformation)
-                .into(article_photo_img, new com.squareup.picasso.Callback() {
-                    @Override
-                    public void onSuccess() {
-                        Bitmap bit = ((BitmapDrawable)article_photo_img.getDrawable()).getBitmap();
-                        article_photo_img.getLayoutParams().width = bit.getWidth();
-                        article_photo_img.getLayoutParams().height = bit.getHeight() - bit.getHeight()/8;
-
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+                .into(article_photo_img);
 
         article_photo_img.setOnClickListener(new View.OnClickListener() {
             @Override
