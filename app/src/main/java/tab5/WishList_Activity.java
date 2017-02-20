@@ -115,6 +115,7 @@ public class WishList_Activity extends Activity {
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_ITEM = 1;
+        private int display_width = App_Config.getInstance().getDISPLAY_WIDTH();
 
         ArrayList<WishList_item> listItems;
 
@@ -159,7 +160,8 @@ public class WishList_Activity extends Activity {
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getApplicationContext())
-                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_photo_thumb_url())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_photo_url())
+                        .override(display_width/3,display_width/3)
                         .error(null)
                         .into(VHitem.article_img);
 

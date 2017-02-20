@@ -288,6 +288,7 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_ITEM = 1;
+        private int display_width = App_Config.getInstance().getDISPLAY_WIDTH();
 
         ArrayList<Fragment_Timeline_item> listItems;
 
@@ -334,7 +335,8 @@ public class Fragment_All_Timeline extends Fragment implements SwipeRefreshLayou
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getActivity())
-                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_thumb_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
+                        .override(display_width/3, display_width/3)
                         .error(null)
                         .into(VHitem.article_img);
 

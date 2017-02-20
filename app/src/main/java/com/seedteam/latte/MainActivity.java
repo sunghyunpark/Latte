@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -78,8 +79,13 @@ public class MainActivity extends FragmentActivity implements View.OnClickListen
         //setTheme(android.R.style.Theme_Holo_Light_NoActionBar_TranslucentDecor);
         setContentView(R.layout.activity_main);
 
+        Display display;
+        display = ((WindowManager)getApplicationContext().getSystemService(getApplicationContext().WINDOW_SERVICE)).getDefaultDisplay();
+
         App_Config.getInstance().setServer_base_ip("http://ustserver.cafe24.com/ust/");
         App_Config.getInstance().setApp_local_path("storage/emulated/0/WePic/");
+        App_Config.getInstance().setDISPLAY_WIDTH(display.getWidth());
+        App_Config.getInstance().setDISPLAY_HEIGHT(display.getHeight());
 
         session = new SessionManager(getApplicationContext());
         if(!session.isLoggedIn()){

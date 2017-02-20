@@ -434,8 +434,8 @@ public class Article_Detail_Activity extends Activity {
                         .error(null)
                         .into(VHitem.user_profile_img);
 
-                VHitem.comment_txt.setText("");
-                VHitem.comment_txt.append(getComment(position));
+                VHitem.comment_txt.setText(getComment(position));
+                VHitem.comment_txt.setMovementMethod(LinkMovementMethod.getInstance());
                 VHitem.comment_item_layout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -593,6 +593,7 @@ public class Article_Detail_Activity extends Activity {
     public class ArticleThumbRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_ITEM = 1;
+        private int display_width = App_Config.getInstance().getDISPLAY_WIDTH();
 
         List<Fragment_Timeline_item> listItems;
 
@@ -639,7 +640,8 @@ public class Article_Detail_Activity extends Activity {
 
                 Glide.clear(VHitem.article_img);
                 Glide.with(getApplicationContext())
-                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_thumb_path())
+                        .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
+                        .override(display_width/3,display_width/3)
                         .error(null)
                         .into(VHitem.article_img);
 
