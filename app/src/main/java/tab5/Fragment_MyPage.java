@@ -467,7 +467,8 @@ public class Fragment_MyPage extends Fragment{
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
         List<Fragment_Timeline_item> listItems;
         private Resources res = getResources();
-        private int displaySize = getDisplaySize();
+        private int display_width = App_Config.getInstance().getDISPLAY_WIDTH();
+        private int display_height = App_Config.getInstance().getDISPLAY_HEIGHT();
 
         public RecyclerAdapter_list(List<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
@@ -484,18 +485,6 @@ public class Fragment_MyPage extends Fragment{
 
         private Fragment_Timeline_item getItem(int position) {
             return listItems.get(position);
-        }
-
-        /**
-         * 단말기 사이즈 반환
-         * @return
-         */
-        private int getDisplaySize(){
-            int w;
-            Display display;
-            display = ((WindowManager)getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay();
-            w = display.getWidth();
-            return w;
         }
 
         /**
@@ -602,7 +591,7 @@ public class Fragment_MyPage extends Fragment{
                 Glide.with(getContext())
                         .load(App_Config.getInstance().getServer_base_ip()+currentItem.getArticle_img_path())
                         .error(null)
-                        .override(displaySize,displaySize)
+                        .override(display_width,display_height - display_height/4)
                         .into(VHitem.article_img);
 
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {

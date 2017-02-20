@@ -25,21 +25,15 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DecodeFormat;
-import com.bumptech.glide.signature.StringSignature;
-import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
 import com.squareup.otto.Subscribe;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
-
 import app_config.App_Config;
 import article.Article_Comment_Activity;
 import article.Article_Detail_Activity;
@@ -47,7 +41,6 @@ import article.Article_Like_Activity;
 import common.Common;
 import common.My_Article_More_Dialog;
 import common.Other_Article_More_Dialog;
-import common.Send_Report_Dialog;
 import common.Util;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -492,7 +485,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         private static final int TYPE_ITEM_USER_ATTICLE = 0;
         List<Fragment_Timeline_item> listItems;
         private Resources res = getResources();
-        private int displaySize = getDisplaySize();
+        private int display_width = App_Config.getInstance().getDISPLAY_WIDTH();
+        private int display_height = App_Config.getInstance().getDISPLAY_HEIGHT();
 
         public RecyclerAdapter(List<Fragment_Timeline_item> listItems) {
             this.listItems = listItems;
@@ -511,17 +505,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             return listItems.get(position);
         }
 
-        /**
-         * 단말기 사이즈 반환
-         * @return
-         */
-        private int getDisplaySize(){
-            int w;
-            Display display;
-            display = ((WindowManager)getActivity().getSystemService(getActivity().WINDOW_SERVICE)).getDefaultDisplay();
-            w = display.getWidth();
-            return w;
-        }
 
         /**
          * 이 메소드는 최초 데이터를 불러와 아이템들을 만들때 해당 포지셥값에 따른 좋아요 상태들을 반환함
@@ -658,7 +641,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
                         .asBitmap()
                         .format(DecodeFormat.PREFER_ARGB_8888)
                         .error(null)
-                        .override(displaySize,displaySize)
+                        .override(display_width,display_height - display_height/4)
                         .into(VHitem.article_img);
 
                 VHitem.article_img.setOnClickListener(new View.OnClickListener() {
