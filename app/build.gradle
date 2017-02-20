@@ -51,6 +51,8 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:9.6.1'
     //facebook
     compile 'com.facebook.android:facebook-android-sdk:4.+'
+    //picasso
+    compile 'com.squareup.picasso:picasso:2.5.2'
 
     testCompile 'junit:junit:4.12'
 }

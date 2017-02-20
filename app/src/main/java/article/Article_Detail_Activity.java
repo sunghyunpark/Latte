@@ -29,9 +29,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.seedteam.latte.R;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -41,7 +41,7 @@ import java.util.List;
 
 import app_config.App_Config;
 import common.ImageViewer;
-import common.My_Article_More_Dialog;
+import common.PicassoTransformations;
 import pushevent.BusProvider;
 import common.Cancel_Following_Dialog;
 import common.Common;
@@ -162,10 +162,11 @@ public class Article_Detail_Activity extends Activity {
         back_btn.setOnTouchListener(myOnTouchListener);
 
         //아티클 사진
-        Glide.with(getApplicationContext())
+        Picasso.with(this)
                 .load(App_Config.getInstance().getServer_base_ip()+article_photo_url)
-                .error(null)
+                .transform(PicassoTransformations.resizeTransformation)
                 .into(article_photo_img);
+
         article_photo_img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
