@@ -93,6 +93,8 @@ public class Fragment_MyPage extends Fragment{
     private GridLayoutManager lLayout;
     private ArrayList<Fragment_Timeline_item> listItems;
 
+    ViewGroup empty_layout;    //아티클이 비어있는 경우 view
+
     private int first_pos=0;
     private int last_pos=0;
     private static final int LOAD_DATA_COUNT = 10;
@@ -350,7 +352,7 @@ public class Fragment_MyPage extends Fragment{
             public void onResponse(Call<PersonalPlaceResponse> call, Response<PersonalPlaceResponse> response) {
 
                 PersonalPlaceResponse articledata = response.body();
-                ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
+                empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!articledata.isArticle_error()) {
 
@@ -692,6 +694,9 @@ public class Fragment_MyPage extends Fragment{
             listItems.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, listItems.size());
+            if(listItems.size() == 0){
+                empty_layout.setVisibility(View.VISIBLE);
+            }
 
         }
         @Override
