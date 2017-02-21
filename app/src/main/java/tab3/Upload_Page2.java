@@ -42,23 +42,19 @@ public class Upload_Page2 extends Activity {
     private String login_method;
     private String uid;
     private String user_profile_path;
-    //중복 클릭 방지
-    private long mLastClickTime = 0;
-    //업로드 상태
-    private boolean upload_complete;
+    // 업로드 버튼
+    Button upload_btn;
 
     EditText upload_edit_box;
 
     Util util = new Util();
     Image_Uploader image_uploader = new Image_Uploader();
-    UploadTask uploadTask;
 
 
     @Override
     protected void onDestroy(){
         super.onDestroy();
-        if(uploadTask!=null)
-            uploadTask.cancel(true);
+
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,37 +98,10 @@ public class Upload_Page2 extends Activity {
 
         upload_edit_box = (EditText)findViewById(R.id.upload_edit_box);
         //공유하기 버튼
-        Button upload_btn = (Button)findViewById(R.id.upload_btn);
+        upload_btn = (Button)findViewById(R.id.upload_btn);
         upload_btn.setOnTouchListener(myOnTouchListener);
     }
 
-    /**
-     * 업로드 화면에서 네트워크가 끊기거나 예외상황이 생길때 비동기적으로 처리하기 위해...
-     */
-    private class UploadTask extends AsyncTask<String, String, String> {
-
-        @Override
-        protected void onPreExecute(){
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String doInBackground(String... str){
-
-            while (!upload_complete && util.isCheckNetworkState(Upload_Page2.this)){
-                String board_str = str[0];
-                String uploadimgName = str[1];
-                UploadBoard(uid, board_str, uploadimgName, upload_img_path);
-                break;
-            }
-
-            return null;
-        }
-        @Override
-        protected void onPostExecute(String result){
-            upload_complete = true;
-        }
-    }
 
     /**
      * retrofit2를 이용해서 이미지 파일을 업로드함
@@ -154,13 +123,13 @@ public class Upload_Page2 extends Activity {
                 UploadBoardResponse uploadBoardResponse = response.body();
                 if (!uploadBoardResponse.isError()) {
                     Toast.makeText(getApplicationContext(), "업로드 성공!", Toast.LENGTH_SHORT).show();
-                    upload_complete = true;
                     image_uploader.Upload_ArticleImage(Upload_Page2.this, "article", upload_img_name, upload_img_local_path);
                     Upload_Page1.upload_page1.finish();
                     finish();
                 } else {
-                    upload_complete = false;
-                    Toast.makeText(getApplicationContext(), "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "에러가 발생했습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                    Upload_Page1.upload_page1.finish();
+                    finish();
                 }
 
             }
@@ -170,7 +139,6 @@ public class Upload_Page2 extends Activity {
                 // Log error here since request failed
                 Log.e("tag", t.toString());
                 Toast.makeText(getApplicationContext(), "에러가 발생했습니다.", Toast.LENGTH_SHORT).show();
-                upload_complete = false;
             }
         });
     }
@@ -194,30 +162,15 @@ public class Upload_Page2 extends Activity {
                         break;
 
                     case R.id.upload_btn:
-
-                        if(SystemClock.elapsedRealtime() - mLastClickTime < 300){
-                            break;
-                        }
-                        mLastClickTime = SystemClock.elapsedRealtime();
                         String board_str = upload_edit_box.getText().toString();
                         board_str = board_str.trim();
                         if(board_str.equals("")){
                             Toast.makeText(getApplicationContext(),"내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
                         }else{
                             if(util.isCheckNetworkState(Upload_Page2.this)){
+                                upload_btn.setEnabled(false);    //버튼 클릭 방지
                                 String upload_img_name = util.MakeImageName(uid);
-                                /**
-                                 * Asynctask로 적용하기 전 사용
-                                 */
-                                //UploadBoard(uid, board_str, upload_img_name, upload_img_path);
-
-                                upload_complete = false;
-                                try{
-                                    uploadTask = new UploadTask();
-                                    uploadTask.execute(board_str,upload_img_name);
-                                }catch (Exception e){
-
-                                }
+                                UploadBoard(uid, board_str, upload_img_name, upload_img_path);
                             }else{
                                 Toast.makeText(getApplicationContext(),"네트워크 연결상태를 확인해주세요.", Toast.LENGTH_SHORT).show();
                             }
