@@ -65,9 +65,6 @@ public class Register_Page3 extends Activity {
     private String mNick_name="";
     private String mProfile_img_path="";
 
-    //닉네임 중복 체크
-    private boolean nickNameCheck = false;
-
     private SessionManager mSessionManager;
 
     ImageView profile_plus_img, profile_img;
@@ -159,18 +156,14 @@ public class Register_Page3 extends Activity {
                     Toast.makeText(getApplicationContext(),"정보를 입력해주세요",Toast.LENGTH_SHORT).show();
                 }else if((mPhone_number.length()!=11)){
                     Toast.makeText(getApplicationContext(), "올바른 폰번호 형식이 아닙니다.",Toast.LENGTH_SHORT).show();
-                }else if(!IsUser(mNick_name)){
-                    Toast.makeText(getApplicationContext(), "이미 동일한 닉네임이 존재합니다.",Toast.LENGTH_SHORT).show();
                 }else{
-                    //회원가입 POST
-                    PostRegisterUser(mLogin_method, mFb_id, mKt_id, mEmail, mName, mPassword, mGender, mNick_name,
-                            mPhone_number, mProfile_img_path);
+                    IsUser(mNick_name);
                 }
             }
         });
     }
 
-    private boolean IsUser(final String nick_name){
+    private void IsUser(final String nick_name){
 
         ApiInterface apiService =
                 ApiClient.getClient().create(ApiInterface.class);
@@ -186,9 +179,11 @@ public class Register_Page3 extends Activity {
                 IsUserResponse userdata = response.body();
                 if(userdata.isError()){
                     //사용가능
-                    nickNameCheck = true;
+                    //회원가입 POST
+                    PostRegisterUser(mLogin_method, mFb_id, mKt_id, mEmail, mName, mPassword, mGender, mNick_name,
+                            mPhone_number, mProfile_img_path);
                 }else{
-                    nickNameCheck = false;
+                    Toast.makeText(getApplicationContext(), "이미 동일한 닉네임이 존재합니다.",Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -199,7 +194,6 @@ public class Register_Page3 extends Activity {
             }
         });
 
-        return nickNameCheck;
     }
 
 
