@@ -261,12 +261,12 @@ public class Article_Detail_Activity extends Activity {
 
                     //아티클 설명글
 
-                    String comment_str = articledata.getArticle().getNick_name()+"  "+articledata.getArticle().getArticle_text();
+                    String comment_str = util.ellipsis(articledata.getArticle().getNick_name(),20)+"  "+articledata.getArticle().getArticle_text();
                     int color_black = Color.BLACK;
                     SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
-                    builder.setSpan(new ForegroundColorSpan(color_black), 0, articledata.getArticle().getNick_name().length(),
+                    builder.setSpan(new ForegroundColorSpan(color_black), 0, util.ellipsis(articledata.getArticle().getNick_name(),20).length(),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    builder.setSpan(new StyleSpan(Typeface.BOLD), 0, articledata.getArticle().getNick_name().length(),
+                    builder.setSpan(new StyleSpan(Typeface.BOLD), 0, util.ellipsis(articledata.getArticle().getNick_name(),20).length(),
                             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
                     article_contents_txt.setText(builder);
@@ -341,7 +341,7 @@ public class Article_Detail_Activity extends Activity {
                             listItems_thumb.add(item);
                         }
                         adapter_thumb.notifyDataSetChanged();
-                        article_thumb_title.setText(articledata.getArticle().getNick_name()+"님의 다른 게시물");
+                        article_thumb_title.setText(util.ellipsis(articledata.getArticle().getNick_name(),20)+"님의 다른 게시물");
                         article_thumb_title.setVisibility(View.VISIBLE);
                     }else{
                         article_thumb_title.setVisibility(View.GONE);

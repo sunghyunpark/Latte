@@ -568,11 +568,11 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
 
         private SpannableStringBuilder getContents(int position){
 
-            String comment_str = getItem(position).getUser_nickname()+"  "+getItem(position).getArticle_contents();
+            String comment_str = util.ellipsis(getItem(position).getUser_nickname(),20)+"  "+getItem(position).getArticle_contents();
             int color_black = Color.BLACK;
             SpannableStringBuilder builder = new SpannableStringBuilder(comment_str);
-            builder.setSpan(new ForegroundColorSpan(color_black), 0, getItem(position).getUser_nickname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            builder.setSpan(new StyleSpan(Typeface.BOLD), 0, getItem(position).getUser_nickname().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new ForegroundColorSpan(color_black), 0, util.ellipsis(getItem(position).getUser_nickname(),20).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            builder.setSpan(new StyleSpan(Typeface.BOLD), 0, util.ellipsis(getItem(position).getUser_nickname(),20).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             return builder;
         }
 

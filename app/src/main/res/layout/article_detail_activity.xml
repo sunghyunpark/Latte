@@ -45,8 +45,9 @@
                     android:layout_toRightOf="@+id/user_profile_img"
                     android:layout_marginLeft="10dp"
                     android:maxLines="1"
-                    android:layout_marginRight="70dp"
+                    android:paddingRight="90dp"
                     android:textSize="15dp"
+                    android:ellipsize="end"
                     android:textStyle="bold"
                     android:textColor="#000000"/>
 
@@ -81,7 +82,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                 />
+                />
 
             <RelativeLayout
                 android:id="@+id/like_comment_share_layout"
