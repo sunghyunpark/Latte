@@ -1,31 +1,24 @@
 package tab5;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Switch;
-import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
+import android.widget.Toast;
 import com.seedteam.latte.MainActivity;
 import com.seedteam.latte.R;
-
-import java.util.HashMap;
-
-import app_config.App_Config;
-import app_config.SQLiteHandler;
 import app_config.SessionManager;
 import app_config.UserInfo;
 import common.Common;
+import common.Recommend_From_PhoneAddress_Activity;
 import io.realm.Realm;
-import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import realm.RealmConfig;
 import realm.Realm_UserData;
 
@@ -35,6 +28,8 @@ import realm.Realm_UserData;
 
 public class App_Setting_Page extends Activity {
 
+    //os6.0 permission
+    private static final int REQUEST_PERMISSIONS_READ_CONTACTS = 10;
     //세션
     private SessionManager session;
     //Realm
@@ -69,6 +64,9 @@ public class App_Setting_Page extends Activity {
         back_btn.setOnTouchListener(myOnTouchListener);
         ViewGroup profile_edit_btn = (ViewGroup)findViewById(R.id.profile_edit_btn);
         profile_edit_btn.setOnTouchListener(myOnTouchListener);
+
+        ViewGroup phone_friends_invite_btn = (ViewGroup)findViewById(R.id.phone_friends_invite_btn);
+        phone_friends_invite_btn.setOnTouchListener(myOnTouchListener);
 
     }
 
@@ -120,11 +118,50 @@ public class App_Setting_Page extends Activity {
                         Intent intent_profile_edit = new Intent(getApplicationContext(),Profile_Setting_Page.class);
                         startActivity(intent_profile_edit);
                         break;
+                    case R.id.phone_friends_invite_btn:
+                        /**
+                         * OS6.0 권한
+                         */
+                        if (ContextCompat.checkSelfPermission(App_Setting_Page.this,
+                                Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                            if (ActivityCompat.shouldShowRequestPermissionRationale
+                                    (App_Setting_Page.this, Manifest.permission.READ_CONTACTS)) {
+
+                                ActivityCompat.requestPermissions(App_Setting_Page.this,
+                                        new String[]{Manifest.permission
+                                                .READ_CONTACTS},
+                                        REQUEST_PERMISSIONS_READ_CONTACTS);
+                            } else {
+                                ActivityCompat.requestPermissions(App_Setting_Page.this,
+                                        new String[]{Manifest.permission
+                                                .READ_CONTACTS},
+                                        REQUEST_PERMISSIONS_READ_CONTACTS);
+
+                            }
+                        }else{
+                            Intent intent_phone_friends_invite = new Intent(getApplicationContext(), Recommend_From_PhoneAddress_Activity.class);
+                            startActivity(intent_phone_friends_invite);
+                        }
+                        break;
 
                 }
             }
             return true;
         }
     };
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode){
+            case REQUEST_PERMISSIONS_READ_CONTACTS :
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Intent intent_phone_friends_invite = new Intent(getApplicationContext(), Recommend_From_PhoneAddress_Activity.class);
+                    startActivity(intent_phone_friends_invite);
+                }else{
+                    Toast.makeText(getApplicationContext(),"퍼미션을 허용해야 이용할 수 있습니다", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+    }
 
 }

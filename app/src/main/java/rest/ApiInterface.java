@@ -1,6 +1,8 @@
 package rest;
 
 
+import java.util.ArrayList;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -319,4 +321,17 @@ public interface ApiInterface {
     @POST("myplace/myplace_btn.php")
     Call<WishListResponse> GetWishList(@Field("tag") String tag,
                                        @Field("uid") String uid);
+
+    /**
+     * 연락처를 통한 추천 친구
+     * @param tag -> contact
+     * @param phoneNumList
+     * @param nameList
+     * @return
+     */
+    @FormUrlEncoded
+    @POST("login/login.php")
+    Call<RecommendFromPhoneNumResponse> GetRecommendFromPhoneNumber(@Field("tag") String tag,
+                                                                    @Field("phone_num []") ArrayList<String> phoneNumList,
+                                                                    @Field("name []") ArrayList<String> nameList);
 }

@@ -2,6 +2,7 @@ package common;
 
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.BitmapShader;
@@ -13,6 +14,8 @@ import android.graphics.drawable.Drawable;
 import android.media.ExifInterface;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
+import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.view.Display;
 import android.view.View;
@@ -24,6 +27,7 @@ import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
 
@@ -31,6 +35,81 @@ import app_config.App_Config;
 
 public class Util {
 
+    //주소록 정보 받아오기
+    public ArrayList<Contact> getContactList(Context context) {
+
+        Uri uri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
+
+        String[] projection = new String[] {
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID, // 연락처 ID -> 사진 정보 가져오는데 사용
+                ContactsContract.CommonDataKinds.Phone.NUMBER,        // 연락처
+                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME }; // 연락처 이름.
+
+        String[] selectionArgs = null;
+
+        String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME
+                + " COLLATE LOCALIZED ASC";
+
+        Cursor contactCursor = context.getContentResolver().query(uri, projection, null,selectionArgs, sortOrder);
+
+        ArrayList<Contact> contactlist = new ArrayList<Contact>();
+
+        if (contactCursor.moveToFirst()) {
+            do {
+                String phonenumber = contactCursor.getString(1).replaceAll("-","");
+                if (phonenumber.length() == 10) {
+                    phonenumber = phonenumber.substring(0, 3) + "-"
+                            + phonenumber.substring(3, 6) + "-"
+                            + phonenumber.substring(6);
+                } else if (phonenumber.length() > 8) {
+                    phonenumber = phonenumber.substring(0, 3) + "-"
+                            + phonenumber.substring(3, 7) + "-"
+                            + phonenumber.substring(7);
+                }
+
+                Contact contact = new Contact();
+                contact.setId(contactCursor.getLong(0));
+                contact.setPhoneNumber(phonenumber);
+                contact.setName(contactCursor.getString(2));
+                contactlist.add(contact);
+
+            } while (contactCursor.moveToNext());
+        }
+
+        return contactlist;
+
+    }
+
+    public class Contact{
+        private long id;
+        private String phoneNumber;
+        private String name;
+
+        public long getId() {
+            return id;
+        }
+
+        public void setId(long id) {
+            this.id = id;
+        }
+
+        public String getPhoneNumber() {
+            return phoneNumber;
+        }
+
+        public void setPhoneNumber(String phoneNumber) {
+            this.phoneNumber = phoneNumber;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+    }
 
     //말줄임 처리
     public String ellipsis(String text, int length){
