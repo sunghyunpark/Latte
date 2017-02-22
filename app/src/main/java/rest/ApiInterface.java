@@ -322,16 +322,9 @@ public interface ApiInterface {
     Call<WishListResponse> GetWishList(@Field("tag") String tag,
                                        @Field("uid") String uid);
 
-    /**
-     * 연락처를 통한 추천 친구
-     * @param tag -> contact
-     * @param phoneNumList
-     * @param nameList
-     * @return
-     */
     @FormUrlEncoded
     @POST("login/login.php")
     Call<RecommendFromPhoneNumResponse> GetRecommendFromPhoneNumber(@Field("tag") String tag,
-                                                                    @Field("phone_num []") ArrayList<String> phoneNumList,
-                                                                    @Field("name []") ArrayList<String> nameList);
+                                                                    @Field("phone_number[]") ArrayList<String> phoneNumList,
+                                                                    @Field("name[]") ArrayList<String> nameList);
 }
