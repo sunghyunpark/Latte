@@ -20,6 +20,9 @@
         android:layout_marginTop="12dp"
         android:layout_marginLeft="10dp"
         android:textSize="14dp"
+        android:paddingRight="75dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="#000000"/>
 
     <TextView
@@ -30,6 +33,9 @@
         android:layout_marginLeft="10dp"
         android:layout_toRightOf="@id/user_profile_img"
         android:textSize="14dp"
+        android:paddingRight="75dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="#a9a9a9"/>
 
 

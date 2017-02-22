@@ -159,7 +159,7 @@ public class Article_Comment_Activity extends Activity implements SwipeRefreshLa
 
         //comment_edit_box 초기화
         comment_edit_box = (EditText)findViewById(R.id.comment_edit_box);
-        comment_edit_box.setHint(user_nick_name+"(으)로 댓글 달기");
+        comment_edit_box.setHint(util.ellipsis(user_nick_name,20)+"(으)로 댓글 달기");
         comment_edit_box.addTextChangedListener(this);
 
         //send btn

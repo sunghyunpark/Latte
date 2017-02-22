@@ -38,6 +38,7 @@ import app_config.App_Config;
 import article.Article_Like_Activity;
 import common.Cancel_Following_Dialog;
 import common.Common;
+import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import article.Article_Detail_Activity;
 import pushevent.BusProvider;
@@ -68,6 +69,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
 
     View v;
     Common common = new Common();
+    Util util = new Util();
 
 
     @Override
@@ -317,20 +319,6 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
             }
             return num;
         }
-        //말줄임 처리
-        private String ellipsis(String text, int length){
-            String ellipsisString = "...";
-            String outputString = text;
-            outputString = outputString.replace("\n"," ");    //줄바꿈이 있을 경우 띄어쓰기로 변경
-
-            if(text.length()>0 && length>0){
-                if(text.length() > length){
-                    outputString = text.substring(0, length);
-                    outputString += ellipsisString;
-                }
-            }
-            return outputString;
-        }
 
         private class SpanClick extends ClickableSpan {
             String clicked;    // 클릭할 단어
@@ -386,7 +374,7 @@ public class Fragment_My_Article_Like extends Fragment implements SwipeRefreshLa
                         getItem(position).getUserA().length()+21+ + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 return builder;
             }else if(type.equals("comment")){
-                String comment = ellipsis(getItem(position).getComment_text(),50);
+                String comment = util.ellipsis(getItem(position).getComment_text(),50);
                 contents_str = String.format(res.getString(R.string.like_my_article_comment), getItem(position).getUserA(), comment,getItem(position).getCreated_at());
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);

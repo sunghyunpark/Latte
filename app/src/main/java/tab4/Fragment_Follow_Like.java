@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import app_config.App_Config;
+import common.Util;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import article.Article_Detail_Activity;
 import rest.ApiClient;
@@ -61,6 +62,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
     private SwipeRefreshLayout mSwipeRefresh;
 
     View v;
+    Util util = new Util();
 
     @Override
     public void onRefresh() {
@@ -329,20 +331,6 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
             }
             return num;
         }
-        //말줄임 처리
-        private String ellipsis(String text, int length){
-            String ellipsisString = "...";
-            String outputString = text;
-            outputString = outputString.replace("\n"," ");    //줄바꿈이 있을 경우 띄어쓰기로 변경
-
-            if(text.length()>0 && length>0){
-                if(text.length() > length){
-                    outputString = text.substring(0, length);
-                    outputString += ellipsisString;
-                }
-            }
-            return outputString;
-        }
 
         private class SpanClick extends ClickableSpan {
             String clicked;    // 클릭할 단어
@@ -405,7 +393,7 @@ public class Fragment_Follow_Like extends Fragment implements SwipeRefreshLayout
                         getItem(position).getUserA().length()+3+userb_str.length()+16 + getItem(position).getCreated_at().length()+1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 return builder;
             }else if(type.equals("comment")){
-                String comment = ellipsis(getItem(position).getComment_text(),50);
+                String comment = util.ellipsis(getItem(position).getComment_text(),50);
                 contents_str = String.format(res.getString(R.string.like_following_comment), getItem(position).getUserA(), userb_str, comment,getItem(position).getCreated_at());
 
                 SpannableStringBuilder builder = new SpannableStringBuilder(contents_str);
