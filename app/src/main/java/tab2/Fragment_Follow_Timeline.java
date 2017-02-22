@@ -784,14 +784,6 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
         listItems.clear();
         RealmResults<Realm_TimeLine_Follow> dataList = mRealm.where(Realm_TimeLine_Follow.class).findAll();
         for(int i=0;i<dataList.size();i++){
-            Log.d("realm_test","============================================================");
-            Log.d("realm_test", "all size : "+dataList.size());
-            Log.d("realm_test", "article_uid : "+dataList.get(i).getArticle_id());
-            Log.d("realm_test", "article_photo_url : "+dataList.get(i).getArticle_photo_url());
-            Log.d("realm_test", "article_text : "+dataList.get(i).getArticle_text());
-            Log.d("realm_test", "article_like_state : "+dataList.get(i).getArticle_like_state());
-            Log.d("realm_test", "article_like_cnt : "+dataList.get(i).getArticle_like_cnt());
-            Log.d("realm_test","============================================================");
 
             Fragment_Timeline_item item = new Fragment_Timeline_item();
             item.setUid(dataList.get(i).getUid());
