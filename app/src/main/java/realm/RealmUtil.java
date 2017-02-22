@@ -38,8 +38,6 @@ public class RealmUtil {
         UserInfo.getInstance().setFcmToken(user.getFcmToken());
         UserInfo.getInstance().setCreated_at(user.getCreated_at());
 
-        Log.d("UserInfo", UserInfo.getInstance().getUserUid());
-        Log.d("UserInfo", UserInfo.getInstance().getUserEmail());
 
     }
 

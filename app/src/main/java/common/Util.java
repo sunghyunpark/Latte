@@ -58,12 +58,12 @@ public class Util {
             do {
                 String phonenumber = contactCursor.getString(1).replaceAll("-","");
                 if (phonenumber.length() == 10) {
-                    phonenumber = phonenumber.substring(0, 3) + "-"
-                            + phonenumber.substring(3, 6) + "-"
+                    phonenumber = phonenumber.substring(0, 3)
+                            + phonenumber.substring(3, 6)
                             + phonenumber.substring(6);
                 } else if (phonenumber.length() > 8) {
-                    phonenumber = phonenumber.substring(0, 3) + "-"
-                            + phonenumber.substring(3, 7) + "-"
+                    phonenumber = phonenumber.substring(0, 3)
+                            + phonenumber.substring(3, 7)
                             + phonenumber.substring(7);
                 }
 
