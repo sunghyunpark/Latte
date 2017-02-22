@@ -5,4 +5,78 @@
     android:background="#ffffff"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:id="@+id/title_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="45dp"
+        android:background="@color/white"
+        android:orientation="horizontal" >
+        <TextView
+            android:id="@+id/title_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="10dp"
+            android:textSize="17sp"
+            android:text="연락처 찾기"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/back_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:text="닫기"
+            android:padding="5dp"/>
+    </RelativeLayout>
+    <!--구분선-->
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:background="#ffe0e0e0"></LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:textSize="18dp"
+        android:textColor="#000000"
+        android:paddingRight="15dp"
+        android:paddingLeft="15dp"
+        android:gravity="center_horizontal"
+        android:text="@string/recommend_phoneNum_txt1"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="#bdbdbd"
+        android:textSize="13dp"
+        android:text="@string/recommend_phoneNum_txt2"
+        android:gravity="center_horizontal"/>
+
+    <Button
+        android:id="@+id/all_follow_btn"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:background="@drawable/rectangle_follow_btn_appcolor"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="+ 모두 팔로우"
+        android:textSize="15dp"
+        android:textColor="@color/AppBasicColor"/>
+
+    <!--구분선-->
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="1dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#ffe0e0e0"></LinearLayout>
 </LinearLayout>
