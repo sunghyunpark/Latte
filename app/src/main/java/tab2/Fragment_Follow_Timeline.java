@@ -87,6 +87,8 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
     private SwipeRefreshLayout mSwipeRefresh;
     private int detail_pos = -1;    //디테일뷰 클릭했을 때의 position
     private String detail_article_id;    //디테일뷰 클릭했을 때의 id값
+    //비어있는 화면
+    ViewGroup empty_layout;
     Util util = new Util();
     Common common = new Common();
     View v;
@@ -341,7 +343,7 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             public void onResponse(Call<TimelineResponse> call, Response<TimelineResponse> response) {
 
                 TimelineResponse articledata = response.body();
-                ViewGroup empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
+                empty_layout = (ViewGroup)v.findViewById(R.id.empty_layout);
 
                 if (!articledata.isError()) {
                     empty_layout.setVisibility(View.GONE);
@@ -741,6 +743,9 @@ public class Fragment_Follow_Timeline extends Fragment implements SwipeRefreshLa
             listItems.remove(position);
             notifyItemRemoved(position);
             notifyItemRangeChanged(position, listItems.size());
+            if(listItems.size() == 0 ){
+                empty_layout.setVisibility(View.VISIBLE);
+            }
 
         }
         @Override
