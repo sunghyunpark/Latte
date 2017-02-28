@@ -2,6 +2,7 @@ package common;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,6 +38,7 @@ import java.util.List;
 import app_config.App_Config;
 import article.Article_Comment_Activity;
 import article.Article_Comment_item;
+import article.Article_Like_Activity;
 import article.Article_Like_item;
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import pushevent.BusProvider;
@@ -84,6 +87,9 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);
 
+        Button back_btn = (Button)findViewById(R.id.back_btn);
+        back_btn.setOnTouchListener(myOnTouchListener);
+
         SetUserData();
     }
 
@@ -112,22 +118,27 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
             public void onResponse(Call<RecommendFromPhoneNumResponse> call, Response<RecommendFromPhoneNumResponse> response) {
 
                 RecommendFromPhoneNumResponse user_data = response.body();
+                TextView recommend_txt = (TextView)findViewById(R.id.recommend_txt);
+                Resources res = getResources();
+
                 if (!user_data.isError()) {
                     Recommend_From_PhoneAddress_item item;
-                    for(int i=0;i<user_data.getUser().size();i++){
+                    int size = user_data.getUser().size();
+                    for(int i=0;i<size;i++){
                         item = new Recommend_From_PhoneAddress_item();
+                        item.setUserUid(user_data.getUser().get(i).getUid());
                         item.setUserProfileImg(user_data.getUser().get(i).getProfile_img_thumb());
                         item.setUserName(user_data.getUser().get(i).getName());
                         item.setUserNickName(user_data.getUser().get(i).getNick_name());
                         listItems.add(item);
                     }
                     adapter.notifyDataSetChanged();
+                    recommend_txt.setText(String.format(res.getString(R.string.recommend_phoneNum_txt1), size));
 
                 }else{
                     Toast.makeText(getApplicationContext(),user_data.getError_msg(),Toast.LENGTH_SHORT).show();
                 }
 
-                Toast.makeText(getApplicationContext(), user_data.getError_msg(),Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -139,7 +150,7 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
         });
     }
 
-    //review 리사이클러뷰 adapter
+    // 리사이클러뷰 adapter
     public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int TYPE_PHONE_ADDRESS = 0;
@@ -152,7 +163,7 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if (viewType == TYPE_PHONE_ADDRESS) {
-                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_article_comment, parent, false);
+                View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.recyclerview_item_recommend_phonenum, parent, false);
                 return new RecyclerAdapter.Recommend_From_PhoneNum_VHitem(v);
             }
             throw new RuntimeException("there is no type that matches the type " + viewType + " + make sure your using types correctly");
@@ -161,7 +172,6 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
         private Recommend_From_PhoneAddress_item getItem(int position) {
             return listItems.get(position);
         }
-
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
@@ -174,10 +184,12 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
                 Glide.with(getApplicationContext())
                         .load(App_Config.getInstance().getServer_base_ip()+currentItem.getUserProfileImg())
                         .bitmapTransform(new CropCircleTransformation(getApplicationContext()))
-                        //.signature(new StringSignature(UUID.randomUUID().toString()))
                         .placeholder(R.drawable.profile_basic_img)
                         .error(null)
                         .into(VHitem.user_profile_img);
+
+                VHitem.user_name_txt.setText(currentItem.getUserName());
+                VHitem.user_nickname_txt.setText(currentItem.getUserNickName());
 
 
 
@@ -189,12 +201,14 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
             ImageView user_profile_img;
             TextView user_name_txt;
             TextView user_nickname_txt;
+            ImageView follow_btn;
 
             public Recommend_From_PhoneNum_VHitem(View itemView){
                 super(itemView);
                 user_profile_img = (ImageView)itemView.findViewById(R.id.user_profile_img);
                 user_name_txt = (TextView)itemView.findViewById(R.id.user_name_txt);
                 user_nickname_txt = (TextView)itemView.findViewById(R.id.user_nickname_txt);
+                follow_btn = (ImageView)itemView.findViewById(R.id.follow_btn);
             }
         }
         @Override
@@ -207,4 +221,27 @@ public class Recommend_From_PhoneAddress_Activity extends Activity{
             return listItems.size();
         }
     }
+
+    private View.OnTouchListener myOnTouchListener = new View.OnTouchListener() {
+
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                v.setPadding(15, 15, 15, 15);
+                v.setAlpha(0.55f);
+            }else if(event.getAction() == MotionEvent.ACTION_CANCEL){
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+            } else if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.setPadding(0, 0, 0, 0);
+                v.setAlpha(1.0f);
+                switch(v.getId()){
+                    case R.id.back_btn:
+                        finish();
+                        break;
+                }
+            }
+            return true;
+        }
+    };
 }

@@ -41,6 +41,7 @@
         android:background="#ffe0e0e0"></LinearLayout>
 
     <TextView
+        android:id="@+id/recommend_txt"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
